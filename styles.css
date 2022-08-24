@@ -19,6 +19,6 @@ canvas{
     border: 5px solid black;
 }
 
-.bg-layer{
+.bg-layer, .player{
     display: none;
 }
