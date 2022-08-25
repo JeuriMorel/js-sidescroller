@@ -13,7 +13,7 @@ class Layer {
     }
     update() {
         if (this.x < -this.width) this.x = 0
-        else this.x -= this.game.speed * this.speedModifier
+        else this.x -= this.game.scrollSpeed * this.speedModifier
     }
     draw(context) {
         context.drawImage(this.image, this.x, this.y, this.width, this.height)
