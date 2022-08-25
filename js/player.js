@@ -46,10 +46,14 @@ export class Player {
         else if (this.x > this.game.width - this.width) this.x = this.game.width - this.width
         //vertical movement
         this.y += this.velocityY
-        if (!this.isOnGround()) {
+        if (!this.isOnGround() && this.currentState === this.states[8]) {
+            this.velocityY += this.weight * 8
+            // this.x+= this.game.scrollSpeed * 3
+        }else if (!this.isOnGround()) {
             this.velocityY += this.weight
+            this.x += this.game.scrollSpeed * 0.2
         } else {
-            this.vy = 0
+            this.velocityY = 0
         }
         if (this.y > this.game.height - this.height - this.game.groundMargin) this.y = this.game.height - this.height - this.game.groundMargin
 
@@ -81,5 +85,8 @@ export class Player {
     }
     isOnGround() {
         return this.y >= this.game.height - this.height - this.game.groundMargin
+    }
+    isAtStartingPosition() {
+        return this.x <= STARTING_X
     }
 }

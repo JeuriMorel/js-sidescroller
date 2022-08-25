@@ -22,7 +22,7 @@ window.addEventListener("load", function () {
         }
         update(deltaTime, input) {
             this.background.update()
-            this.player.update(deltaTime, input.lastKey)
+            this.player.update(deltaTime, input)
         }
 
         draw(context) {
@@ -38,7 +38,7 @@ window.addEventListener("load", function () {
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        game.update(deltaTime, input)
+        game.update(deltaTime, game.input)
         game.draw(ctx)
         requestAnimationFrame(animate)
     }

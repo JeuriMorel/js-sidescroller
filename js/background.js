@@ -88,6 +88,7 @@ export class Background {
             1,
             this.layer7image
         )
+
         this.bgLayers = [
             this.layer1,
             this.layer2,

@@ -1,6 +1,7 @@
 export default class InputHandler {
     constructor() {
         this.lastKey = ""
+        this.lastTimeKeyPressed = 0
         window.addEventListener("keydown", e => {
             switch (e.key) {
                 case "ArrowLeft":
@@ -15,7 +16,7 @@ export default class InputHandler {
                 case "ArrowDown":
                     this.lastKey = "PRESS Down"
                     break
-                case "D":
+                case "d":
                     this.lastKey = "PRESS Attack"
                     break
             }
@@ -33,8 +34,9 @@ export default class InputHandler {
                     break
                 case "ArrowDown":
                     this.lastKey = "RELEASE Down"
+                    this.lastTimeKeyPressed = Date.now()
                     break
-                case "D":
+                case "d":
                     this.lastKey = "RELEASE Attack"
                     break
             }
