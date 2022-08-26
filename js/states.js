@@ -106,7 +106,7 @@ export class Attacking_Dash extends State {
         if (this.player.frame === 8 && lastKey === "PRESS Attack")
             this.player.frame = 7
         else if (lastKey === "PRESS Left") this.player.setState(states.IDLE)
-        if (this.player.frame > 10) this.player.x += 20
+        if (this.player.frame > 10) this.player.x += 25
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.RUNNING)
     }
@@ -147,7 +147,7 @@ export class Jumping extends State {
     enter() {
         this.player.animationSheet = 6
         this.player.frame = 0
-        this.player.velocityY -= 15
+        this.player.velocityY -= 13
         this.player.maxFrame = 9
         //adjust scroll speed
         // this.player.game.scrollSpeed = this.player.game.scrollSpeed * 0.5

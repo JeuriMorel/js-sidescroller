@@ -55,7 +55,12 @@ export class Player {
         } else {
             this.velocityY = 0
         }
-        if (this.y > this.game.height - this.height - this.game.groundMargin) this.y = this.game.height - this.height - this.game.groundMargin
+        if (
+            this.y >
+            this.game.height - this.height - this.game.groundMargin
+        )
+            this.y =
+                this.game.height - this.height - this.game.groundMargin 
 
         
         if (this.frameTimer > this.frameInterval) {
@@ -75,8 +80,8 @@ export class Player {
             this.height,
             this.x,
             this.y,
-            this.width,
-            this.height
+            this.width ,
+            this.height 
         )
     }
     setState(state) {
@@ -84,7 +89,10 @@ export class Player {
         this.currentState.enter()
     }
     isOnGround() {
-        return this.y >= this.game.height - this.height - this.game.groundMargin
+        return (
+            this.y >=
+            this.game.height - this.height - this.game.groundMargin
+        )
     }
     isAtStartingPosition() {
         return this.x <= STARTING_X

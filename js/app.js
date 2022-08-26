@@ -3,6 +3,7 @@ import { Background } from "./background.js"
 import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
+import { AngryEgg} from "./enemies.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -19,15 +20,33 @@ window.addEventListener("load", function () {
             this.background = new Background(this)
             this.player = new Player(this)
             this.input = new InputHandler()
+            this.enemyFrequency = 1500
+            this.enemyTimer = 0
+            this.enemies = []
+            this.maxEnemies = 5
         }
         update(deltaTime, input) {
             this.background.update()
             this.player.update(deltaTime, input)
+            this.enemies.forEach(enemy => {
+                enemy.update(deltaTime)
+            })
+            this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
+            if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
+                this.enemyTimer = 0
+                if(Math.random() > 0.5) this.enemies.push(new AngryEgg(this))
+            } else {
+                this.enemyTimer += deltaTime
+            }
+
         }
 
         draw(context) {
             this.background.draw(context)
             this.player.draw(context)
+            this.enemies.forEach(enemy => {
+                enemy.draw(context)
+            })
         }
     }
 
