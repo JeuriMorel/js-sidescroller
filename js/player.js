@@ -28,6 +28,7 @@ export class Player {
         this.height = SPRITE_HEIGHT
         this.x = STARTING_X
         this.y = this.game.height - this.height - this.game.groundMargin
+        this.starting_x = STARTING_X
         this.image = qs("#player")
         this.frame = 0
         this.maxFrame = 11

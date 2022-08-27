@@ -3,6 +3,8 @@ import {
     ANGRY_EGG_WIDTH,
     GHOST_WIDTH,
     GHOST_HEIGHT,
+    CRAWLER_WIDTH,
+    CRAWLER_HEIGHT,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -48,8 +50,8 @@ export class AngryEgg extends Enemy {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.sizeModifier = Math.random() * 0.4 + 0.5
-        this.spriteWidth = ANGRY_EGG_WIDTH 
-        this.spriteHeight = ANGRY_EGG_HEIGHT 
+        this.spriteWidth = ANGRY_EGG_WIDTH
+        this.spriteHeight = ANGRY_EGG_HEIGHT
         this.width = ANGRY_EGG_WIDTH * this.sizeModifier
         this.height = ANGRY_EGG_HEIGHT * this.sizeModifier
         this.x = this.game.width
@@ -58,10 +60,49 @@ export class AngryEgg extends Enemy {
         this.image = qs("#angryEgg")
     }
 }
+export class Crawler extends Enemy {
+    constructor(game) {
+        super(game)
+
+        this.transparency = 0.95
+
+        this.maxFrame = 12
+        this.fps = 15
+        this.frameInterval = 1000 / this.fps
+        this.frameTimer = 0
+        this.sizeModifier = Math.random() * 0.4 + 0.5
+        this.spriteWidth = CRAWLER_WIDTH
+        this.spriteHeight = CRAWLER_HEIGHT
+        this.width = CRAWLER_WIDTH * this.sizeModifier
+        this.height = CRAWLER_HEIGHT * this.sizeModifier
+        this.x = this.game.width
+        this.y = this.game.height - this.height - this.game.groundMargin
+        this.horizontalSpeed = 0.5
+        this.image = qs("#crawler")
+    }
+    update(deltaTime) {
+        if (this.x < this.game.player.width + this.game.player.starting_x) {
+            this.horizontalSpeed = -25
+            this.fps = 60
+            this.transparency = 0.075
+        } else if (this.x > this.game.width - this.width * 0.5) {
+            this.horizontalSpeed = 0.5
+            this.fps = 15
+            this.transparency = 0.95
+        }
+        super.update(deltaTime)
+    }
+    draw(context) {
+        context.save()
+        context.globalAlpha = this.transparency
+        super.draw(context)
+        context.restore()
+    }
+}
 export class Ghost extends Enemy {
     constructor(game) {
         super(game)
-        this.transparancy = Math.random() * 0.2 + 0.3
+        this.transparency = Math.random() * 0.2 + 0.3
         this.maxFrame = 10
         this.fps = 20
         this.frameInterval = 1000 / this.fps
@@ -89,18 +130,10 @@ export class Ghost extends Enemy {
 
     draw(context) {
         context.save()
-        context.globalAlpha = this.transparancy
-        context.drawImage(
-            this.image,
-            this.frame * this.spriteWidth,
-            this.animationSheet * this.spriteHeight,
-            this.spriteWidth,
-            this.spriteHeight,
-            this.x,
-            this.y,
-            this.width,
-            this.height
-        )
+        if (this.frame % 4 == 0) {
+            context.globalAlpha = this.transparency
+        } else context.globalAlpha = this.transparency - 0.1
+        super.draw(context)
         context.restore()
     }
 }

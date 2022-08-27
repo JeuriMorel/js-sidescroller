@@ -8,3 +8,5 @@ export const ANGRY_EGG_WIDTH = 199.64
 export const ANGRY_EGG_HEIGHT = 200
 export const GHOST_WIDTH = 198
 export const GHOST_HEIGHT = 291
+export const CRAWLER_WIDTH = 288
+export const CRAWLER_HEIGHT = 250

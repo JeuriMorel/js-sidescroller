@@ -3,7 +3,7 @@ import { Background } from "./background.js"
 import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
-import { AngryEgg, Ghost} from "./enemies.js"
+import { AngryEgg, Ghost, Crawler } from "./enemies.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -51,8 +51,10 @@ window.addEventListener("load", function () {
         }
 
         addEnemy() {
-            if (Math.random() > 0.5) this.enemies.push(new Ghost(this))
+            if (Math.random() > 0.7) this.enemies.push(new Ghost(this))
+            else if (Math.random() > 0.4 && !this.enemies.some(obj => obj instanceof Crawler)) this.enemies.push(new Crawler(this))
             else this.enemies.push(new AngryEgg(this))
+
         }
     }
 
