@@ -34,7 +34,7 @@ export class Background {
         this.height = LAYER_HEIGHT
         this.layer7image = qs("#bgLayer7")
         this.layer6image = qs("#bgLayer6")
-        this.layer5image = qs("#bgLayer5")
+        // this.layer5image = qs("#bgLayer5")
         this.layer4image = qs("#bgLayer4")
         this.layer3image = qs("#bgLayer3")
         this.layer2image = qs("#bgLayer2")
@@ -67,13 +67,13 @@ export class Background {
             0.56,
             this.layer4image
         )
-        this.layer5 = new Layer(
-            this.game,
-            this.width,
-            this.height,
-            0.7,
-            this.layer5image
-        )
+        // this.layer5 = new Layer(
+        //     this.game,
+        //     this.width,
+        //     this.height,
+        //     0.7,
+        //     this.layer5image
+        // )
         this.layer6 = new Layer(
             this.game,
             this.width,
@@ -94,7 +94,6 @@ export class Background {
             this.layer2,
             this.layer3,
             this.layer4,
-            this.layer5,
             this.layer6,
             this.layer7,
         ]
