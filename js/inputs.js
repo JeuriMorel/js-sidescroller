@@ -1,8 +1,10 @@
 export default class InputHandler {
-    constructor() {
+    constructor(game) {
         this.lastKey = ""
         this.lastTimeKeyPressed = 0
+        this.game = game
         window.addEventListener("keydown", e => {
+            if(this.game.recoveryTime > 0) return
             switch (e.key) {
                 case "ArrowLeft":
                     this.lastKey = "PRESS Left"

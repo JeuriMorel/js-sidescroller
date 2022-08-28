@@ -17,6 +17,7 @@ import {
     Roll_Down,
     Roll_Up,
     Roll_Across,
+    Roll_Back,
     Running,
     Sleeping,
 } from "./states.js"
@@ -55,10 +56,11 @@ export class Player {
             new Roll_Up(this),
             new Roll_Down(this),
             new Roll_Across(this),
+            new Roll_Back(this),
             new Running(this),
             new Sleeping(this),
         ]
-        this.currentState = this.states[11]
+        this.currentState = this.states[12]
     }
     update(deltaTime, input) {
         this.currentState.handleInput(input)
@@ -116,6 +118,9 @@ export class Player {
     }
     isRollingDown() {
         return this.currentState === this.states[9]
+    }
+    isRollingBack() {
+        return this.currentState === this.states[11]
     }
     isAtStartingPosition() {
         return this.x <= STARTING_X

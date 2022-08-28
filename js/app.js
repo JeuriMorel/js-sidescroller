@@ -19,16 +19,23 @@ window.addEventListener("load", function () {
             this.scrollSpeed = DEFAULT_SCROLL_SPEED
             this.background = new Background(this)
             this.player = new Player(this)
-            this.input = new InputHandler()
+            this.input = new InputHandler(this)
             this.enemyFrequency = 1500
             this.enemyTimer = 0
             this.enemies = []
             this.maxEnemies = 5
+            this.recoveryTime = 0
+            this.isRecovering = false
         }
         update(deltaTime, input) {
             this.background.update()
             this.player.update(deltaTime, input)
-            if(this.scrollSpeed > DEFAULT_SCROLL_SPEED) this.scrollSpeed -= 0.03
+            if (this.scrollSpeed > DEFAULT_SCROLL_SPEED) this.scrollSpeed -= 0.03
+            if (this.recoveryTime > 0 && this.isRecovering) this.recoveryTime -= deltaTime
+            else if (this.recoveryTime < 0) {
+                this.recoveryTime = 0
+                this.isRecovering = false
+            }
             this.enemies.forEach(enemy => {
                 enemy.update(deltaTime)
             })
