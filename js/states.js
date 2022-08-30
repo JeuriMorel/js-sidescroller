@@ -27,11 +27,23 @@ export class Attacking_Claw extends State {
     constructor(player) {
         super("CLAW_ATTACK")
         this.player = player
+        
     }
     enter() {
         this.player.animationSheet = 0
         this.player.frame = 0
         this.player.maxFrame = 13
+        this.player.hitbox.isActive = true
+        this.player.hitbox.xOffset = 70
+        this.player.hitbox.yOffset = 15
+        this.player.hitbox.width = this.player.width - 70
+        this.player.hitbox.height = this.player.height - 25
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 38
+        this.player.hurtbox.head.yOffset = 15
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 40
 
         this.player.game.scrollSpeed = 0
     }
@@ -51,6 +63,16 @@ export class Falling extends State {
         this.player.animationSheet = 1
         this.player.frame = 0
         this.player.maxFrame = 9
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 45
+        this.player.hurtbox.head.yOffset = 23
+        this.player.hurtbox.body.xOffset = 20
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 70
+        this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey }) {
         if (this.player.isOnGround()) this.player.setState(states.RUNNING)
@@ -72,6 +94,8 @@ export class Game_Over extends State {
         this.player.frame = 0
         this.player.maxFrame = 24
         this.player.game.scrollSpeed = 0
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Down") this.player.setState(states.IDLE)
@@ -87,6 +111,8 @@ export class Get_Hit extends State {
         this.player.frame = 0
         this.player.game.scrollSpeed = 2
         this.player.maxFrame = 7
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Down") this.player.setState(states.IDLE)
@@ -102,6 +128,16 @@ export class Attacking_Dash extends State {
         this.player.frame = 0
         this.player.maxFrame = 14
         this.player.game.scrollSpeed = 0
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 38
+        this.player.hurtbox.head.yOffset = 25
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 60
+        this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey }) {
         if (this.player.frame === 8 && lastKey === "PRESS Attack") {
@@ -113,6 +149,11 @@ export class Attacking_Dash extends State {
             this.player.x += 25
             if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
                 this.player.game.scrollSpeed += 1
+        }
+
+        if (this.player.frame >= 9) {
+            this.player.hurtbox.head.isActive = false
+            this.player.hurtbox.body.isActive = false
         }
 
         if (this.player.frame == this.player.maxFrame) {
@@ -131,6 +172,16 @@ export class Idle extends State {
         this.player.animationSheet = 5
         this.player.frame = 0
         this.player.maxFrame = 19
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 38
+        this.player.hurtbox.head.yOffset = 20
+        this.player.hurtbox.body.xOffset = 28
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 65
+        this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey, lastTimeKeyPressed }) {
         if (this.player.isAtStartingPosition()) {
@@ -160,6 +211,16 @@ export class Jumping extends State {
         this.player.frame = 0
         this.player.velocityY -= 15
         this.player.maxFrame = 9
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 38
+        this.player.hurtbox.head.yOffset = 15
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 70
+        this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Left")
@@ -183,6 +244,16 @@ export class Resting extends State {
         this.player.animationSheet = 7
         this.player.frame = 0
         this.player.maxFrame = 13
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 30
+        this.player.hurtbox.head.yOffset = 20
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 60
+        this.player.hurtbox.body.height = this.player.height - 40
 
         this.player.game.scrollSpeed = 0
     }
@@ -203,6 +274,8 @@ export class Roll_Down extends State {
         this.player.animationSheet = 8
         this.player.frame = 0
         this.player.maxFrame = 8
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
     }
     handleInput({ lastKey }) {
         if (this.player.isOnGround()) {
@@ -221,6 +294,8 @@ export class Roll_Up extends State {
         this.player.animationSheet = 8
         this.player.frame = 0
         this.player.maxFrame = 8
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
         if (this.player.velocityY < 0) this.player.velocityY -= 13
     }
     handleInput({ lastKey }) {
@@ -240,6 +315,8 @@ export class Roll_Across extends State {
         this.player.animationSheet = 8
         this.player.frame = 0
         this.player.maxFrame = 8
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
     }
     handleInput({ lastKey }) {
         this.player.x += 5
@@ -258,6 +335,8 @@ export class Roll_Back extends State {
         this.player.animationSheet = 8
         this.player.frame = 0
         this.player.maxFrame = 8
+        this.player.hurtbox.head.isActive = false
+        this.player.hurtbox.body.isActive = false
     }
     handleInput({ lastKey }) {
         this.player.x -= 5
@@ -275,6 +354,16 @@ export class Running extends State {
         this.player.animationSheet = 9
         this.player.frame = 0
         this.player.maxFrame = 11
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 38
+        this.player.hurtbox.head.yOffset = 20
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 40
+        this.player.hurtbox.head.width = this.player.width - 65
+        this.player.hurtbox.head.height = this.player.height - 40
+        this.player.hurtbox.body.width = this.player.width - 60
+        this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey }) {
         if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
@@ -303,6 +392,16 @@ export class Sleeping extends State {
         this.player.animationSheet = 10
         this.player.frame = 0
         this.player.maxFrame = 19
+        this.player.hurtbox.head.isActive = true
+        this.player.hurtbox.body.isActive = true
+        this.player.hurtbox.head.xOffset = 55
+        this.player.hurtbox.head.yOffset = 45
+        this.player.hurtbox.body.xOffset = 25
+        this.player.hurtbox.body.yOffset = 55
+        this.player.hurtbox.head.width = this.player.width - 70
+        this.player.hurtbox.head.height = this.player.height - 50
+        this.player.hurtbox.body.width = this.player.width - 50
+        this.player.hurtbox.body.height = this.player.height - 55
 
         this.player.game.scrollSpeed = 0
     }

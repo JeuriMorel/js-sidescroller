@@ -39,6 +39,35 @@ export class Player {
         this.frameTimer = 0
         this.speed = 0
         this.maxSpeed = 10
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: 25,
+                yOffset: 40,
+                x: this.x + 25,
+                y: this.y + 40,
+                width: this.width - 60,
+                height: this.height - 40,
+            },
+            head: {
+                isActive: true,
+                xOffset: 38,
+                yOffset: 20,
+                x: this.x + 38,
+                y: this.y + 20,
+                width: this.width - 65,
+                height: this.height - 40,
+            },
+        }
+        this.hitbox = {
+            isActive: false,
+            xOffset: 40,
+            yOffset: 50,
+            x: this.x + this.xOffset,
+            y: this.y + this.yOffset,
+            width: this.width,
+            height: this.height
+        }
         //vertical
         this.velocityY = 0
         this.weight = 0.5
@@ -92,8 +121,49 @@ export class Player {
         } else {
             this.frameTimer += deltaTime
         }
+        //player hitboxes
+        if (this.isClawing() && this.frame >= 8) {
+            this.hitbox.isActive = true
+            this.hitbox.xOffset = 70
+            this.hitbox.yOffset = 15
+            this.hitbox.width = this.width - 70
+            this.hitbox.height = this.height - 25
+        } else {
+            this.hitbox.isActive = false
+        }
+        this.updateHitboxes()
     }
     draw(context) {
+        if (this.hurtbox.body.isActive) {
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hurtbox.head.isActive) {
+            context.beginPath()
+            context.rect(
+                this.hurtbox.head.x,
+                this.hurtbox.head.y,
+                this.hurtbox.head.width,
+                this.hurtbox.head.height
+            )
+            context.stroke()
+        }
+        if (this.hitbox.isActive) {
+            context.beginPath()
+            context.rect(
+                this.hitbox.x,
+                this.hitbox.y,
+                this.hitbox.width,
+                this.hitbox.height
+            )
+            context.stroke()
+        }
         context.drawImage(
             this.image,
             this.animationSheet * this.width,
@@ -105,6 +175,14 @@ export class Player {
             this.width,
             this.height
         )
+    }
+    updateHitboxes() {
+        this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
+        this.hurtbox.body.y = this.y + this.hurtbox.body.yOffset
+        this.hurtbox.head.x = this.x + this.hurtbox.head.xOffset
+        this.hurtbox.head.y = this.y + this.hurtbox.head.yOffset
+        this.hitbox.x = this.x + this.hitbox.xOffset
+        this.hitbox.y = this.y + this.hitbox.yOffset
     }
     setState(state) {
         this.currentState = this.states[state]
@@ -124,5 +202,8 @@ export class Player {
     }
     isAtStartingPosition() {
         return this.x <= STARTING_X
+    }
+    isClawing() {
+        return this.currentState === this.states[0]
     }
 }

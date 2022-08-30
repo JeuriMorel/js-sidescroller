@@ -16,6 +16,7 @@ class Layer {
         else this.x -= this.game.scrollSpeed * this.speedModifier
     }
     draw(context) {
+        
         context.drawImage(this.image, this.x, this.y, this.width, this.height)
         context.drawImage(
             this.image,
@@ -24,6 +25,7 @@ class Layer {
             this.width,
             this.height
         )
+        
     }
 }
 
