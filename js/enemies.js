@@ -25,8 +25,31 @@ class Enemy {
         } else {
             this.frameTimer += deltaTime
         }
+        this.updateHitboxes()
     }
     draw(context) {
+        if (this.hurtbox.body.isActive) {
+            context.strokeStyle = "black"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hitbox.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.x,
+                this.hitbox.y,
+                this.hitbox.width,
+                this.hitbox.height
+            )
+            context.stroke()
+        }
         context.drawImage(
             this.image,
             this.frame * this.spriteWidth,
@@ -38,6 +61,12 @@ class Enemy {
             this.width,
             this.height
         )
+    }
+    updateHitboxes() {
+        this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
+        this.hurtbox.body.y = this.y + this.hurtbox.body.yOffset
+        this.hitbox.x = this.x + this.hitbox.xOffset
+        this.hitbox.y = this.y + this.hitbox.yOffset
     }
 }
 
@@ -58,6 +87,26 @@ export class AngryEgg extends Enemy {
         this.y = this.game.height - this.height - this.game.groundMargin
         this.horizontalSpeed = 0
         this.image = qs("#angryEgg")
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.17,
+                yOffset: this.height * 0.2,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.6,
+                height: this.height * 0.75,
+            },
+        }
+        this.hitbox = {
+            isActive: true,
+            xOffset: this.width * 0.1,
+            yOffset: this.height * 0.35,
+            x: this.x + this.xOffset,
+            y: this.y + this.yOffset,
+            width: this.width * 0.3,
+            height: this.height * 0.5,
+        }
     }
 }
 export class Crawler extends Enemy {
@@ -77,18 +126,44 @@ export class Crawler extends Enemy {
         this.height = CRAWLER_HEIGHT * this.sizeModifier
         this.x = this.game.width
         this.y = this.game.height - this.height - this.game.groundMargin
+        this.leftBound =
+            this.game.player.width * 0.5 + this.game.player.starting_x
         this.horizontalSpeed = 0.5
         this.image = qs("#crawler")
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: 0,
+                yOffset: this.width * 0.5,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width,
+                height: this.height * 0.45,
+            },
+        }
+        this.hitbox = {
+            isActive: true,
+            xOffset: this.width * 0.06,
+            yOffset: this.width * 0.65,
+            x: this.x + this.xOffset,
+            y: this.y + this.yOffset,
+            width: this.width * 0.9,
+            height: this.height * 0.25,
+        }
     }
     update(deltaTime) {
-        if (this.x < this.game.player.width + this.game.player.starting_x) {
+        if (this.x < this.leftBound) {
             this.horizontalSpeed = -25
             this.fps = 60
             this.transparency = 0.075
+            this.hurtbox.body.isActive = false
+            this.hitbox.isActive = false
         } else if (this.x > this.game.width - this.width * 0.5) {
             this.horizontalSpeed = 0.5
             this.fps = 15
             this.transparency = 0.95
+            this.hurtbox.body.isActive = true
+            this.hitbox.isActive = true
         }
         super.update(deltaTime)
     }
@@ -121,6 +196,26 @@ export class Ghost extends Enemy {
         //Flying Pattern
         this.angle = 0
         this.curve = Math.random() * 6
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: 0,
+                yOffset: this.width * 0.1,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.9,
+                height: this.height * 0.7,
+            },
+        }
+        this.hitbox = {
+            isActive: true,
+            xOffset: 0,
+            yOffset: this.width * 0.1,
+            x: this.x + this.xOffset,
+            y: this.y + this.yOffset,
+            width: this.width * 0.9,
+            height: this.height * 0.7,
+        }
     }
     update(deltaTime) {
         super.update(deltaTime)

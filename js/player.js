@@ -66,7 +66,7 @@ export class Player {
             x: this.x + this.xOffset,
             y: this.y + this.yOffset,
             width: this.width,
-            height: this.height
+            height: this.height,
         }
         //vertical
         this.velocityY = 0
@@ -127,7 +127,19 @@ export class Player {
             this.hitbox.xOffset = 70
             this.hitbox.yOffset = 15
             this.hitbox.width = this.width - 70
+            this.hitbox.height = this.height - 20
+        } else if (this.isRollingDown() || this.isRollingUp()) {
+            this.hitbox.isActive = true
+            this.hitbox.xOffset = 20
+            this.hitbox.yOffset = 15
+            this.hitbox.width = this.width - 40
             this.hitbox.height = this.height - 25
+        } else if (this.isDashAttacking() && this.frame >= 9) {
+            this.hitbox.isActive = true
+            this.hitbox.xOffset = 70
+            this.hitbox.yOffset = 15
+            this.hitbox.width = this.width - 70
+            this.hitbox.height = this.height - 20
         } else {
             this.hitbox.isActive = false
         }
@@ -135,6 +147,7 @@ export class Player {
     }
     draw(context) {
         if (this.hurtbox.body.isActive) {
+            context.strokeStyle = 'black'
             context.beginPath()
             context.rect(
                 this.hurtbox.body.x,
@@ -155,6 +168,7 @@ export class Player {
             context.stroke()
         }
         if (this.hitbox.isActive) {
+            context.strokeStyle = "#ff0000"
             context.beginPath()
             context.rect(
                 this.hitbox.x,
@@ -205,5 +219,8 @@ export class Player {
     }
     isClawing() {
         return this.currentState === this.states[0]
+    }
+    isDashAttacking() {
+        return this.currentState === this.states[4]
     }
 }
