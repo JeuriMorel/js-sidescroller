@@ -20,11 +20,13 @@ import {
     Roll_Back,
     Running,
     Sleeping,
+    states
 } from "./states.js"
 
 export class Player {
     constructor(game) {
         this.game = game
+        this.attackDamage = 20
         this.width = SPRITE_WIDTH
         this.height = SPRITE_HEIGHT
         this.x = STARTING_X
@@ -140,10 +142,18 @@ export class Player {
             this.hitbox.yOffset = 15
             this.hitbox.width = this.width - 70
             this.hitbox.height = this.height - 20
+        } else if (this.isFalling()) {
+            this.hitbox.isActive = true
+            this.hitbox.xOffset = 20
+            this.hitbox.yOffset = 40
+            this.hitbox.width = this.width - 70
+            this.hitbox.height = this.height - 40
         } else {
             this.hitbox.isActive = false
         }
         this.updateHitboxes()
+        if(this.hitbox.isActive) this.checkAttackCollision()
+        if(this.hurtbox.body.isActive || this.hurtbox.head.isActive) this.checkHitCollision()
     }
     draw(context) {
         if (this.hurtbox.body.isActive) {
@@ -208,6 +218,9 @@ export class Player {
     isRollingUp() {
         return this.currentState === this.states[8]
     }
+    isFalling() {
+        return this.currentState === this.states[1]
+    }
     isRollingDown() {
         return this.currentState === this.states[9]
     }
@@ -222,5 +235,36 @@ export class Player {
     }
     isDashAttacking() {
         return this.currentState === this.states[4]
+    }
+    checkAttackCollision() {
+        this.game.enemies.forEach(enemy => {
+            if (enemy.hurtbox.body.isActive && this.hitbox.x <= enemy.hurtbox.body.x + enemy.hurtbox.body.width && this.hitbox.x + this.hitbox.width >= enemy.hurtbox.body.x && this.hitbox.y <= enemy.hurtbox.body.y + enemy.hurtbox.body.height && this.hitbox.y + this.hitbox.height >= enemy.hurtbox.body.y) {
+                enemy.healthPoints -= this.attackDamage
+                enemy.hurtbox.body.isActive = false
+                if(this.isFalling()) this.setState(states.JUMPING)
+            }
+        })
+    }
+    checkHitCollision() {
+        this.game.enemies.forEach(enemy => {
+            if (
+                enemy.hitbox.isActive &&
+                (enemy.hitbox.x <=
+                    this.hurtbox.body.x + this.hurtbox.body.width ||
+                    enemy.hitbox.x <=
+                        this.hurtbox.head.x + this.hurtbox.head.width) &&
+                (enemy.hitbox.x + enemy.hitbox.width >= this.hurtbox.body.x ||
+                    enemy.hitbox.x + enemy.hitbox.width >=
+                        this.hurtbox.head.x) &&
+                (enemy.hitbox.y <=
+                    this.hurtbox.body.y + this.hurtbox.body.height ||
+                    enemy.hitbox.y <=
+                        this.hurtbox.head.y + this.hurtbox.head.height) &&
+                (enemy.hitbox.y + enemy.hitbox.height >= this.hurtbox.body.y ||
+                    enemy.hitbox.y + enemy.hitbox.height >= this.hurtbox.head.y)
+            ) {
+                this.setState(states.GET_HIT)
+            }
+        })
     }
 }

@@ -25,6 +25,7 @@ class Enemy {
         } else {
             this.frameTimer += deltaTime
         }
+        if (this.healthPoints <= 0) this.deleteEnemy = true
         this.updateHitboxes()
     }
     draw(context) {
@@ -74,6 +75,7 @@ export class AngryEgg extends Enemy {
     constructor(game) {
         super(game)
 
+        this.healthPoints = 20
         this.maxFrame = 38
         this.fps = 20
         this.frameInterval = 1000 / this.fps
@@ -114,6 +116,7 @@ export class Crawler extends Enemy {
         super(game)
 
         this.transparency = 0.95
+        this.healthPoints = 50
 
         this.maxFrame = 12
         this.fps = 15
@@ -177,6 +180,8 @@ export class Crawler extends Enemy {
 export class Ghost extends Enemy {
     constructor(game) {
         super(game)
+
+        this.healthPoints = 20
         this.transparency = Math.random() * 0.2 + 0.3
         this.maxFrame = 10
         this.fps = 20

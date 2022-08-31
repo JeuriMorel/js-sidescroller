@@ -27,7 +27,6 @@ export class Attacking_Claw extends State {
     constructor(player) {
         super("CLAW_ATTACK")
         this.player = player
-        
     }
     enter() {
         this.player.animationSheet = 0
@@ -47,8 +46,8 @@ export class Attacking_Claw extends State {
 
         this.player.game.scrollSpeed = 0
     }
-    handleInput({lastKey}) {
-        if(lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
+    handleInput({ lastKey }) {
+        if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 1
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.IDLE)
@@ -73,6 +72,7 @@ export class Falling extends State {
         this.player.hurtbox.head.height = this.player.height - 40
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
+        
     }
     handleInput({ lastKey }) {
         if (this.player.isOnGround()) this.player.setState(states.RUNNING)
@@ -113,9 +113,13 @@ export class Get_Hit extends State {
         this.player.maxFrame = 7
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
+        this.player.x -= 15
+        this.player.y -= 10
     }
     handleInput({ lastKey }) {
-        if (lastKey === "PRESS Down") this.player.setState(states.IDLE)
+        this.player.x -= 15
+        if (this.player.frame == this.player.maxFrame)
+            this.player.setState(states.IDLE)
     }
 }
 export class Attacking_Dash extends State {
@@ -144,7 +148,8 @@ export class Attacking_Dash extends State {
             this.player.frame = 7
             if (this.player.game.recoveryTime < 300)
                 this.player.game.recoveryTime += 50
-        } else if (lastKey === "PRESS Left") this.player.setState(states.ROLL_BACK)
+        } else if (lastKey === "PRESS Left")
+            this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 10) {
             this.player.x += 25
             if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
