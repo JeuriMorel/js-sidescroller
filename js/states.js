@@ -35,7 +35,7 @@ export class Attacking_Claw extends State {
         this.player.hitbox.isActive = true
         this.player.hitbox.xOffset = 70
         this.player.hitbox.yOffset = 15
-        this.player.hitbox.width = this.player.width - 70
+        this.player.hitbox.width = this.player.width - 60
         this.player.hitbox.height = this.player.height - 25
         this.player.hurtbox.head.isActive = true
         this.player.hurtbox.body.isActive = true
@@ -48,7 +48,8 @@ export class Attacking_Claw extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
-        if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 1
+        if (this.player.frame > 5 && this.player.frame < 8) this.player.y -= 6
+        if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 4
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.IDLE)
     }
@@ -75,13 +76,13 @@ export class Falling extends State {
         
     }
     handleInput({ lastKey }) {
-        if (this.player.isOnGround()) this.player.setState(states.RUNNING)
+        if (this.player.isOnGround()) this.player.setState(states.IDLE)
         if (lastKey === "PRESS Attack") this.player.setState(states.ROLL_DOWN)
         else if (lastKey === "PRESS Left")
             this.player.x -= this.player.game.scrollSpeed
         else if (lastKey === "PRESS Right")
-            this.player.x += this.player.game.scrollSpeed * 0.5
-        else this.player.x += this.player.game.scrollSpeed * 0.15
+            this.player.x += (this.player.game.scrollSpeed * 0.5) + 2
+        else this.player.x += (this.player.game.scrollSpeed * 0.15) + 2
     }
 }
 export class Game_Over extends State {
@@ -188,22 +189,22 @@ export class Idle extends State {
         this.player.hurtbox.body.width = this.player.width - 65
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey, lastTimeKeyPressed }) {
+    handleInput({ lastKey, keysPressed }) {
         if (this.player.isAtStartingPosition()) {
             this.player.game.scrollSpeed = 0
         } else {
             this.player.x -= this.player.game.scrollSpeed
         }
-        if (lastKey === "PRESS Attack") this.player.setState(states.CLAW_ATTACK)
+        if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
+        else if (keysPressed.attack && keysPressed.right)
+            this.player.setState(states.ROLL_ACROSS)
+        else if (lastKey === "PRESS Attack")
+            this.player.setState(states.CLAW_ATTACK)
         else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
-        else if (
-            lastKey === "PRESS Down" &&
-            Date.now() - lastTimeKeyPressed < 250
-        )
-            this.player.setState(states.SLEEPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
-        else if (lastKey === "RELEASE Left" || lastKey === "PRESS Right")
-            this.player.setState(states.RUNNING)
+        else if (lastKey === "PRESS Right") this.player.setState(states.RUNNING)
+        else if (keysPressed.down) this.player.setState(states.SLEEPING)
+        
     }
 }
 export class Jumping extends State {
@@ -229,9 +230,9 @@ export class Jumping extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Left")
-            this.player.x -= this.player.game.scrollSpeed
+            this.player.x -= (this.player.game.scrollSpeed * 2) + 2
         else if (lastKey === "PRESS Right")
-            this.player.x += this.player.game.scrollSpeed * 0.5
+            this.player.x += (this.player.game.scrollSpeed) + 3
         else if (lastKey === "RELEASE Up") this.player.velocityY += 0.5
         else if (lastKey === "PRESS Attack")
             this.player.setState(states.ROLL_UP)
@@ -264,10 +265,8 @@ export class Resting extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey === "RELEASE Down") this.player.setState(states.IDLE)
-        else if (lastKey === "PRESS Right") this.player.setState(states.RUNNING)
-        else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
-        else if (lastKey === "PRESS Attack")
-            this.player.setState(states.ROLL_ACROSS)
+        else if (lastKey === "PRESS Right") this.player.setState(states.ROLL_ACROSS)
+        else if (lastKey === "PRESS Left") this.player.setState(states.ROLL_BACK)
     }
 }
 export class Roll_Down extends State {
@@ -343,11 +342,11 @@ export class Roll_Back extends State {
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
     }
-    handleInput({ lastKey }) {
+    handleInput() {
         this.player.x -= 5
         this.player.game.scrollSpeed = 0
         if (this.player.frame == this.player.maxFrame)
-            this.player.setState(states.RUNNING)
+            this.player.setState(states.IDLE)
     }
 }
 export class Running extends State {
@@ -373,7 +372,8 @@ export class Running extends State {
     handleInput({ lastKey }) {
         if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
             this.player.game.scrollSpeed += 0.1
-        if (lastKey === "PRESS Left") this.player.setState(states.IDLE)
+        if (lastKey === "PRESS Left" || lastKey === "RELEASE Right")
+            this.player.setState(states.IDLE)
         else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
         else if (
@@ -384,8 +384,6 @@ export class Running extends State {
 
         if (!this.player.isAtStartingPosition())
             this.player.x -= this.player.game.scrollSpeed * 0.5
-        // else if (input === "PRESS Attack")
-        //     this.player.setState(states.CLAW_ATTACK)
     }
 }
 export class Sleeping extends State {
@@ -411,9 +409,13 @@ export class Sleeping extends State {
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey }) {
-        if (lastKey === "PRESS Left") this.player.setState(states.IDLE)
-        else if (lastKey === "PRESS Right") this.player.setState(states.RUNNING)
-        // if (this.player.isAtStartingPosition()) this.player.game.scrollSpeed = 0
-        // else this.player.x -= this.player.game.scrollSpeed
+        if (
+            lastKey === "PRESS Up" ||
+            lastKey === "PRESS Right" ||
+            lastKey === "PRESS Left" ||
+            lastKey === "PRESS Right" ||
+            lastKey === "RELEASE Down"
+        )
+            this.player.setState(states.IDLE)
     }
 }

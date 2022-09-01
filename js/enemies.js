@@ -8,16 +8,29 @@ import {
 } from "./constants.js"
 import { qs } from "./utils.js"
 
+import { Explosion } from "./particles.js"
+
 class Enemy {
     constructor(game) {
         this.game = game
         this.animationSheet = 0
         this.frame = 0
         this.deleteEnemy = false
+        this.invulnerabilityTime = 0
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Explosion(
+                    this.game,
+                    this.x + (this.width * 0.5),
+                    this.y + (this.height * 0.5),
+                    this.sizeModifier,
+                    this.constructor.name
+                )
+            )
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
@@ -27,6 +40,8 @@ class Enemy {
         }
         if (this.healthPoints <= 0) this.deleteEnemy = true
         this.updateHitboxes()
+        if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
+        else this.hurtbox.body.isActive = true
     }
     draw(context) {
         if (this.hurtbox.body.isActive) {

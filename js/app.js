@@ -4,6 +4,7 @@ import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
 import { AngryEgg, Ghost, Crawler } from "./enemies.js"
+import { Explosion} from "./particles.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -20,9 +21,10 @@ window.addEventListener("load", function () {
             this.background = new Background(this)
             this.player = new Player(this)
             this.input = new InputHandler(this)
-            this.enemyFrequency = 1500
+            this.enemyFrequency = 2500
             this.enemyTimer = 0
             this.enemies = []
+            this.particles = []
             this.maxEnemies = 5
             this.recoveryTime = 0
             this.isRecovering = false
@@ -47,6 +49,9 @@ window.addEventListener("load", function () {
                 this.enemyTimer += deltaTime
             }
 
+            this.particles = this.particles.filter(particle => !particle.markedForDeletion)
+            this.particles.forEach(particle => particle.update(deltaTime))
+
         }
 
         draw(context) {
@@ -55,6 +60,7 @@ window.addEventListener("load", function () {
             this.enemies.forEach(enemy => {
                 enemy.draw(context)
             })
+            this.particles.forEach(particle => particle.draw(context))
         }
 
         addEnemy() {

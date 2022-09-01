@@ -1,7 +1,6 @@
 export default class InputHandler {
     constructor(game) {
         this.lastKey = ""
-        this.lastTimeKeyPressed = 0
         this.game = game
         this.keysPressed = {
             right: false,

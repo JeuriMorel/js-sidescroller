@@ -91,7 +91,7 @@ export class Player {
             new Running(this),
             new Sleeping(this),
         ]
-        this.currentState = this.states[12]
+        this.currentState = this.states[5]
     }
     update(deltaTime, input) {
         this.currentState.handleInput(input)
@@ -241,6 +241,7 @@ export class Player {
             if (enemy.hurtbox.body.isActive && this.hitbox.x <= enemy.hurtbox.body.x + enemy.hurtbox.body.width && this.hitbox.x + this.hitbox.width >= enemy.hurtbox.body.x && this.hitbox.y <= enemy.hurtbox.body.y + enemy.hurtbox.body.height && this.hitbox.y + this.hitbox.height >= enemy.hurtbox.body.y) {
                 enemy.healthPoints -= this.attackDamage
                 enemy.hurtbox.body.isActive = false
+                enemy.invulnerabilityTime = 700
                 if(this.isFalling()) this.setState(states.JUMPING)
             }
         })
