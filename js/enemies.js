@@ -125,6 +125,9 @@ export class AngryEgg extends Enemy {
             height: this.height * 0.5,
         }
     }
+    resolveCollision(){
+        this.healthPoints = 0
+    }
 }
 export class Crawler extends Enemy {
     constructor(game) {
@@ -132,6 +135,8 @@ export class Crawler extends Enemy {
 
         this.transparency = 0.95
         this.healthPoints = 50
+        this.teleportAudio = new Audio()
+        this.teleportAudio.src = "./audio/teleport.wav"
 
         this.maxFrame = 12
         this.fps = 15
@@ -146,7 +151,93 @@ export class Crawler extends Enemy {
         this.y = this.game.height - this.height - this.game.groundMargin
         this.leftBound =
             this.game.player.width * 0.5 + this.game.player.starting_x
+        this.rightBound = this.game.width - this.width * 0.5
         this.horizontalSpeed = 0.5
+        this.image = qs("#crawler")
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: 0,
+                yOffset: this.width * 0.5,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width,
+                height: this.height * 0.45,
+            },
+        }
+        this.hitbox = {
+            isActive: true,
+            xOffset: this.width * 0.06,
+            yOffset: this.width * 0.65,
+            x: this.x + this.xOffset,
+            y: this.y + this.yOffset,
+            width: this.width * 0.9,
+            height: this.height * 0.25,
+        }
+        this.turnsUntilSpawn = 3
+    }
+    update(deltaTime) {
+        if (this.x < this.leftBound) {
+            this.returnToRightBound()
+            
+        } else if (this.x > this.rightBound) {
+            this.horizontalSpeed = 0.5
+            this.fps = 15
+            this.transparency = 0.95
+            this.hurtbox.body.isActive = true
+            this.hitbox.isActive = true
+        }
+        super.update(deltaTime)
+    }
+    draw(context) {
+        context.save()
+        context.globalAlpha = this.transparency
+        super.draw(context)
+        context.restore()
+    }
+    resolveCollision() {
+        this.returnToRightBound()
+    }
+    returnToRightBound() {
+        this.teleportAudio.play()
+        this.horizontalSpeed = -25
+        this.fps = 60
+        this.transparency = 0.075
+        this.hurtbox.body.isActive = false
+        this.hitbox.isActive = false
+        if (this.turnsUntilSpawn > 0) {
+            this.turnsUntilSpawn--
+        } else {
+            this.turnsUntilSpawn = 3
+            this.spawn()
+        }
+    } 
+    spawn() {
+        let numberOfSpawns = Math.floor(Math.random() * 2 + 1)
+        for (let i = 0; i <= numberOfSpawns; i++){
+            this.game.enemies.push(new Spawn(this.game))
+        }
+    }
+}
+export class Spawn extends Enemy {
+    constructor(game) {
+        super(game)
+
+        this.transparency = 0.95
+        this.healthPoints = 20
+
+        this.maxFrame = 12
+        this.fps = 15
+        this.frameInterval = 1000 / this.fps
+        this.frameTimer = 0
+        this.sizeModifier = 0.2
+        this.spriteWidth = CRAWLER_WIDTH
+        this.spriteHeight = CRAWLER_HEIGHT
+        this.width = CRAWLER_WIDTH * this.sizeModifier
+        this.height = CRAWLER_HEIGHT * this.sizeModifier
+        this.x = this.game.width
+        this.y = this.game.height - this.height - this.game.groundMargin
+        this.horizontalSpeed = Math.random() * 1 + 1
         this.image = qs("#crawler")
         this.hurtbox = {
             body: {
@@ -170,26 +261,10 @@ export class Crawler extends Enemy {
         }
     }
     update(deltaTime) {
-        if (this.x < this.leftBound) {
-            this.horizontalSpeed = -25
-            this.fps = 60
-            this.transparency = 0.075
-            this.hurtbox.body.isActive = false
-            this.hitbox.isActive = false
-        } else if (this.x > this.game.width - this.width * 0.5) {
-            this.horizontalSpeed = 0.5
-            this.fps = 15
-            this.transparency = 0.95
-            this.hurtbox.body.isActive = true
-            this.hitbox.isActive = true
-        }
         super.update(deltaTime)
     }
-    draw(context) {
-        context.save()
-        context.globalAlpha = this.transparency
-        super.draw(context)
-        context.restore()
+    resolveCollision() {
+        this.healthPoints = 0
     }
 }
 export class Ghost extends Enemy {
@@ -250,5 +325,7 @@ export class Ghost extends Enemy {
         } else context.globalAlpha = this.transparency - 0.1
         super.draw(context)
         context.restore()
+    }
+    resolveCollision() {
     }
 }

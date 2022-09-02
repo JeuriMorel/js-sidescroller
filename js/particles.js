@@ -1,7 +1,7 @@
 import {qs} from './utils.js'
 
 class Particles {
-    constructor(game, x, y, sizeModifier, enemyType) {
+    constructor(game, sizeModifier, enemyType) {
         this.game = game
         this.sizeModifier = sizeModifier
         this.frameTimer = 0
@@ -15,6 +15,7 @@ class Particles {
     }
 
     update(deltaTime) {
+        if (this.frame === 0) this.audio.play()
         if (this.frame >= this.maxFrame) this.markedForDeletion = true
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
@@ -22,7 +23,6 @@ class Particles {
         } else {
             this.frameTimer += deltaTime
         }
-        this.audio.play()
     }
 
     draw(context) {
@@ -42,7 +42,7 @@ class Particles {
 
 export class Explosion extends Particles{
     constructor(game, x, y, sizeModifier, enemyType) {
-        super(game, x, y, sizeModifier, enemyType)
+        super(game, sizeModifier, enemyType)
         this.image = qs('#boom')
         this.maxFrame = 5
         this.spriteHeight = 179

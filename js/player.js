@@ -265,6 +265,7 @@ export class Player {
                     enemy.hitbox.y + enemy.hitbox.height >= this.hurtbox.head.y)
             ) {
                 this.setState(states.GET_HIT)
+                enemy.resolveCollision()
             }
         })
     }

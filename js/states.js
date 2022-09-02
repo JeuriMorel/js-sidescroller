@@ -202,7 +202,7 @@ export class Idle extends State {
             this.player.setState(states.CLAW_ATTACK)
         else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
-        else if (lastKey === "PRESS Right") this.player.setState(states.RUNNING)
+        else if (lastKey === "PRESS Right" || keysPressed.right) this.player.setState(states.RUNNING)
         else if (keysPressed.down) this.player.setState(states.SLEEPING)
         
     }
