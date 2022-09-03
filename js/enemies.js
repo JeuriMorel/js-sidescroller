@@ -139,7 +139,7 @@ export class Crawler extends Enemy {
         this.healthPoints = 50
         this.teleportAudio = new Audio()
         this.teleportAudio.src = "./audio/teleport.wav"
-
+        this.animationSheet = 1
         this.maxFrame = 12
         this.fps = 15
         this.frameInterval = 1000 / this.fps
@@ -182,13 +182,28 @@ export class Crawler extends Enemy {
         if (this.x < this.leftBound) {
             this.returnToRightBound()
         } else if (this.x > this.rightBound) {
-            this.horizontalSpeed = 0.5
-            this.fps = 15
+            this.x = this.game.width - this.width * 0.5
+            if (this.turnsUntilSpawn > 0) {
+                this.turnsUntilSpawn--
+            } else {
+                this.turnsUntilSpawn = 3
+                this.switchToIdle()
+            }
             this.transparency = 0.95
-            this.hurtbox.body.isActive = true
-            this.hitbox.isActive = true
+
+            if (this.animationSheet === 1) {
+                this.horizontalSpeed = 0.5
+                this.fps = 15
+                
+                this.hurtbox.body.isActive = true
+                this.hitbox.isActive = true
+            }
+        }
+        if (this.frame === this.maxFrame && this.animationSheet === 0) {
+            this.spawn()
         }
         super.update(deltaTime)
+
         if (this.healthPoints <= 0)
             this.game.particles.push(
                 new Smoke(
@@ -215,26 +230,35 @@ export class Crawler extends Enemy {
         this.transparency = 0.075
         this.hurtbox.body.isActive = false
         this.hitbox.isActive = false
-        if (this.turnsUntilSpawn > 0) {
-            this.turnsUntilSpawn--
-        } else {
-            this.turnsUntilSpawn = 3
-            this.spawn()
-        }
     }
     spawn() {
-        let numberOfSpawns = Math.floor(Math.random() * 2 + 1)
+        let numberOfSpawns = Math.floor(Math.random() * 7 + 3)
         for (let i = 0; i <= numberOfSpawns; i++) {
-            this.game.enemies.push(new Spawn(this.game))
+            this.game.enemies.push(
+                new Spawn(this.game, this.x + this.width * 0.5)
+            )
         }
+        this.switchToWalking()
+    }
+    switchToIdle() {
+        this.animationSheet = 0
+        this.maxFrame = 7
+        this.horizontalSpeed = 0
+    }
+    switchToWalking() {
+        this.animationSheet = 1
+        this.maxFrame = 12
+        this.transparency = 0.95
+        this.horizontalSpeed = 0.5
     }
 }
 export class Spawn extends Enemy {
-    constructor(game) {
+    constructor(game, x) {
         super(game)
 
         this.transparency = 0.95
         this.healthPoints = 20
+        this.animationSheet = 1
 
         this.maxFrame = 12
         this.fps = 15
@@ -245,7 +269,7 @@ export class Spawn extends Enemy {
         this.spriteHeight = CRAWLER_HEIGHT
         this.width = CRAWLER_WIDTH * this.sizeModifier
         this.height = CRAWLER_HEIGHT * this.sizeModifier
-        this.x = this.game.width
+        this.x = x
         this.y = this.game.height - this.height - this.game.groundMargin
         this.horizontalSpeed = Math.random() * 1 + 1
         this.image = qs("#crawler")

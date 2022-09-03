@@ -284,7 +284,14 @@ export class Roll_Down extends State {
     }
     handleInput() {
         if (this.player.isOnGround()) {
-            this.player.game.particles.push(new Fire(this.player.game, this.player.x + this.player.width * 0.5, this.player.y, 1))
+            this.player.game.particles.push(
+                new Fire(
+                    this.player.game,
+                    this.player.x + this.player.width * 0.5,
+                    this.player.game.height - this.player.game.groundMargin + this.player.height * 0.5,
+                    1
+                )
+            )
             this.player.setState(states.RESTING)
             this.player.game.recoveryTime += 300
             this.player.game.isRecovering = true

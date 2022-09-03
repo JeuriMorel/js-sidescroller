@@ -79,7 +79,7 @@ export class Fire extends Particles{
         this.height = this.spriteHeight * this.sizeModifier
         this.width = this.spriteWidth * this.sizeModifier
         this.x = x - (this.width * 0.5)
-        this.y = y - (this.height * 0.5)
+        this.y = y - this.height
         this.audio.src = SOUND_SNARE
     }
 }
