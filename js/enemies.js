@@ -8,7 +8,7 @@ import {
 } from "./constants.js"
 import { qs } from "./utils.js"
 
-import { Explosion } from "./particles.js"
+import { Boom, Smoke } from "./particles.js"
 
 class Enemy {
     constructor(game) {
@@ -21,16 +21,6 @@ class Enemy {
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
-        if (this.healthPoints <= 0)
-            this.game.particles.push(
-                new Explosion(
-                    this.game,
-                    this.x + (this.width * 0.5),
-                    this.y + (this.height * 0.5),
-                    this.sizeModifier,
-                    this.constructor.name
-                )
-            )
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
@@ -125,7 +115,19 @@ export class AngryEgg extends Enemy {
             height: this.height * 0.5,
         }
     }
-    resolveCollision(){
+    update(deltaTime) {
+        super.update(deltaTime)
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Smoke(
+                    this.game,
+                    this.x + this.width * 0.5,
+                    this.y + this.height * 0.5,
+                    this.sizeModifier
+                )
+            )
+    }
+    resolveCollision() {
         this.healthPoints = 0
     }
 }
@@ -179,7 +181,6 @@ export class Crawler extends Enemy {
     update(deltaTime) {
         if (this.x < this.leftBound) {
             this.returnToRightBound()
-            
         } else if (this.x > this.rightBound) {
             this.horizontalSpeed = 0.5
             this.fps = 15
@@ -188,6 +189,15 @@ export class Crawler extends Enemy {
             this.hitbox.isActive = true
         }
         super.update(deltaTime)
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Smoke(
+                    this.game,
+                    this.x + this.width * 0.5,
+                    this.y + this.height * 0.5,
+                    this.sizeModifier
+                )
+            )
     }
     draw(context) {
         context.save()
@@ -211,10 +221,10 @@ export class Crawler extends Enemy {
             this.turnsUntilSpawn = 3
             this.spawn()
         }
-    } 
+    }
     spawn() {
         let numberOfSpawns = Math.floor(Math.random() * 2 + 1)
-        for (let i = 0; i <= numberOfSpawns; i++){
+        for (let i = 0; i <= numberOfSpawns; i++) {
             this.game.enemies.push(new Spawn(this.game))
         }
     }
@@ -262,6 +272,15 @@ export class Spawn extends Enemy {
     }
     update(deltaTime) {
         super.update(deltaTime)
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Smoke(
+                    this.game,
+                    this.x + this.width * 0.5,
+                    this.y + this.height * 0.5,
+                    this.sizeModifier
+                )
+            )
     }
     resolveCollision() {
         this.healthPoints = 0
@@ -314,6 +333,15 @@ export class Ghost extends Enemy {
     }
     update(deltaTime) {
         super.update(deltaTime)
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Boom(
+                    this.game,
+                    this.x + this.width * 0.5,
+                    this.y + this.height * 0.5,
+                    this.sizeModifier
+                )
+            )
         this.y += Math.sin(this.angle) * this.curve
         this.angle += 0.05
     }
@@ -326,6 +354,5 @@ export class Ghost extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision() {
-    }
+    resolveCollision() {}
 }

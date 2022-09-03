@@ -10,3 +10,6 @@ export const GHOST_WIDTH = 198
 export const GHOST_HEIGHT = 291
 export const CRAWLER_WIDTH = 288
 export const CRAWLER_HEIGHT = 250
+export const SOUND_GHOST_DIE = "./audio/ghost_die.wav"
+export const SOUND_CRACKS_1 = "./audio/multiple_cracks_1.wav"
+export const SOUND_CRACKS_2 = "./audio/multiple_cracks_2.wav"

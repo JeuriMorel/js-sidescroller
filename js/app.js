@@ -4,7 +4,6 @@ import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
 import { AngryEgg, Ghost, Crawler } from "./enemies.js"
-import { Explosion} from "./particles.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
