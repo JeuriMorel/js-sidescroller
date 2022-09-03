@@ -13,3 +13,4 @@ export const CRAWLER_HEIGHT = 250
 export const SOUND_GHOST_DIE = "./audio/ghost_die.wav"
 export const SOUND_CRACKS_1 = "./audio/multiple_cracks_1.wav"
 export const SOUND_CRACKS_2 = "./audio/multiple_cracks_2.wav"
+export const SOUND_SNARE = "./audio/best_snare.wav"

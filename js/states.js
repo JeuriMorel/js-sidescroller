@@ -1,4 +1,5 @@
 import { DEFAULT_SCROLL_SPEED } from "./constants.js"
+import { Fire } from "./particles.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -281,8 +282,9 @@ export class Roll_Down extends State {
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
     }
-    handleInput({ lastKey }) {
+    handleInput() {
         if (this.player.isOnGround()) {
+            this.player.game.particles.push(new Fire(this.player.game, this.player.x + this.player.width * 0.5, this.player.y, 1))
             this.player.setState(states.RESTING)
             this.player.game.recoveryTime += 300
             this.player.game.isRecovering = true

@@ -41,6 +41,7 @@ export class Player {
         this.frameTimer = 0
         this.speed = 0
         this.maxSpeed = 10
+        this.poweredUp = true
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -188,6 +189,7 @@ export class Player {
             )
             context.stroke()
         }
+        
         context.drawImage(
             this.image,
             this.animationSheet * this.width,

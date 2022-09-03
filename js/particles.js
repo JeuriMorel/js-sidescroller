@@ -1,5 +1,5 @@
 import { qs } from './utils.js'
-import {SOUND_CRACKS_1, SOUND_CRACKS_2, SOUND_GHOST_DIE} from './constants.js'
+import {SOUND_CRACKS_1, SOUND_CRACKS_2, SOUND_GHOST_DIE, SOUND_SNARE} from './constants.js'
 
 class Particles {
     constructor(game, sizeModifier) {
@@ -67,5 +67,19 @@ export class Smoke extends Particles{
         this.x = x - (this.width * 0.5)
         this.y = y - (this.height * 0.5)
         this.audio.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
+    }
+}
+export class Fire extends Particles{
+    constructor(game, x, y, sizeModifier) {
+        super(game, sizeModifier)
+        this.image = qs('#fire')
+        this.maxFrame = 7
+        this.spriteHeight = 200
+        this.spriteWidth = 200
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - (this.width * 0.5)
+        this.y = y - (this.height * 0.5)
+        this.audio.src = SOUND_SNARE
     }
 }
