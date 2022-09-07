@@ -93,6 +93,7 @@ export class Player {
             new Sleeping(this),
         ]
         this.currentState = this.states[5]
+        this.currentState.enter()
     }
     update(deltaTime, input) {
         this.currentState.handleInput(input)
@@ -244,6 +245,13 @@ export class Player {
                 enemy.healthPoints -= this.attackDamage
                 enemy.hurtbox.body.isActive = false
                 enemy.invulnerabilityTime = 700
+                enemy.resolveCollision('attacked')
+                if(this.isFalling()) this.setState(states.JUMPING)
+            }
+            if (enemy.hurtbox.tongue.isActive && this.hitbox.x <= enemy.hurtbox.tongue.x + enemy.hurtbox.tongue.width && this.hitbox.x + this.hitbox.width >= enemy.hurtbox.tongue.x && this.hitbox.y <= enemy.hurtbox.tongue.y + enemy.hurtbox.tongue.height && this.hitbox.y + this.hitbox.height >= enemy.hurtbox.tongue.y) {
+                enemy.healthPoints -= this.attackDamage
+                enemy.hurtbox.tongue.isActive = false
+                enemy.invulnerabilityTime = 700
                 if(this.isFalling()) this.setState(states.JUMPING)
             }
         })
@@ -265,6 +273,44 @@ export class Player {
                         this.hurtbox.head.y + this.hurtbox.head.height) &&
                 (enemy.hitbox.y + enemy.hitbox.height >= this.hurtbox.body.y ||
                     enemy.hitbox.y + enemy.hitbox.height >= this.hurtbox.head.y)
+            ) {
+                this.setState(states.GET_HIT)
+                enemy.resolveCollision()
+            }
+            if (
+                enemy.hitbox.tongue.isActive &&
+                (enemy.hitbox.tongue.x <=
+                    this.hurtbox.body.x + this.hurtbox.body.width ||
+                    enemy.hitbox.tongue.x <=
+                        this.hurtbox.head.x + this.hurtbox.head.width) &&
+                (enemy.hitbox.tongue.x + enemy.hitbox.tongue.width >= this.hurtbox.body.x ||
+                    enemy.hitbox.tongue.x + enemy.hitbox.tongue.width >=
+                        this.hurtbox.head.x) &&
+                (enemy.hitbox.tongue.y <=
+                    this.hurtbox.body.y + this.hurtbox.body.height ||
+                    enemy.hitbox.tongue.y <=
+                        this.hurtbox.head.y + this.hurtbox.head.height) &&
+                (enemy.hitbox.tongue.y + enemy.hitbox.tongue.height >= this.hurtbox.body.y ||
+                    enemy.hitbox.tongue.y + enemy.hitbox.tongue.height >= this.hurtbox.head.y)
+            ) {
+                this.setState(states.GET_HIT)
+                enemy.resolveCollision()
+            }
+            if (
+                enemy.hitbox.body.isActive &&
+                (enemy.hitbox.body.x <=
+                    this.hurtbox.body.x + this.hurtbox.body.width ||
+                    enemy.hitbox.body.x <=
+                        this.hurtbox.head.x + this.hurtbox.head.width) &&
+                (enemy.hitbox.body.x + enemy.hitbox.body.width >= this.hurtbox.body.x ||
+                    enemy.hitbox.body.x + enemy.hitbox.body.width >=
+                        this.hurtbox.head.x) &&
+                (enemy.hitbox.body.y <=
+                    this.hurtbox.body.y + this.hurtbox.body.height ||
+                    enemy.hitbox.body.y <=
+                        this.hurtbox.head.y + this.hurtbox.head.height) &&
+                (enemy.hitbox.body.y + enemy.hitbox.body.height >= this.hurtbox.body.y ||
+                    enemy.hitbox.body.y + enemy.hitbox.body.height >= this.hurtbox.head.y)
             ) {
                 this.setState(states.GET_HIT)
                 enemy.resolveCollision()

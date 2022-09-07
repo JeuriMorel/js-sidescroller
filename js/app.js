@@ -4,6 +4,7 @@ import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
 import { AngryEgg, Ghost, Crawler } from "./enemies.js"
+import { Armored_Frog } from "./boss.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -22,7 +23,7 @@ window.addEventListener("load", function () {
             this.input = new InputHandler(this)
             this.enemyFrequency = 2500
             this.enemyTimer = 0
-            this.enemies = []
+            this.enemies = [new Armored_Frog(this)]
             this.particles = []
             this.maxEnemies = 5
             this.recoveryTime = 0
@@ -41,12 +42,12 @@ window.addEventListener("load", function () {
                 enemy.update(deltaTime)
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
-            if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
-                this.enemyTimer = 0
-                this.addEnemy()
-            } else {
-                this.enemyTimer += deltaTime
-            }
+            // if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
+            //     this.enemyTimer = 0
+            //     this.addEnemy()
+            // } else {
+            //     this.enemyTimer += deltaTime
+            // }
 
             this.particles = this.particles.filter(particle => !particle.markedForDeletion)
             this.particles.forEach(particle => particle.update(deltaTime))
