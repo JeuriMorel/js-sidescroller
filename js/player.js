@@ -240,6 +240,9 @@ export class Player {
     isDashAttacking() {
         return this.currentState === this.states[4]
     }
+    isClawing() {
+        return this.currentState === this.states[0]
+    }
     checkAttackCollision() {
         this.game.enemies.forEach(enemy => {
             const enemyHurtboxes = Object.values(enemy.hurtbox)

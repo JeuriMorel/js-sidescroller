@@ -1,3 +1,4 @@
+import { BOSS_DAMAGED } from "./constants.js"
 import { qs } from "./utils.js"
 
 const states = {
@@ -23,6 +24,7 @@ export class Armored_Frog {
         this.speed = 0
         this.deleteEnemy = false
         this.invulnerabilityTime = 0
+        this.phase = 1
         this.spriteHeight = 0
         this.spriteWidth = 0
         this.width = 0
@@ -37,6 +39,8 @@ export class Armored_Frog {
         this.attackTimer = 0
         this.attacks = ["tongue"]
         this.idleXOffsetModifier = 0.15
+        this.damaged_audio = new Audio(BOSS_DAMAGED)
+
 
         this.states = [
             new Walking(this),
@@ -71,7 +75,7 @@ export class Armored_Frog {
                 yOffset: this.height * 0.65,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.x - this.width,
+                width: this.width * 0.8,
                 height: this.height * 0.1,
             },
         }
@@ -92,7 +96,7 @@ export class Armored_Frog {
                 yOffset: this.height * 0.65,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.x - this.width,
+                width: this.width * 0.8,
                 height: this.height * 0.1,
             },
         }
@@ -187,6 +191,10 @@ export class Armored_Frog {
             )
             context.stroke()
         }
+        context.strokeStyle = "yellow"
+        context.beginPath()
+        context.rect(this.x, this.y, this.width, this.height)
+        context.stroke()
     }
     attack() {
         let attackToPerform =
@@ -209,6 +217,7 @@ export class Armored_Frog {
                 this.x += this.attackOffsetX
             }
             this.setState(states.GOT_HIT)
+            this.damaged_audio.play()
         }
     }
 }
@@ -240,34 +249,41 @@ class Attack extends Boss_State {
         this.boss.hurtbox.tongue.isActive = true
         this.boss.hitbox.tongue.xOffset += this.boss.attackOffsetX
         this.boss.hitbox.tongue.isActive = true
+        // console.log(this.boss.hurtbox.tongue.x)
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
-        if (this.boss.frame === 13) {
-            this.boss.hurtbox.tongue.xOffset =
-                this.boss.width * this.boss.idleXOffsetModifier +
-                this.boss.attackOffsetX -
-                110
-            this.boss.hitbox.tongue.xOffset =
-                this.boss.width * this.boss.idleXOffsetModifier +
-                this.boss.attackOffsetX -
-                110
-        }
         if (this.boss.frame === 14) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier +
                 this.boss.attackOffsetX -
-                210
+                75
             this.boss.hitbox.tongue.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier +
                 this.boss.attackOffsetX -
-                210
+                75
         }
         if (this.boss.frame === 15) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier +
-                this.boss.attackOffsetX
+                this.boss.attackOffsetX -
+                145
             this.boss.hitbox.tongue.xOffset =
+                this.boss.width * this.boss.idleXOffsetModifier +
+                this.boss.attackOffsetX -
+                145
+        }
+        if (this.boss.frame === 17) {
+            this.boss.hurtbox.tongue.xOffset =
+                this.boss.width * this.boss.idleXOffsetModifier +
+                this.boss.attackOffsetX -
+                80
+            this.boss.hitbox.tongue.xOffset =
+                this.boss.width * this.boss.idleXOffsetModifier +
+                this.boss.attackOffsetX
+        }
+        if (this.boss.frame === 18) {
+            this.boss.hurtbox.tongue.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier +
                 this.boss.attackOffsetX
         }
@@ -317,13 +333,21 @@ class Idle extends Boss_State {
         this.boss.maxFrame = 30
         this.boss.image = qs("#idle")
         this.boss.horizontalSpeed = 0
-        if (this.boss.hurtbox)
+        if (this.boss.hurtbox) {
             this.boss.hurtbox.body.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier
-        if (this.boss.hitbox)
+            this.boss.hurtbox.tongue.xOffset =
+                this.boss.width * this.boss.idleXOffsetModifier
+        }
+
+        if (this.boss.hitbox) {
             this.boss.hitbox.body.xOffset =
                 this.boss.width * this.boss.idleXOffsetModifier -
                 this.boss.width * 0.025
+
+            this.boss.hitbox.tongue.xOffset =
+                this.boss.width * this.boss.idleXOffsetModifier
+        }
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
