@@ -10,7 +10,7 @@ export class Phase_One extends Boss_Phase {
         this.boss = boss
         this.boss.fps = 20
         this.boss.frameInterval = 1000 / this.boss.fps
-        this.boss.attacks = ["TONGUE_ATTACK"]
+        this.boss.attacks = ["JUMP_ATTACK"]
         this.boss.sizeModifier = 0.6
     }
 }

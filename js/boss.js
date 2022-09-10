@@ -7,7 +7,7 @@ const states = {
     ATTACK: 1,
     IDLE: 2,
     JUMP_DOWN: 3,
-    JUMP_UP: 4,
+    JUMP_FORWARD: 4,
     GOT_HIT: 5,
     DEFEATED: 6,
 }
@@ -46,7 +46,7 @@ export class Armored_Frog {
             new Attack(this),
             new Idle(this),
             new Jump_Down(this),
-            new Jump_Up(this),
+            new Jump_Forward(this),
             new Got_Hit(this),
             new Defeated(this),
         ]
@@ -111,10 +111,13 @@ export class Armored_Frog {
                 yOffset: this.height * 1.4 * this.sizeModifier,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.6 * this.sizeModifier,
+                width: this.width * 1.4 * this.sizeModifier,
                 height: this.height * 0.15 * this.sizeModifier,
             },
         }
+        //vertical
+        this.velocityY = 0
+        this.weight = 3
     }
 
     setState(state) {
@@ -131,7 +134,7 @@ export class Armored_Frog {
         }
 
         //Attack
-        if (this.attackTimer > this.attackInterval) {
+        if (this.attackTimer > this.attackInterval && this.isOnGround()) {
             this.attackTimer = 0
             this.attackInterval =
                 this.attackIntervals[
@@ -149,6 +152,35 @@ export class Armored_Frog {
             this.hurtbox.body.isActive = true
             this.hurtbox.tongue.isActive = true
         }
+
+        //vertical
+        this.y += this.velocityY
+        if (
+            this.y >
+            this.game.height -
+                this.height * this.spriteGroundOffsetModifier -
+                this.game.groundMargin
+        )
+            this.y =
+                this.game.height -
+                this.height * this.spriteGroundOffsetModifier -
+                this.game.groundMargin
+
+        if (!this.isOnGround()) this.velocityY += this.weight
+        else this.velocityY = 0
+
+        // //horizontal jumping arc
+        if (this.jumpTarget) this.jumpTarget -= this.game.scrollSpeed
+        if (!this.isOnGround() && this.jumpTarget)
+            this.x += (this.jumpTarget - this.x) * 0.15
+    }
+    isOnGround() {
+        return (
+            this.y >=
+            this.game.height -
+                this.height * this.spriteGroundOffsetModifier -
+                this.game.groundMargin
+        )
     }
     draw(context) {
         if (this.hitbox.body.isActive) {
@@ -264,31 +296,23 @@ export class Armored_Frog {
     resetBoxes() {
         if (this.hurtbox) {
             this.hurtbox.body.xOffset =
-                this.width *
-                this.idleXOffsetModifier *
-                this.sizeModifier
+                this.width * this.idleXOffsetModifier * this.sizeModifier
             this.hurtbox.tongue.xOffset =
-                this.width *
-                this.idleXOffsetModifier *
-                this.sizeModifier
+                this.width * this.idleXOffsetModifier * this.sizeModifier
         }
 
         if (this.hitbox) {
             this.hitbox.body.xOffset =
-                this.width *
-                this.idleXOffsetModifier *
-                0.95 *
-                this.sizeModifier
+                this.width * this.idleXOffsetModifier * 0.95 * this.sizeModifier
 
             this.hitbox.tongue.xOffset =
-                this.width *
-                this.idleXOffsetModifier *
-                this.sizeModifier
+                this.width * this.idleXOffsetModifier * this.sizeModifier
 
             this.hitbox.claws.xOffset =
-                this.width *
-                this.idleXOffsetModifier *
-                this.sizeModifier
+                this.width * this.idleXOffsetModifier * this.sizeModifier
+
+            this.hitbox.claws.width = this.width * 1.4 * this.sizeModifier
+            this.hitbox.claws.yOffset = this.height * 1.4 * this.sizeModifier
         }
     }
 }
@@ -442,12 +466,18 @@ class Jump_Down extends Boss_State {
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 20
         this.boss.image = qs("#jump_down")
+        this.boss.hitbox.claws.width =
+            this.boss.width * 0.6 * this.boss.sizeModifier
+        this.boss.hitbox.claws.yOffset =
+            this.boss.height * 1.75 * this.boss.sizeModifier
     }
-    update() {}
+    update() {
+        if (this.boss.isOnGround()) this.boss.setState(states.IDLE)
+    }
 }
-class Jump_Up extends Boss_State {
+class Jump_Forward extends Boss_State {
     constructor(boss) {
-        super("JUMP_UP")
+        super("JUMP_FORWARD")
         this.boss = boss
     }
     enter() {
@@ -458,8 +488,13 @@ class Jump_Up extends Boss_State {
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 20
         this.boss.image = qs("#jump_up")
+        this.boss.velocityY -= 55
+        this.boss.jumpTarget = this.boss.game.player.x
+        this.boss.hitbox.claws.width *= 1.5
     }
-    update() {}
+    update() {
+        if (this.boss.velocityY > 0) this.boss.setState(states.JUMP_DOWN)
+    }
 }
 class Got_Hit extends Boss_State {
     constructor(boss) {
