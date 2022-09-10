@@ -38,7 +38,7 @@ export class Armored_Frog {
         this.hitOffsetX = 0
         this.attackInterval = 6000
         this.attackTimer = 0
-        this.idleXOffsetModifier = 0.2
+        this.idleXOffsetModifier = 0.25
         this.damaged_audio = new Audio(BOSS_DAMAGED)
 
         this.states = [
@@ -86,7 +86,6 @@ export class Armored_Frog {
                 xOffset:
                     this.width *
                     this.idleXOffsetModifier *
-                    0.95 *
                     this.sizeModifier,
                 yOffset: this.height * 0.3 * this.sizeModifier,
                 x: this.x + this.xOffset,
@@ -126,6 +125,7 @@ export class Armored_Frog {
     }
     update(deltaTime) {
         if (this.frameTimer > this.frameInterval) {
+            // console.log(this.x)
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
             else this.frame = 0
@@ -173,6 +173,8 @@ export class Armored_Frog {
         if (this.jumpTarget) this.jumpTarget -= this.game.scrollSpeed
         if (!this.isOnGround() && this.jumpTarget)
             this.x += (this.jumpTarget - this.x) * 0.15
+        
+        if(this.isOnGround() && this.currentState != states[states.ATTACK] && this.game.player.x > this.x + this.width) this.setState(states.JUMP_FORWARD)
     }
     isOnGround() {
         return (
@@ -183,17 +185,17 @@ export class Armored_Frog {
         )
     }
     draw(context) {
-        if (this.hitbox.body.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.body.x,
-                this.hitbox.body.y,
-                this.hitbox.body.width,
-                this.hitbox.body.height
-            )
-            context.stroke()
-        }
+        // if (this.hitbox.body.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.body.x,
+        //         this.hitbox.body.y,
+        //         this.hitbox.body.width,
+        //         this.hitbox.body.height
+        //     )
+        //     context.stroke()
+        // }
 
         context.drawImage(
             this.image,
@@ -206,43 +208,43 @@ export class Armored_Frog {
             this.width,
             this.height
         )
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hurtbox.tongue.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.tongue.x,
-                this.hurtbox.tongue.y,
-                this.hurtbox.tongue.width,
-                this.hurtbox.tongue.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.tongue.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.tongue.x,
-                this.hitbox.tongue.y,
-                this.hitbox.tongue.width,
-                this.hitbox.tongue.height
-            )
-            context.stroke()
-        }
-        context.strokeStyle = "yellow"
-        context.beginPath()
-        context.rect(this.x, this.y, this.width, this.height)
-        context.stroke()
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hurtbox.tongue.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.tongue.x,
+        //         this.hurtbox.tongue.y,
+        //         this.hurtbox.tongue.width,
+        //         this.hurtbox.tongue.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hitbox.tongue.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.tongue.x,
+        //         this.hitbox.tongue.y,
+        //         this.hitbox.tongue.width,
+        //         this.hitbox.tongue.height
+        //     )
+        //     context.stroke()
+        // }
+        // context.strokeStyle = "yellow"
+        // context.beginPath()
+        // context.rect(this.x, this.y, this.width, this.height)
+        // context.stroke()
         if (this.hitbox.claws.isActive) {
             context.strokeStyle = "#ff0000"
             context.beginPath()
@@ -293,6 +295,7 @@ export class Armored_Frog {
             this.setState(states.WALKING)
         }
     }
+
     resetBoxes() {
         if (this.hurtbox) {
             this.hurtbox.body.xOffset =
@@ -303,7 +306,7 @@ export class Armored_Frog {
 
         if (this.hitbox) {
             this.hitbox.body.xOffset =
-                this.width * this.idleXOffsetModifier * 0.95 * this.sizeModifier
+                this.width * this.idleXOffsetModifier * this.sizeModifier
 
             this.hitbox.tongue.xOffset =
                 this.width * this.idleXOffsetModifier * this.sizeModifier
@@ -403,6 +406,7 @@ class Attack extends Boss_State {
             this.boss.hitbox.tongue.isActive = false
             this.boss.x += this.boss.attackOffsetX
             this.boss.setState(2)
+            
         }
     }
 }
@@ -420,10 +424,6 @@ class Walking extends Boss_State {
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 22
         this.boss.image = qs("#walking")
-        this.boss.hurtbox.body.xOffset =
-            this.boss.width *
-            this.boss.idleXOffsetModifier *
-            this.boss.sizeModifier
         this.boss.resetBoxes()
     }
     update() {
@@ -489,8 +489,9 @@ class Jump_Forward extends Boss_State {
         this.boss.maxFrame = 20
         this.boss.image = qs("#jump_up")
         this.boss.velocityY -= 55
-        this.boss.jumpTarget = this.boss.game.player.x
+        this.boss.jumpTarget = this.boss.game.player.x < this.boss.x ? this.boss.game.player.x : this.boss.game.width - this.boss.width
         this.boss.hitbox.claws.width *= 1.5
+
     }
     update() {
         if (this.boss.velocityY > 0) this.boss.setState(states.JUMP_DOWN)
@@ -513,7 +514,7 @@ class Got_Hit extends Boss_State {
         this.boss.hurtbox.body.isActive = false
         this.boss.hurtbox.tongue.isActive = false
         this.boss.hitbox.tongue.isActive = false
-        this.boss.x = this.boss.game.width - this.boss.width
+        // this.boss.x = this.boss.game.width - this.boss.width
     }
     update() {
         if (this.boss.frame === this.boss.maxFrame) {
