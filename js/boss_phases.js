@@ -24,6 +24,7 @@ export class Phase_Two extends Boss_Phase {
         this.boss.sizeModifier = 0.8
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.idleXOffsetModifier = 0.25
         this.boss.y =
             this.boss.game.height -
             this.boss.height * this.boss.spriteGroundOffsetModifier -

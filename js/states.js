@@ -279,7 +279,6 @@ export class Roll_Down extends State {
         this.player.animationSheet = 8
         this.player.frame = 0
         this.player.maxFrame = 8
-        this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
     }
     handleInput() {
