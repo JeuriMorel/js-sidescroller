@@ -255,7 +255,10 @@ export class Player {
                     enemy.invulnerabilityTime = 700
                     enemy.resolveCollision("attacked")
                     if (this.isFalling()) this.setState(states.JUMPING)
-                    // else if(this.isRollingUp()) this.setState(states.FALLING)
+                    else if (this.isRollingUp()) {
+                        this.setState(states.FALLING)
+                        this.velocityY = 0
+                    }
                 }
             })
         })

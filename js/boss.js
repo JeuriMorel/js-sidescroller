@@ -6,20 +6,10 @@ import {
     Idle,
     Jump_Down,
     Jump_Forward,
+    Retreat,
     STATES,
-    Walking,
 } from "./boss_states.js"
 import { BOSS_DAMAGED } from "./constants.js"
-
-// const states = {
-//     WALKING: 0,
-//     ATTACK: 1,
-//     IDLE: 2,
-//     JUMP_DOWN: 3,
-//     JUMP_FORWARD: 4,
-//     GOT_HIT: 5,
-//     DEFEATED: 6,
-// }
 
 export class Armored_Frog {
     constructor(game) {
@@ -52,7 +42,7 @@ export class Armored_Frog {
         this.damaged_audio = new Audio(BOSS_DAMAGED)
 
         this.states = [
-            new Walking(this),
+            new Retreat(this),
             new Attack(this),
             new Idle(this),
             new Jump_Down(this),
@@ -298,15 +288,15 @@ export class Armored_Frog {
             this.damaged_audio.play()
         }
 
-        if (
-            this.phase.phase === "Phase_One" &&
-            this.healthPoints <= this.phase2Threshold
-        ) {
-            this.phase = new Phase_Two(this)
-        }
+        // if (
+        //     this.phase.phase === "Phase_One" &&
+        //     this.healthPoints <= this.phase2Threshold
+        // ) {
+        //     this.phase = new Phase_Two(this)
+        // }
 
         if (type === "player is attacked") {
-            this.setState(STATES.WALKING)
+            this.setState(STATES.RETREAT)
         }
     }
 

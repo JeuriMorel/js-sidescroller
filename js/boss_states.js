@@ -1,7 +1,7 @@
 import { qs } from './utils.js'
 
 export const STATES = {
-    WALKING: 0,
+    RETREAT: 0,
     ATTACK: 1,
     IDLE: 2,
     JUMP_DOWN: 3,
@@ -99,9 +99,9 @@ export class Attack extends Boss_State {
         }
     }
 }
-export class Walking extends Boss_State {
+export class Retreat extends Boss_State {
     constructor(boss) {
-        super("WALKING")
+        super("RETREAT")
         this.boss = boss
     }
     enter() {
@@ -112,7 +112,7 @@ export class Walking extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 22
-        this.boss.image = qs("#walking")
+        this.boss.image = qs("#retreat")
         this.boss.resetBoxes()
     }
     update() {
@@ -215,7 +215,7 @@ export class Got_Hit extends Boss_State {
         if (this.boss.frame === this.boss.maxFrame) {
             this.boss.hurtbox.body.isActive = true
             this.boss.hurtbox.tongue.isActive = true
-            this.boss.setState(STATES.WALKING)
+            this.boss.setState(STATES.RETREAT)
         }
     }
 }
