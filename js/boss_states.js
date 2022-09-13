@@ -1,4 +1,5 @@
-import { qs } from './utils.js'
+import { Boom } from "./particles.js"
+import { qs } from "./utils.js"
 
 export const STATES = {
     RETREAT: 0,
@@ -49,6 +50,7 @@ export class Attack extends Boss_State {
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX -
                 75
+            this.boss.audio.tongue.play()
             this.boss.hitbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -114,6 +116,7 @@ export class Retreat extends Boss_State {
         this.boss.maxFrame = 22
         this.boss.image = qs("#retreat")
         this.boss.resetBoxes()
+        this.boss.audio.retreat.play()
     }
     update() {
         this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
@@ -183,6 +186,15 @@ export class Jump_Forward extends Boss_State {
                 ? this.boss.game.player.x
                 : this.boss.game.width - this.boss.width
         this.boss.hitbox.claws.width *= 1.5
+        this.boss.audio.jump.play()
+        this.boss.game.particles.push(
+            new Boom(
+                this.boss.game,
+                this.boss.x + this.boss.width * 0.5,
+                this.boss.game.height - this.boss.game.groundMargin,
+                2
+            )
+        )
     }
     update() {
         if (this.boss.velocityY > 0) this.boss.setState(STATES.JUMP_DOWN)

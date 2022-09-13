@@ -34,7 +34,7 @@ window.addEventListener("load", function () {
             this.player.update(deltaTime, input)
             if (this.scrollSpeed > DEFAULT_SCROLL_SPEED) this.scrollSpeed -= 0.03
             if (this.recoveryTime > 0 && this.isRecovering) this.recoveryTime -= deltaTime
-            else if (this.recoveryTime < 0) {
+            else if (this.recoveryTime <= 0) {
                 this.recoveryTime = 0
                 this.isRecovering = false
             }

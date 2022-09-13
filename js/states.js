@@ -46,11 +46,13 @@ export class Attacking_Claw extends State {
         this.player.hurtbox.body.yOffset = 40
 
         this.player.game.scrollSpeed = 0
+        
     }
     handleInput({ lastKey }) {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 5 && this.player.frame < 8) this.player.y -= 6
         if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 4
+        if (this.player.frame === 10) this.player.audio.slash.play()
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.IDLE)
     }
@@ -154,6 +156,7 @@ export class Attacking_Dash extends State {
             this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 10) {
             this.player.x += 25
+            this.player.audio.dash.play()
             if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
                 this.player.game.scrollSpeed += 1
         }
@@ -308,6 +311,7 @@ export class Roll_Up extends State {
         this.player.maxFrame = 8
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
+        this.player.audio.up_roll.play()
         if (this.player.velocityY < 0) this.player.velocityY -= 13
     }
     handleInput({ lastKey }) {
@@ -349,6 +353,7 @@ export class Roll_Back extends State {
         this.player.maxFrame = 8
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
+        this.player.audio.back_roll.play()
     }
     handleInput() {
         this.player.x -= 5

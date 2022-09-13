@@ -11,7 +11,7 @@ export default class InputHandler {
         }
 
         window.addEventListener("keydown", e => {
-            if (this.game.recoveryTime > 0) return
+            if (this.game.isRecovering) return
             switch (e.key) {
                 case "ArrowLeft":
                     this.lastKey = "PRESS Left"

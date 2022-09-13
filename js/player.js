@@ -1,6 +1,10 @@
 import { qs } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
+    SOUND_BACKROLL,
+    SOUND_DASH,
+    SOUND_SLASH,
+    SOUND_UPROLL,
     SPRITE_HEIGHT,
     SPRITE_WIDTH,
     STARTING_X,
@@ -22,6 +26,7 @@ import {
     Sleeping,
     states,
 } from "./states.js"
+import { Boom, Smoke } from "./particles.js"
 
 export class Player {
     constructor(game) {
@@ -70,6 +75,12 @@ export class Player {
             y: this.y + this.yOffset,
             width: this.width,
             height: this.height,
+        }
+        this.audio = {
+            slash: new Audio(SOUND_SLASH),
+            up_roll: new Audio(SOUND_UPROLL),
+            dash: new Audio(SOUND_DASH),
+            back_roll: new Audio(SOUND_BACKROLL)
         }
         //vertical
         this.velocityY = 0
@@ -255,10 +266,9 @@ export class Player {
                     enemy.invulnerabilityTime = 700
                     enemy.resolveCollision("attacked")
                     if (this.isFalling()) this.setState(states.JUMPING)
-                    else if (this.isRollingUp()) {
-                        this.setState(states.FALLING)
-                        this.velocityY = 0
-                    }
+                    // else if (this.isRollingUp()) {
+                    //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))
+                    // }
                 }
             })
         })

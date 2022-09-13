@@ -9,7 +9,12 @@ import {
     Retreat,
     STATES,
 } from "./boss_states.js"
-import { BOSS_DAMAGED } from "./constants.js"
+import {
+    BOSS_DAMAGED,
+    SOUND_BOSS_JUMP,
+    SOUND_BOSS_RETREAT,
+    SOUND_TONGUE,
+} from "./constants.js"
 
 export class Armored_Frog {
     constructor(game) {
@@ -39,7 +44,12 @@ export class Armored_Frog {
         this.attackInterval = 6000
         this.attackTimer = 0
         this.idleXOffsetModifier = 0.25
-        this.damaged_audio = new Audio(BOSS_DAMAGED)
+        this.audio = {
+            damaged: new Audio(BOSS_DAMAGED),
+            retreat: new Audio(SOUND_BOSS_RETREAT),
+            jump: new Audio(SOUND_BOSS_JUMP),
+            tongue: new Audio(SOUND_TONGUE)
+        }
 
         this.states = [
             new Retreat(this),
@@ -285,7 +295,7 @@ export class Armored_Frog {
                 this.x += this.attackOffsetX
             }
             this.setState(STATES.GOT_HIT)
-            this.damaged_audio.play()
+            this.audio.damaged.play()
         }
 
         // if (

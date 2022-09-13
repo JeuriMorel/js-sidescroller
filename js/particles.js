@@ -52,7 +52,7 @@ export class Boom extends Particles{
         this.width = this.spriteWidth * this.sizeModifier
         this.x = x - (this.width * 0.5)
         this.y = y - (this.height * 0.5)
-        this.audio.src = SOUND_GHOST_DIE
+        // this.audio.src = SOUND_GHOST_DIE
     }
 }
 export class Smoke extends Particles{
