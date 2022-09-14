@@ -194,7 +194,7 @@ export class Crawler extends Enemy {
             if (this.animationSheet === 1) {
                 this.horizontalSpeed = 0.5
                 this.fps = 15
-                
+
                 this.hurtbox.body.isActive = true
                 this.hitbox.isActive = true
             }
@@ -359,12 +359,13 @@ export class Ghost extends Enemy {
         super.update(deltaTime)
         if (this.healthPoints <= 0)
             this.game.particles.push(
-                new Boom(
-                    this.game,
-                    this.x + this.width * 0.5,
-                    this.y + this.height * 0.5,
-                    this.sizeModifier
-                )
+                new Boom({
+                    game: this.game,
+                    x: this.x + this.width * 0.5,
+                    y: this.y + this.height * 0.5,
+                    sizeModifier: this.sizeModifier,
+                    src: SOUND_GHOST_DIE,
+                })
             )
         this.y += Math.sin(this.angle) * this.curve
         this.angle += 0.05

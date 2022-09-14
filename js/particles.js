@@ -15,7 +15,7 @@ class Particles {
     }
 
     update(deltaTime) {
-        if (this.frame === 0) this.audio.play()
+        if (this.frame === 0 && this.audio.src) this.audio.play()
         if (this.frame >= this.maxFrame) this.markedForDeletion = true
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
@@ -41,7 +41,7 @@ class Particles {
 }
 
 export class Boom extends Particles{
-    constructor(game, x, y, sizeModifier) {
+    constructor({game, x, y, sizeModifier, src}) {
         super(game, sizeModifier)
         this.image = qs('#boom')
         this.maxFrame = 5
@@ -52,7 +52,7 @@ export class Boom extends Particles{
         this.width = this.spriteWidth * this.sizeModifier
         this.x = x - (this.width * 0.5)
         this.y = y - (this.height * 0.5)
-        // this.audio.src = SOUND_GHOST_DIE
+        if(this.src) this.audio.src = src
     }
 }
 export class Smoke extends Particles{

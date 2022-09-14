@@ -120,6 +120,19 @@ export class Retreat extends Boss_State {
     }
     update() {
         this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
+        if (this.boss.frame % 5 === 0)
+            this.boss.game.particles.push(
+                new Boom({
+                    game: this.boss.game,
+                    x:
+                        this.boss.x +
+                        this.boss.width * Math.random() * 0.5 +
+                        0.5,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 0.2,
+                    src: null,
+                })
+            )
         if (this.boss.x >= this.boss.game.width - this.boss.width)
             this.boss.setState(2)
     }
@@ -188,12 +201,13 @@ export class Jump_Forward extends Boss_State {
         this.boss.hitbox.claws.width *= 1.5
         this.boss.audio.jump.play()
         this.boss.game.particles.push(
-            new Boom(
-                this.boss.game,
-                this.boss.x + this.boss.width * 0.5,
-                this.boss.game.height - this.boss.game.groundMargin,
-                2
-            )
+            new Boom({
+                game: this.boss.game,
+                x: this.boss.x + this.boss.width * 0.5,
+                y: this.boss.game.height - this.boss.game.groundMargin,
+                sizeModifier: 2,
+                src: null,
+            })
         )
     }
     update() {
