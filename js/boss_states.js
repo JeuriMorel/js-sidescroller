@@ -1,4 +1,4 @@
-import { Boom } from "./particles.js"
+import { Boom, Smoke } from "./particles.js"
 import { qs } from "./utils.js"
 
 export const STATES = {
@@ -120,7 +120,10 @@ export class Retreat extends Boss_State {
     }
     update() {
         this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
-        if (this.boss.frame % 5 === 0)
+        // if (
+        //     (this.boss.frame % 5) - Math.floor(this.boss.game.scrollSpeed) ===
+        //     0
+        // )
             this.boss.game.particles.push(
                 new Boom({
                     game: this.boss.game,
@@ -129,7 +132,7 @@ export class Retreat extends Boss_State {
                         this.boss.width * Math.random() * 0.5 +
                         0.5,
                     y: this.boss.game.height - this.boss.game.groundMargin,
-                    sizeModifier: 0.2,
+                    sizeModifier: Math.random() * 0.2 + 0.1,
                     src: null,
                 })
             )
@@ -231,6 +234,7 @@ export class Got_Hit extends Boss_State {
         this.boss.hurtbox.body.isActive = false
         this.boss.hurtbox.tongue.isActive = false
         this.boss.hitbox.tongue.isActive = false
+        this.boss.audio.damaged.play()
     }
     update() {
         this.boss.x += this.boss.horizontalSpeed + this.boss.game.scrollSpeed
@@ -252,12 +256,34 @@ export class Defeated extends Boss_State {
     }
     enter() {
         this.boss.frame = 0
+        this.boss.horizontalSpeed = 0
         this.boss.spriteWidth = 522
         this.boss.spriteHeight = 475
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 50
         this.boss.image = qs("#defeated")
+        this.boss.hurtbox.body.isActive = false
+        this.boss.hurtbox.tongue.isActive = false
+        this.boss.hitbox.body.isActive = false
+        this.boss.hitbox.tongue.isActive = false
+        this.boss.hitbox.claws.isActive = false
+        this.boss.isDefeated = true
+        this.boss.audio.growl.play()
+        
+
     }
-    update() {}
+    update() {
+        this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
+        if (this.boss.frame === this.boss.maxFrame) {
+            this.boss.deleteEnemy = true
+            this.boss.game.particles.push(new Smoke({
+                game: this.boss.game,
+                x: this.boss.x + this.boss.width * 0.5,
+                y: this.boss.game.height - this.boss.game.groundMargin,
+                sizeModifier: 2,
+                src: null
+            }))
+        }
+    }
 }

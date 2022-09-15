@@ -94,6 +94,7 @@ export class AngryEgg extends Enemy {
         this.y = this.game.height - this.height - this.game.groundMargin
         this.horizontalSpeed = 0
         this.image = qs("#angryEgg")
+        this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -119,12 +120,13 @@ export class AngryEgg extends Enemy {
         super.update(deltaTime)
         if (this.healthPoints <= 0)
             this.game.particles.push(
-                new Smoke(
-                    this.game,
-                    this.x + this.width * 0.5,
-                    this.y + this.height * 0.5,
-                    this.sizeModifier
-                )
+                new Smoke({
+                    game: this.game,
+                    x: this.x + this.width * 0.5,
+                    y: this.y + this.height * 0.5,
+                    sizeModifier: this.sizeModifier,
+                    src: this.src,
+                })
             )
     }
     resolveCollision() {
@@ -156,6 +158,7 @@ export class Crawler extends Enemy {
         this.rightBound = this.game.width - this.width * 0.5
         this.horizontalSpeed = 0.5
         this.image = qs("#crawler")
+        this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -206,12 +209,13 @@ export class Crawler extends Enemy {
 
         if (this.healthPoints <= 0)
             this.game.particles.push(
-                new Smoke(
-                    this.game,
-                    this.x + this.width * 0.5,
-                    this.y + this.height * 0.5,
-                    this.sizeModifier
-                )
+                new Smoke({
+                    game: this.game,
+                    x: this.x + this.width * 0.5,
+                    y: this.y + this.height * 0.5,
+                    sizeModifier: this.sizeModifier,
+                    src: this.src,
+                })
             )
     }
     draw(context) {

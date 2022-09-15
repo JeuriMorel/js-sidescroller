@@ -1,8 +1,8 @@
 import { qs } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
-    SOUND_BACKROLL,
     SOUND_DASH,
+    SOUND_DODGE,
     SOUND_SLASH,
     SOUND_UPROLL,
     SPRITE_HEIGHT,
@@ -80,7 +80,8 @@ export class Player {
             slash: new Audio(SOUND_SLASH),
             up_roll: new Audio(SOUND_UPROLL),
             dash: new Audio(SOUND_DASH),
-            back_roll: new Audio(SOUND_BACKROLL)
+            // back_roll: new Audio(SOUND_BACKROLL),
+            dodge: new Audio(SOUND_DODGE)
         }
         //vertical
         this.velocityY = 0
@@ -202,7 +203,10 @@ export class Player {
             )
             context.stroke()
         }
-
+        if (this.isRollingBack() || this.isRollingAcross()) {
+            context.save()
+            context.globalAlpha = 0.75
+        }
         context.drawImage(
             this.image,
             this.animationSheet * this.width,
@@ -214,6 +218,9 @@ export class Player {
             this.width,
             this.height
         )
+        if (this.isRollingBack() || this.isRollingAcross()) {
+            context.restore()
+        }
     }
     updateHitboxes() {
         this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
@@ -238,6 +245,9 @@ export class Player {
     }
     isRollingDown() {
         return this.currentState === this.states[9]
+    }
+    isRollingAcross() {
+        return this.currentState === this.states[10]
     }
     isRollingBack() {
         return this.currentState === this.states[11]

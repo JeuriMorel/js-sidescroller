@@ -1,5 +1,5 @@
-import { DEFAULT_SCROLL_SPEED } from "./constants.js"
-import { Fire } from "./particles.js"
+import { DEFAULT_SCROLL_SPEED, SOUND_SNARE } from "./constants.js"
+import { Boom, Fire } from "./particles.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -46,7 +46,6 @@ export class Attacking_Claw extends State {
         this.player.hurtbox.body.yOffset = 40
 
         this.player.game.scrollSpeed = 0
-        
     }
     handleInput({ lastKey }) {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
@@ -76,7 +75,6 @@ export class Falling extends State {
         this.player.hurtbox.head.height = this.player.height - 40
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
-        
     }
     handleInput({ lastKey }) {
         if (this.player.isOnGround()) this.player.setState(states.IDLE)
@@ -84,8 +82,8 @@ export class Falling extends State {
         else if (lastKey === "PRESS Left")
             this.player.x -= this.player.game.scrollSpeed
         else if (lastKey === "PRESS Right")
-            this.player.x += (this.player.game.scrollSpeed * 0.5) + 2
-        else this.player.x += (this.player.game.scrollSpeed * 0.15) + 2
+            this.player.x += this.player.game.scrollSpeed * 0.5 + 2
+        else this.player.x += this.player.game.scrollSpeed * 0.15 + 2
     }
 }
 export class Game_Over extends State {
@@ -206,9 +204,9 @@ export class Idle extends State {
             this.player.setState(states.CLAW_ATTACK)
         else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
-        else if (lastKey === "PRESS Right" || keysPressed.right) this.player.setState(states.RUNNING)
+        else if (lastKey === "PRESS Right" || keysPressed.right)
+            this.player.setState(states.RUNNING)
         else if (keysPressed.down) this.player.setState(states.SLEEPING)
-        
     }
 }
 export class Jumping extends State {
@@ -234,9 +232,9 @@ export class Jumping extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Left")
-            this.player.x -= (this.player.game.scrollSpeed * 2) + 2
+            this.player.x -= this.player.game.scrollSpeed * 2 + 2
         else if (lastKey === "PRESS Right")
-            this.player.x += (this.player.game.scrollSpeed) + 3
+            this.player.x += this.player.game.scrollSpeed + 3
         else if (lastKey === "RELEASE Up") this.player.velocityY += 0.5
         else if (lastKey === "PRESS Attack")
             this.player.setState(states.ROLL_UP)
@@ -269,8 +267,10 @@ export class Resting extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey === "RELEASE Down") this.player.setState(states.IDLE)
-        else if (lastKey === "PRESS Right") this.player.setState(states.ROLL_ACROSS)
-        else if (lastKey === "PRESS Left") this.player.setState(states.ROLL_BACK)
+        else if (lastKey === "PRESS Right")
+            this.player.setState(states.ROLL_ACROSS)
+        else if (lastKey === "PRESS Left")
+            this.player.setState(states.ROLL_BACK)
     }
 }
 export class Roll_Down extends State {
@@ -287,12 +287,16 @@ export class Roll_Down extends State {
     handleInput() {
         if (this.player.isOnGround()) {
             this.player.game.particles.push(
-                new Fire(
-                    this.player.game,
-                    this.player.x + this.player.width * 0.5,
-                    this.player.game.height - this.player.game.groundMargin + this.player.height * 0.5,
-                    1
-                )
+                new Fire({
+                    game: this.player.game,
+                    x: this.player.x + this.player.width * 0.5,
+                    y:
+                        this.player.game.height -
+                        this.player.game.groundMargin +
+                        this.player.height * 0.5,
+                    sizeModifier: 1,
+                    src: SOUND_SNARE,
+                })
             )
             this.player.setState(states.RESTING)
             this.player.game.recoveryTime += 300
@@ -314,7 +318,7 @@ export class Roll_Up extends State {
         this.player.audio.up_roll.play()
         if (this.player.velocityY < 0) this.player.velocityY -= 13
     }
-    handleInput({ lastKey }) {
+    handleInput() {
         if (this.player.velocityY > 0) {
             this.player.setState(states.FALLING)
             this.player.game.recoveryTime += 700
@@ -333,6 +337,7 @@ export class Roll_Across extends State {
         this.player.maxFrame = 8
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
+        this.player.audio.dodge.play()
     }
     handleInput({ lastKey }) {
         this.player.x += 5
@@ -353,11 +358,20 @@ export class Roll_Back extends State {
         this.player.maxFrame = 8
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
-        this.player.audio.back_roll.play()
+        this.player.audio.dodge.play()
     }
     handleInput() {
         this.player.x -= 5
         this.player.game.scrollSpeed = 0
+        this.player.game.particles.push(
+            new Boom({
+                game: this.player.game,
+                x: this.player.x + this.player.width * 0.75,
+                y: this.player.game.height - this.player.game.groundMargin,
+                sizeModifier: Math.random() * 0.1 + 0.05,
+                src: null,
+            })
+        )
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.IDLE)
     }

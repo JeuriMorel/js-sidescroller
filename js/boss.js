@@ -11,6 +11,7 @@ import {
 } from "./boss_states.js"
 import {
     BOSS_DAMAGED,
+    BOSS_GROWL,
     SOUND_BOSS_JUMP,
     SOUND_BOSS_RETREAT,
     SOUND_TONGUE,
@@ -19,7 +20,7 @@ import {
 export class Armored_Frog {
     constructor(game) {
         this.game = game
-        this.healthPoints = 200
+        this.healthPoints = 50
         this.animationSheet = 0
         this.frame = 0
         this.maxFrame = 11
@@ -28,6 +29,7 @@ export class Armored_Frog {
         this.frameTimer = 0
         this.speed = 0
         this.deleteEnemy = false
+        this.isDefeated = false
         this.invulnerabilityTime = 0
         this.phase = new Phase_One(this)
         this.phase2Threshold = 120
@@ -48,7 +50,8 @@ export class Armored_Frog {
             damaged: new Audio(BOSS_DAMAGED),
             retreat: new Audio(SOUND_BOSS_RETREAT),
             jump: new Audio(SOUND_BOSS_JUMP),
-            tongue: new Audio(SOUND_TONGUE)
+            tongue: new Audio(SOUND_TONGUE),
+            growl: new Audio(BOSS_GROWL)
         }
 
         this.states = [
@@ -132,9 +135,7 @@ export class Armored_Frog {
         this.currentState.enter()
     }
     update(deltaTime) {
-        if (this.healthPoints <= 0) this.setState(STATES.DEFEATED)
         if (this.frameTimer > this.frameInterval) {
-            // console.log(this.x)
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
             else this.frame = 0
@@ -142,8 +143,13 @@ export class Armored_Frog {
             this.frameTimer += deltaTime
         }
 
+
         //Attack
-        if (this.attackTimer > this.attackInterval && this.isOnGround()) {
+        if (
+            this.attackTimer > this.attackInterval &&
+            this.isOnGround() &&
+            !this.isDefeated
+        ) {
             this.attackTimer = 0
             this.attackInterval =
                 this.attackIntervals[
@@ -153,7 +159,7 @@ export class Armored_Frog {
         } else {
             this.attackTimer += deltaTime
         }
-        if (this.healthPoints <= 0) this.deleteEnemy = true
+        
         this.currentState.update()
         this.updateHitboxes()
         if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
@@ -184,8 +190,8 @@ export class Armored_Frog {
             this.x += (this.jumpTarget - this.x) * 0.15
 
         if (
-            this.isOnGround() &&
-            this.currentState != STATES[STATES.ATTACK] &&
+            this.isOnGround() && !this.isDefeated &&
+            this.currentState != STATES.ATTACK &&
             this.game.player.x > this.x + this.width
         )
             this.setState(STATES.JUMP_FORWARD)
@@ -294,8 +300,7 @@ export class Armored_Frog {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
             }
-            this.setState(STATES.GOT_HIT)
-            this.audio.damaged.play()
+            this.setState(this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT)
         }
 
         // if (
