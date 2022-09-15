@@ -51,7 +51,7 @@ export class Armored_Frog {
             retreat: new Audio(SOUND_BOSS_RETREAT),
             jump: new Audio(SOUND_BOSS_JUMP),
             tongue: new Audio(SOUND_TONGUE),
-            growl: new Audio(BOSS_GROWL)
+            growl: new Audio(BOSS_GROWL),
         }
 
         this.states = [
@@ -143,7 +143,6 @@ export class Armored_Frog {
             this.frameTimer += deltaTime
         }
 
-
         //Attack
         if (
             this.attackTimer > this.attackInterval &&
@@ -159,7 +158,7 @@ export class Armored_Frog {
         } else {
             this.attackTimer += deltaTime
         }
-        
+
         this.currentState.update()
         this.updateHitboxes()
         if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
@@ -190,7 +189,8 @@ export class Armored_Frog {
             this.x += (this.jumpTarget - this.x) * 0.15
 
         if (
-            this.isOnGround() && !this.isDefeated &&
+            this.isOnGround() &&
+            !this.isDefeated &&
             this.currentState != STATES.ATTACK &&
             this.game.player.x > this.x + this.width
         )
@@ -261,10 +261,10 @@ export class Armored_Frog {
         //     )
         //     context.stroke()
         // }
-        // context.strokeStyle = "yellow"
-        // context.beginPath()
-        // context.rect(this.x, this.y, this.width, this.height)
-        // context.stroke()
+        context.strokeStyle = "yellow"
+        context.beginPath()
+        context.rect(this.x, this.y, this.width, this.height)
+        context.stroke()
         if (this.hitbox.claws.isActive) {
             context.strokeStyle = "#ff0000"
             context.beginPath()
@@ -300,7 +300,9 @@ export class Armored_Frog {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
             }
-            this.setState(this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT)
+            this.setState(
+                this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT
+            )
         }
 
         // if (
@@ -311,6 +313,7 @@ export class Armored_Frog {
         // }
 
         if (type === "player is attacked") {
+            if (this.currentState === "ATTACK") this.x += this.attackOffsetX
             this.setState(STATES.RETREAT)
         }
     }

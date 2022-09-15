@@ -97,7 +97,7 @@ export class Attack extends Boss_State {
             this.boss.hurtbox.tongue.isActive = false
             this.boss.hitbox.tongue.isActive = false
             this.boss.x += this.boss.attackOffsetX
-            this.boss.setState(2)
+            this.boss.setState(STATES.IDLE)
         }
     }
 }
@@ -117,27 +117,22 @@ export class Retreat extends Boss_State {
         this.boss.image = qs("#retreat")
         this.boss.resetBoxes()
         this.boss.audio.retreat.play()
+        
+
     }
     update() {
         this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
-        // if (
-        //     (this.boss.frame % 5) - Math.floor(this.boss.game.scrollSpeed) ===
-        //     0
-        // )
-            this.boss.game.particles.push(
-                new Boom({
-                    game: this.boss.game,
-                    x:
-                        this.boss.x +
-                        this.boss.width * Math.random() * 0.5 +
-                        0.5,
-                    y: this.boss.game.height - this.boss.game.groundMargin,
-                    sizeModifier: Math.random() * 0.2 + 0.1,
-                    src: null,
-                })
-            )
+        this.boss.game.particles.push(
+            new Boom({
+                game: this.boss.game,
+                x: this.boss.x + this.boss.width * Math.random() * 0.5 + 0.5,
+                y: this.boss.game.height - this.boss.game.groundMargin,
+                sizeModifier: Math.random() * 0.2 + 0.1,
+                src: null,
+            })
+        )
         if (this.boss.x >= this.boss.game.width - this.boss.width)
-            this.boss.setState(2)
+            this.boss.setState(STATES.IDLE)
     }
 }
 export class Idle extends Boss_State {
@@ -158,7 +153,7 @@ export class Idle extends Boss_State {
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
-        if (this.boss.x <= this.boss.game.width * 0.5) this.boss.setState(0)
+        if (this.boss.x <= this.boss.game.width * 0.5) this.boss.setState(STATES.RETREAT)
     }
 }
 export class Jump_Down extends Boss_State {
@@ -270,20 +265,20 @@ export class Defeated extends Boss_State {
         this.boss.hitbox.claws.isActive = false
         this.boss.isDefeated = true
         this.boss.audio.growl.play()
-        
-
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
         if (this.boss.frame === this.boss.maxFrame) {
             this.boss.deleteEnemy = true
-            this.boss.game.particles.push(new Smoke({
-                game: this.boss.game,
-                x: this.boss.x + this.boss.width * 0.5,
-                y: this.boss.game.height - this.boss.game.groundMargin,
-                sizeModifier: 2,
-                src: null
-            }))
+            this.boss.game.particles.push(
+                new Smoke({
+                    game: this.boss.game,
+                    x: this.boss.x + this.boss.width * 0.5,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 2,
+                    src: null,
+                })
+            )
         }
     }
 }

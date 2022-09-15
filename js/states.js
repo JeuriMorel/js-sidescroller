@@ -340,7 +340,7 @@ export class Roll_Across extends State {
         this.player.audio.dodge.play()
     }
     handleInput({ lastKey }) {
-        this.player.x += 5
+        this.player.x += this.player.maxFrame - this.player.frame
         if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
             this.player.game.scrollSpeed += 0.3
         if (this.player.frame == this.player.maxFrame)
@@ -361,17 +361,8 @@ export class Roll_Back extends State {
         this.player.audio.dodge.play()
     }
     handleInput() {
-        this.player.x -= 5
+        this.player.x -= this.player.maxFrame - this.player.frame
         this.player.game.scrollSpeed = 0
-        this.player.game.particles.push(
-            new Boom({
-                game: this.player.game,
-                x: this.player.x + this.player.width * 0.75,
-                y: this.player.game.height - this.player.game.groundMargin,
-                sizeModifier: Math.random() * 0.1 + 0.05,
-                src: null,
-            })
-        )
         if (this.player.frame == this.player.maxFrame)
             this.player.setState(states.IDLE)
     }

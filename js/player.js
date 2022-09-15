@@ -203,10 +203,7 @@ export class Player {
             )
             context.stroke()
         }
-        if (this.isRollingBack() || this.isRollingAcross()) {
-            context.save()
-            context.globalAlpha = 0.75
-        }
+        
         context.drawImage(
             this.image,
             this.animationSheet * this.width,
@@ -218,9 +215,6 @@ export class Player {
             this.width,
             this.height
         )
-        if (this.isRollingBack() || this.isRollingAcross()) {
-            context.restore()
-        }
     }
     updateHitboxes() {
         this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
