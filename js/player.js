@@ -171,38 +171,38 @@ export class Player {
             this.checkHitCollision()
     }
     draw(context) {
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hurtbox.head.isActive) {
-            context.beginPath()
-            context.rect(
-                this.hurtbox.head.x,
-                this.hurtbox.head.y,
-                this.hurtbox.head.width,
-                this.hurtbox.head.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.x,
-                this.hitbox.y,
-                this.hitbox.width,
-                this.hitbox.height
-            )
-            context.stroke()
-        }
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hurtbox.head.isActive) {
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.head.x,
+        //         this.hurtbox.head.y,
+        //         this.hurtbox.head.width,
+        //         this.hurtbox.head.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hitbox.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.x,
+        //         this.hitbox.y,
+        //         this.hitbox.width,
+        //         this.hitbox.height
+        //     )
+        //     context.stroke()
+        // }
         
         context.drawImage(
             this.image,
@@ -265,10 +265,9 @@ export class Player {
                 if (enemy.invulnerabilityTime > 0) return
 
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
-                    enemy.healthPoints -= this.attackDamage
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 700
-                    enemy.resolveCollision("attacked")
+                    enemy.resolveCollision("enemy is attacked", this.attackDamage)
                     if (this.isFalling()) this.setState(states.JUMPING)
                     // else if (this.isRollingUp()) {
                     //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))

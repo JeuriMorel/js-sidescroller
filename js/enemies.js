@@ -5,7 +5,9 @@ import {
     GHOST_HEIGHT,
     CRAWLER_WIDTH,
     CRAWLER_HEIGHT,
-    SOUND_CRACKS_1, SOUND_CRACKS_2, SOUND_GHOST_DIE
+    SOUND_CRACKS_1,
+    SOUND_CRACKS_2,
+    SOUND_GHOST_DIE,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -35,33 +37,32 @@ class Enemy {
         if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
         else this.hurtbox.body.isActive = true
 
-        if (this.healthBar) this.healthBar.update(this.healthPoints, this.x, this.y)
-
+        if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
     }
     draw(context) {
-        if(this.healthBar) this.healthBar.draw(context)
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.x,
-                this.hitbox.y,
-                this.hitbox.width,
-                this.hitbox.height
-            )
-            context.stroke()
-        }
+        if (this.healthBar) this.healthBar.draw(context)
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hitbox.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.x,
+        //         this.hitbox.y,
+        //         this.hitbox.width,
+        //         this.hitbox.height
+        //     )
+        //     context.stroke()
+        // }
         context.drawImage(
             this.image,
             this.frame * this.spriteWidth,
@@ -86,12 +87,12 @@ export class AngryEgg extends Enemy {
     constructor(game) {
         super(game)
 
-        this.healthPoints = 200
         this.maxFrame = 38
         this.fps = 20
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.sizeModifier = Math.random() * 0.4 + 0.5
+        this.healthPoints = 100 * this.sizeModifier
         this.spriteWidth = ANGRY_EGG_WIDTH
         this.spriteHeight = ANGRY_EGG_HEIGHT
         this.width = ANGRY_EGG_WIDTH * this.sizeModifier
@@ -105,7 +106,7 @@ export class AngryEgg extends Enemy {
             x: this.x,
             y: this.y,
             width: this.width,
-            height: 15,
+            height: 15 * this.sizeModifier,
             maxhealth: this.healthPoints,
         })
         this.hurtbox = {
@@ -144,7 +145,11 @@ export class AngryEgg extends Enemy {
             this.deleteEnemy = true
         }
     }
-    resolveCollision() {
+    resolveCollision(type, attackDamage) {
+        if (type === "enemy is attacked") {
+            this.healthPoints -= attackDamage
+            this.healthBar.updateBar(this.healthPoints)
+        }
     }
 }
 export class Crawler extends Enemy {
@@ -152,7 +157,6 @@ export class Crawler extends Enemy {
         super(game)
 
         this.transparency = 0.95
-        this.healthPoints = 50
         this.teleportAudio = new Audio()
         this.teleportAudio.src = "./audio/teleport.wav"
         this.animationSheet = 1
@@ -161,6 +165,7 @@ export class Crawler extends Enemy {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.sizeModifier = Math.random() * 0.4 + 0.5
+        this.healthPoints = 75 * this.sizeModifier
         this.spriteWidth = CRAWLER_WIDTH
         this.spriteHeight = CRAWLER_HEIGHT
         this.width = CRAWLER_WIDTH * this.sizeModifier
@@ -193,6 +198,13 @@ export class Crawler extends Enemy {
             width: this.width * 0.9,
             height: this.height * 0.25,
         }
+        this.healthBar = new HealthBar({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: 20 * this.sizeModifier,
+            maxhealth: this.healthPoints,
+        })
         this.turnsUntilSpawn = 3
     }
     update(deltaTime) {
@@ -238,8 +250,12 @@ export class Crawler extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision() {
+    resolveCollision(type, attackDamage) {
         this.returnToRightBound()
+        if (type === "enemy is attacked") {
+            this.healthPoints -= attackDamage
+            this.healthBar.updateBar(this.healthPoints)
+        }
     }
     returnToRightBound() {
         this.teleportAudio.play()
@@ -291,6 +307,7 @@ export class Spawn extends Enemy {
         this.y = this.game.height - this.height - this.game.groundMargin
         this.horizontalSpeed = Math.random() * 1 + 1
         this.image = qs("#crawler")
+        this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -311,17 +328,25 @@ export class Spawn extends Enemy {
             width: this.width * 0.9,
             height: this.height * 0.25,
         }
+        this.healthBar = new HealthBar({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: 15 * this.sizeModifier,
+            maxhealth: this.healthPoints,
+        })
     }
     update(deltaTime) {
         super.update(deltaTime)
         if (this.healthPoints <= 0)
             this.game.particles.push(
-                new Smoke(
-                    this.game,
-                    this.x + this.width * 0.5,
-                    this.y + this.height * 0.5,
-                    this.sizeModifier
-                )
+                new Smoke({
+                    game: this.game,
+                    x: this.x + this.width * 0.5,
+                    y: this.y + this.height * 0.5,
+                    sizeModifier: this.sizeModifier,
+                    src: this.src,
+                })
             )
     }
     resolveCollision() {
@@ -397,5 +422,9 @@ export class Ghost extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision() {}
+    resolveCollision(type, attackDamage) {
+        if (type === "enemy is attacked") {
+            this.healthPoints -= attackDamage
+        }
+    }
 }

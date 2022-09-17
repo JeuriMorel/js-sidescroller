@@ -23,5 +23,4 @@ canvas {
 .player,
 .hidden {
     display: none;
-    color: hsl(2, 90%, 49%);
 }

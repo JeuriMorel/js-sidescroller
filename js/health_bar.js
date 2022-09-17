@@ -8,7 +8,7 @@ export class HealthBar {
         height,
         maxhealth,
         borderColor = "black",
-        fillColor = "#abff2e",
+        defaultbarColor = "#abff2e",
     }) {
         this.barOffset = 2
         this.x = x
@@ -16,34 +16,38 @@ export class HealthBar {
         this.width = width - this.barOffset * 2
         this.maxWidth = width
         this.height = height
-        this.radius = this.height * 0.5
-        this.barRadius = this.radius - this.barOffset
+        this.radius = this.height * 0.25
+        this.barRadius = Math.max(this.radius - this.barOffset, 1)
         this.barX = this.x + this.barOffset
         this.barY = this.y + this.barOffset
         this.barheight = this.height - this.barOffset * 2
         this.health = maxhealth
         this.maxhealth = maxhealth
         this.borderColor = borderColor
-        this.fillColor = fillColor
+        this.defaultbarColor = defaultbarColor
+        this.fillColor = defaultbarColor
     }
 
-    update(healthPoints, x, y) {
+    updatePosition(x, y) {
         this.x = x
         this.y = y
         this.barX = x + this.barOffset
         this.barY = y + this.barOffset
-        this.health = healthPoints
+    }
 
+    updateBar(healthPoints) {
+        this.health = healthPoints
         this.width =
             (this.health / this.maxhealth) * this.maxWidth - this.barOffset * 2
+        this.fillColor = getHealthBarColor(
+            this.defaultbarColor,
+            this.health / this.maxhealth
+        )
     }
 
     draw(context) {
         context.strokeStyle = this.borderColor
-        context.fillStyle = getHealthBarColor(
-            this.fillColor,
-            this.health / this.maxhealth
-        )
+        context.fillStyle = this.fillColor
         // const border = new Path2D()
         const bar = new Path2D()
 

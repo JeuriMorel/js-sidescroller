@@ -296,7 +296,7 @@ export class Armored_Frog {
         this.hitbox.claws.y = this.y + this.hitbox.claws.yOffset
     }
     resolveCollision(type) {
-        if (type === "attacked") {
+        if (type === "enemy is attacked") {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
             }
