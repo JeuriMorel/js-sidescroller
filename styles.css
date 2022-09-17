@@ -10,7 +10,7 @@
     font: inherit;
 }
 
-canvas{
+canvas {
     position: absolute;
     inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
@@ -19,6 +19,9 @@ canvas{
     border: 5px solid black;
 }
 
-.bg-layer, .player, .hidden{
+.bg-layer,
+.player,
+.hidden {
     display: none;
+    color: hsl(2, 90%, 49%);
 }

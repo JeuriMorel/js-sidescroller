@@ -23,7 +23,7 @@ window.addEventListener("load", function () {
             this.input = new InputHandler(this)
             this.enemyFrequency = 2500
             this.enemyTimer = 0
-            this.enemies = [new Armored_Frog(this)]
+            this.enemies = []
             this.particles = []
             this.maxEnemies = 5
             this.recoveryTime = 0
@@ -42,12 +42,12 @@ window.addEventListener("load", function () {
                 enemy.update(deltaTime)
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
-            // if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
-            //     this.enemyTimer = 0
-            //     this.addEnemy()
-            // } else {
-            //     this.enemyTimer += deltaTime
-            // }
+            if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
+                this.enemyTimer = 0
+                this.addEnemy()
+            } else {
+                this.enemyTimer += deltaTime
+            }
 
             this.particles = this.particles.filter(particle => !particle.markedForDeletion)
             this.particles.forEach(particle => particle.update(deltaTime))

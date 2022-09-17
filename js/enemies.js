@@ -5,10 +5,12 @@ import {
     GHOST_HEIGHT,
     CRAWLER_WIDTH,
     CRAWLER_HEIGHT,
+    SOUND_CRACKS_1, SOUND_CRACKS_2, SOUND_GHOST_DIE
 } from "./constants.js"
 import { qs } from "./utils.js"
 
 import { Boom, Smoke } from "./particles.js"
+import { HealthBar } from "./health_bar.js"
 
 class Enemy {
     constructor(game) {
@@ -32,8 +34,12 @@ class Enemy {
         this.updateHitboxes()
         if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
         else this.hurtbox.body.isActive = true
+
+        if (this.healthBar) this.healthBar.update(this.healthPoints, this.x, this.y)
+
     }
     draw(context) {
+        if(this.healthBar) this.healthBar.draw(context)
         if (this.hurtbox.body.isActive) {
             context.strokeStyle = "black"
             context.beginPath()
@@ -80,7 +86,7 @@ export class AngryEgg extends Enemy {
     constructor(game) {
         super(game)
 
-        this.healthPoints = 20
+        this.healthPoints = 200
         this.maxFrame = 38
         this.fps = 20
         this.frameInterval = 1000 / this.fps
@@ -95,6 +101,13 @@ export class AngryEgg extends Enemy {
         this.horizontalSpeed = 0
         this.image = qs("#angryEgg")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
+        this.healthBar = new HealthBar({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: 15,
+            maxhealth: this.healthPoints,
+        })
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -118,7 +131,7 @@ export class AngryEgg extends Enemy {
     }
     update(deltaTime) {
         super.update(deltaTime)
-        if (this.healthPoints <= 0)
+        if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Smoke({
                     game: this.game,
@@ -128,9 +141,10 @@ export class AngryEgg extends Enemy {
                     src: this.src,
                 })
             )
+            this.deleteEnemy = true
+        }
     }
     resolveCollision() {
-        this.healthPoints = 0
     }
 }
 export class Crawler extends Enemy {
