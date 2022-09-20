@@ -33,9 +33,9 @@ export class Attacking_Claw extends State {
         this.player.animationSheet = 0
         this.player.frame = 0
         this.player.maxFrame = 13
-        this.player.hitbox.isActive = true
-        this.player.hitbox.xOffset = 70
-        this.player.hitbox.yOffset = 15
+        // this.player.hitbox.isActive = true
+        // this.player.hitbox.xOffset = 70
+        // this.player.hitbox.yOffset = 15
         this.player.hitbox.width = this.player.width - 60
         this.player.hitbox.height = this.player.height - 25
         this.player.hurtbox.head.isActive = true
@@ -44,16 +44,21 @@ export class Attacking_Claw extends State {
         this.player.hurtbox.head.yOffset = 15
         this.player.hurtbox.body.xOffset = 25
         this.player.hurtbox.body.yOffset = 40
-
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey }) {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 5 && this.player.frame < 8) this.player.y -= 6
         if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 4
-        if (this.player.frame === 10) this.player.audio.slash.play()
-        if (this.player.frame == this.player.maxFrame)
+        if (this.player.frame === 10) {
+            if (this.player.isWhiffing) this.player.audio.slash.play()
+            else this.player.audio.claw_strike.play()
+            
+        }
+        if (this.player.frame == this.player.maxFrame) {
             this.player.setState(states.IDLE)
+            this.player.isWhiffing = true
+        }
     }
 }
 export class Falling extends State {
@@ -229,6 +234,7 @@ export class Jumping extends State {
         this.player.hurtbox.head.height = this.player.height - 40
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
+        
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Left")

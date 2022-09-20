@@ -21,10 +21,25 @@ class Enemy {
         this.frame = 0
         this.deleteEnemy = false
         this.invulnerabilityTime = 0
+        this.markedForRecoil = false
+        this.recoilSpeeds = {
+            "Claw": 35,
+            "Dash": 15,
+            "Jump": 10
+        }
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
+        //
+        // if (this.frameTimer > this.frameInterval && this.markedForRecoil) {
+        //     this.horizontalSpeed -= 35
+        //     this.markedForRecoil = false
+        // }
+        // if (this.horizontalSpeed <= 0) this.horizontalSpeed += this.weight
+        // if (this.horizontalSpeed > this.defaultHorizontalSpeed)
+        //     this.horizontalSpeed = this.defaultHorizontalSpeed
+        //
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
@@ -81,6 +96,12 @@ class Enemy {
         this.hitbox.x = this.x + this.hitbox.xOffset
         this.hitbox.y = this.y + this.hitbox.yOffset
     }
+    resolveCollision({type, attackDamage}) {
+        if (type === "enemy is attacked") {
+            this.healthPoints -= attackDamage
+            this.markedForRecoil = true
+        }
+    }
 }
 
 export class AngryEgg extends Enemy {
@@ -99,9 +120,13 @@ export class AngryEgg extends Enemy {
         this.height = ANGRY_EGG_HEIGHT * this.sizeModifier
         this.x = this.game.width
         this.y = this.game.height - this.height - this.game.groundMargin
+        this.defaultHorizontalSpeed = 0
         this.horizontalSpeed = 0
+        // this.markedForRecoil = false
+        this.attackDirection
         this.image = qs("#angryEgg")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
+        this.weight = 3 * this.sizeModifier
         this.healthBar = new HealthBar({
             x: this.x,
             y: this.y,
@@ -131,7 +156,14 @@ export class AngryEgg extends Enemy {
         }
     }
     update(deltaTime) {
+        if (this.frameTimer + deltaTime > this.frameInterval && this.markedForRecoil) {
+            this.horizontalSpeed -= this.recoilSpeeds[this.attackType]
+            if (this.healthBar) this.healthBar.updateBar(this.healthPoints)
+            this.markedForRecoil = false
+        }
         super.update(deltaTime)
+        if (this.horizontalSpeed <= 0) this.horizontalSpeed += this.weight
+        if(this.horizontalSpeed > this.defaultHorizontalSpeed) this.horizontalSpeed = this.defaultHorizontalSpeed
         if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Smoke({
@@ -145,11 +177,9 @@ export class AngryEgg extends Enemy {
             this.deleteEnemy = true
         }
     }
-    resolveCollision(type, attackDamage) {
-        if (type === "enemy is attacked") {
-            this.healthPoints -= attackDamage
-            this.healthBar.updateBar(this.healthPoints)
-        }
+    resolveCollision({type, attackDamage, attackType}) {
+        super.resolveCollision({ type, attackDamage })
+        this.attackType = attackType
     }
 }
 export class Crawler extends Enemy {
@@ -175,7 +205,9 @@ export class Crawler extends Enemy {
         this.leftBound =
             this.game.player.width * 0.5 + this.game.player.starting_x
         this.rightBound = this.game.width - this.width * 0.5
+        this.defaultHorizontalSpeed = 0.5
         this.horizontalSpeed = 0.5
+        this.weight = 5 * this.sizeModifier
         this.image = qs("#crawler")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.hurtbox = {
@@ -208,6 +240,12 @@ export class Crawler extends Enemy {
         this.turnsUntilSpawn = 3
     }
     update(deltaTime) {
+        if (this.frameTimer + deltaTime > this.frameInterval && this.markedForRecoil) {
+            this.returnToRightBound()
+            if (this.healthBar) this.healthBar.updateBar(this.healthPoints)
+            this.markedForRecoil = false
+        }
+        super.update(deltaTime)
         if (this.x < this.leftBound) {
             this.returnToRightBound()
         } else if (this.x > this.rightBound) {
@@ -221,9 +259,8 @@ export class Crawler extends Enemy {
             this.transparency = 0.95
 
             if (this.animationSheet === 1) {
-                this.horizontalSpeed = 0.5
+                this.horizontalSpeed = this.defaultHorizontalSpeed
                 this.fps = 15
-
                 this.hurtbox.body.isActive = true
                 this.hitbox.isActive = true
             }
@@ -231,7 +268,8 @@ export class Crawler extends Enemy {
         if (this.frame === this.maxFrame && this.animationSheet === 0) {
             this.spawn()
         }
-        super.update(deltaTime)
+        
+        
 
         if (this.healthPoints <= 0)
             this.game.particles.push(
@@ -250,13 +288,7 @@ export class Crawler extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision(type, attackDamage) {
-        this.returnToRightBound()
-        if (type === "enemy is attacked") {
-            this.healthPoints -= attackDamage
-            this.healthBar.updateBar(this.healthPoints)
-        }
-    }
+    
     returnToRightBound() {
         this.teleportAudio.play()
         this.horizontalSpeed = -25
@@ -422,7 +454,7 @@ export class Ghost extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision(type, attackDamage) {
+    resolveCollision({type, attackDamage}) {
         if (type === "enemy is attacked") {
             this.healthPoints -= attackDamage
         }

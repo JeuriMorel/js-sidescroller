@@ -28,12 +28,15 @@ window.addEventListener("load", function () {
             this.maxEnemies = 5
             this.recoveryTime = 0
             this.isRecovering = false
+            this.deltaTime = 0
         }
         update(deltaTime, input) {
             this.background.update()
             this.player.update(deltaTime, input)
-            if (this.scrollSpeed > DEFAULT_SCROLL_SPEED) this.scrollSpeed -= 0.03
-            if (this.recoveryTime > 0 && this.isRecovering) this.recoveryTime -= deltaTime
+            if (this.scrollSpeed > DEFAULT_SCROLL_SPEED)
+                this.scrollSpeed -= 0.03
+            if (this.recoveryTime > 0 && this.isRecovering)
+                this.recoveryTime -= deltaTime
             else if (this.recoveryTime <= 0) {
                 this.recoveryTime = 0
                 this.isRecovering = false
@@ -42,16 +45,20 @@ window.addEventListener("load", function () {
                 enemy.update(deltaTime)
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
-            if (this.enemyTimer > this.enemyFrequency && this.enemies.length < this.maxEnemies) {
+            if (
+                this.enemyTimer > this.enemyFrequency &&
+                this.enemies.length < this.maxEnemies
+            ) {
                 this.enemyTimer = 0
                 this.addEnemy()
             } else {
                 this.enemyTimer += deltaTime
             }
 
-            this.particles = this.particles.filter(particle => !particle.markedForDeletion)
+            this.particles = this.particles.filter(
+                particle => !particle.markedForDeletion
+            )
             this.particles.forEach(particle => particle.update(deltaTime))
-
         }
 
         draw(context) {
@@ -65,9 +72,21 @@ window.addEventListener("load", function () {
 
         addEnemy() {
             if (Math.random() > 0.7) this.enemies.push(new Ghost(this))
-            else if (Math.random() > 0.4 && !this.enemies.some(obj => obj instanceof Crawler)) this.enemies.push(new Crawler(this))
+            else if (
+                Math.random() > 0.4 &&
+                !this.enemies.some(obj => obj instanceof Crawler)
+            )
+                this.enemies.push(new Crawler(this))
             else this.enemies.push(new AngryEgg(this))
+        }
 
+        stickyFriction() {
+            const sticky = this.deltaTime * -12
+            if (this.player.frameTimer > -50) this.player.frameTimer += sticky
+            this.enemies.forEach(enemy => {
+                if (enemy.frameTimer > -50) enemy.frameTimer += sticky
+            })
+            this.enemyTimer += sticky
         }
     }
 
@@ -77,6 +96,7 @@ window.addEventListener("load", function () {
     function animate(timestamp) {
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
+        game.deltaTime = deltaTime
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         game.update(deltaTime, game.input)
         game.draw(ctx)

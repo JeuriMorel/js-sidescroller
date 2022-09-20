@@ -1,6 +1,7 @@
 import { qs } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
+    SOUND_CLAW_STRIKE,
     SOUND_DASH,
     SOUND_DODGE,
     SOUND_SLASH,
@@ -47,6 +48,8 @@ export class Player {
         this.speed = 0
         this.maxSpeed = 10
         this.poweredUp = true
+        this.deltaTime = 0
+        this.isWhiffing = true
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -80,8 +83,8 @@ export class Player {
             slash: new Audio(SOUND_SLASH),
             up_roll: new Audio(SOUND_UPROLL),
             dash: new Audio(SOUND_DASH),
-            // back_roll: new Audio(SOUND_BACKROLL),
-            dodge: new Audio(SOUND_DODGE)
+            dodge: new Audio(SOUND_DODGE),
+            claw_strike : new Audio(SOUND_CLAW_STRIKE)
         }
         //vertical
         this.velocityY = 0
@@ -108,6 +111,7 @@ export class Player {
         this.currentState.enter()
     }
     update(deltaTime, input) {
+        this.deltaTime = deltaTime
         this.currentState.handleInput(input)
         //keep player within gamebox
         if (this.x < STARTING_X) this.x = STARTING_X
@@ -138,7 +142,7 @@ export class Player {
             this.frameTimer += deltaTime
         }
         //player hitboxes
-        if (this.isClawing() && this.frame >= 8) {
+        if (this.isClawing() && this.frame >= 8 && this.isWhiffing) {
             this.hitbox.isActive = true
             this.hitbox.xOffset = 70
             this.hitbox.yOffset = 15
@@ -265,9 +269,16 @@ export class Player {
                 if (enemy.invulnerabilityTime > 0) return
 
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
+                    const attackType = this.isClawing() ? "Claw" : this.isDashAttacking() ? "Dash" : "Jump"
+                    this.game.stickyFriction()
+                    enemy.resolveCollision({
+                        type: "enemy is attacked",
+                        attackDamage: this.attackDamage,
+                        attackType,
+                    })
+                    this.isWhiffing = false
                     enemyHurtbox.isActive = false
-                    enemy.invulnerabilityTime = 700
-                    enemy.resolveCollision("enemy is attacked", this.attackDamage)
+                    enemy.invulnerabilityTime = 500
                     if (this.isFalling()) this.setState(states.JUMPING)
                     // else if (this.isRollingUp()) {
                     //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))
@@ -279,6 +290,7 @@ export class Player {
     enemyIsGetttingHit(enemyHurtbox) {
         return (
             enemyHurtbox.isActive &&
+            this.hitbox.isActive &&
             this.hitbox.x <= enemyHurtbox.x + enemyHurtbox.width &&
             this.hitbox.x + this.hitbox.width >= enemyHurtbox.x &&
             this.hitbox.y <= enemyHurtbox.y + enemyHurtbox.height &&
