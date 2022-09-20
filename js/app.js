@@ -80,11 +80,11 @@ window.addEventListener("load", function () {
             else this.enemies.push(new AngryEgg(this))
         }
 
-        stickyFriction() {
-            const sticky = this.deltaTime * -12
-            if (this.player.frameTimer > -50) this.player.frameTimer += sticky
+        stickyFriction(stickyMultiplier) {
+            const sticky = this.deltaTime * -4 * stickyMultiplier
+            if (this.player.frameTimer >= 0) this.player.frameTimer += sticky
             this.enemies.forEach(enemy => {
-                if (enemy.frameTimer > -50) enemy.frameTimer += sticky
+                if (enemy.frameTimer >= 0) enemy.frameTimer += sticky
             })
             this.enemyTimer += sticky
         }

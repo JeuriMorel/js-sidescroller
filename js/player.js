@@ -50,6 +50,7 @@ export class Player {
         this.poweredUp = true
         this.deltaTime = 0
         this.isWhiffing = true
+        this.stickyMultiplier = 0
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -113,6 +114,7 @@ export class Player {
     update(deltaTime, input) {
         this.deltaTime = deltaTime
         this.currentState.handleInput(input)
+        if(this.stickyMultiplier > 0) this.callStickyFunction()
         //keep player within gamebox
         if (this.x < STARTING_X) this.x = STARTING_X
         else if (this.x > this.game.width - this.width * 3) {
@@ -230,6 +232,7 @@ export class Player {
     }
     setState(state) {
         this.currentState = this.states[state]
+        this.isWhiffing = true
         this.currentState.enter()
     }
     isOnGround() {
@@ -270,7 +273,8 @@ export class Player {
 
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
                     const attackType = this.isClawing() ? "Claw" : this.isDashAttacking() ? "Dash" : "Jump"
-                    this.game.stickyFriction()
+                    this.stickyMultiplier = 3
+                    
                     enemy.resolveCollision({
                         type: "enemy is attacked",
                         attackDamage: this.attackDamage,
@@ -286,6 +290,12 @@ export class Player {
                 }
             })
         })
+    }
+    callStickyFunction() {
+        if (this.stickyMultiplier > 0) {
+            this.game.stickyFriction(this.stickyMultiplier)
+            this.stickyMultiplier--
+        }
     }
     enemyIsGetttingHit(enemyHurtbox) {
         return (
