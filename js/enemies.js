@@ -27,6 +27,7 @@ class Enemy {
             "Dash": 15,
             "Jump": 10
         }
+        
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed

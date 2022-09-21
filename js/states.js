@@ -50,7 +50,7 @@ export class Attacking_Claw extends State {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 5 && this.player.frame < 8) this.player.y -= 6
         if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 4
-        if (this.player.frame === 10) {
+        if (this.player.frame === 12) {
             if (this.player.isWhiffing) this.player.audio.slash.play()
             else this.player.audio.claw_strike.play()
             

@@ -1,3 +1,4 @@
+import { DamageNumbers } from "./damageNumbers.js"
 import { getHealthBarColor } from "./utils.js"
 
 export class HealthBar {
@@ -26,6 +27,7 @@ export class HealthBar {
         this.borderColor = borderColor
         this.defaultbarColor = defaultbarColor
         this.fillColor = defaultbarColor
+        this.damageNumbers = []
     }
 
     updatePosition(x, y) {
@@ -33,9 +35,16 @@ export class HealthBar {
         this.y = y
         this.barX = x + this.barOffset
         this.barY = y + this.barOffset
+        this.damageNumbers = this.damageNumbers.filter(
+            numbers => !numbers.markedForDeletion
+        )
+        this.damageNumbers.forEach(numbers =>
+            numbers.update({ x: this.x + this.width, y: this.y - this.height })
+        )
     }
 
     updateBar(healthPoints) {
+        const damageTaken = this.health - healthPoints
         this.health = healthPoints
         this.width =
             (this.health / this.maxhealth) * this.maxWidth - this.barOffset * 2
@@ -43,11 +52,21 @@ export class HealthBar {
             this.defaultbarColor,
             this.health / this.maxhealth
         )
+        this.damageNumbers.push(
+            new DamageNumbers({
+                value: damageTaken,
+                x: this.x + this.width,
+                y: this.y - this.height,
+            })
+        )
     }
 
     draw(context) {
+        
         context.strokeStyle = this.borderColor
         context.fillStyle = this.fillColor
+        context.lineWidth = 2
+
         // const border = new Path2D()
         const bar = new Path2D()
 
@@ -109,5 +128,8 @@ export class HealthBar {
         context.closePath()
         context.stroke()
         context.fill(bar)
+        this.damageNumbers.forEach(numbers =>
+            numbers.draw({ context, color: this.fillColor })
+        )
     }
 }

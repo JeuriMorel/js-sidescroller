@@ -25,6 +25,7 @@ window.addEventListener("load", function () {
             this.enemyTimer = 0
             this.enemies = []
             this.particles = []
+            
             this.maxEnemies = 5
             this.recoveryTime = 0
             this.isRecovering = false
