@@ -1,5 +1,10 @@
-import { qs } from './utils.js'
-import {SOUND_CRACKS_1, SOUND_CRACKS_2, SOUND_GHOST_DIE, SOUND_SNARE} from './constants.js'
+import { qs } from "./utils.js"
+import {
+    SOUND_CRACKS_1,
+    SOUND_CRACKS_2,
+    SOUND_GHOST_DIE,
+    SOUND_SNARE,
+} from "./constants.js"
 
 class Particles {
     constructor(game, sizeModifier, src) {
@@ -9,12 +14,13 @@ class Particles {
         this.fps = 60
         this.frameInterval = 1000 / this.fps
         this.frame = 0
-        this.animationSheet = 0
+        this.frameX = 0
+        this.frameY = 0
         if (src) this.audio = new Audio(src)
-
     }
 
     update(deltaTime) {
+        this.x -= this.game.scrollSpeed
         if (this.frame === 0) this.audio?.play()
         if (this.frame >= this.maxFrame) this.markedForDeletion = true
         if (this.frameTimer > this.frameInterval) {
@@ -28,8 +34,8 @@ class Particles {
     draw(context) {
         context.drawImage(
             this.image,
-            this.frame * this.spriteWidth,
-            this.animationSheet * this.spriteHeight,
+            (this.frame % this.framesPerRow) * this.spriteWidth,
+            Math.floor(this.frame / this.framesPerRow) * this.spriteHeight,
             this.spriteWidth,
             this.spriteHeight,
             this.x,
@@ -40,18 +46,19 @@ class Particles {
     }
 }
 
-export class Boom extends Particles{
-    constructor({game, x, y, sizeModifier, src}) {
+export class Boom extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs('#boom')
+        this.image = qs("#boom")
         this.maxFrame = 5
+        this.framesPerRow = 5
         this.fps = 15
         this.spriteHeight = 179
         this.spriteWidth = 200
         this.height = this.spriteHeight * this.sizeModifier
         this.width = this.spriteWidth * this.sizeModifier
-        this.x = x - (this.width * 0.5)
-        this.y = y - (this.height * 0.5)
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
     }
 }
 export class Smoke extends Particles {
@@ -59,6 +66,7 @@ export class Smoke extends Particles {
         super(game, sizeModifier, src)
         this.image = qs("#smoke")
         this.maxFrame = 7
+        this.framesPerRow = 7
         this.spriteHeight = 200
         this.spriteWidth = 200
         this.height = this.spriteHeight * this.sizeModifier
@@ -67,16 +75,48 @@ export class Smoke extends Particles {
         this.y = y - this.height * 0.5
     }
 }
-export class Fire extends Particles{
-    constructor({game, x, y, sizeModifier, src}) {
+export class Fire extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs('#fire')
+        this.image = qs("#fire")
         this.maxFrame = 7
+        this.framesPerRow = 7
         this.spriteHeight = 200
         this.spriteWidth = 200
         this.height = this.spriteHeight * this.sizeModifier
         this.width = this.spriteWidth * this.sizeModifier
-        this.x = x - (this.width * 0.5)
+        this.x = x - this.width * 0.5
         this.y = y - this.height
+    }
+}
+export class Hit_V1 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#hit_one")
+        this.maxFrame = 16
+        this.framesPerRow = 4
+        this.fps = 60
+        this.spriteHeight = 256
+        this.spriteWidth = 256
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+    
+}
+export class Hit_V2 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#hit_two")
+        this.maxFrame = 16
+        this.framesPerRow = 4
+        this.fps = 60
+        this.spriteHeight = 256
+        this.spriteWidth = 256
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
     }
 }

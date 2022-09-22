@@ -27,7 +27,7 @@ import {
     Sleeping,
     states,
 } from "./states.js"
-import { Boom, Smoke } from "./particles.js"
+import { Boom, Hit_V1, Hit_V2, Smoke } from "./particles.js"
 
 export class Player {
     constructor(game) {
@@ -274,12 +274,31 @@ export class Player {
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
                     const attackType = this.isClawing() ? "Claw" : this.isDashAttacking() ? "Dash" : "Jump"
                     this.stickyMultiplier = 3
+                    let enemyName = enemy.enemyName
                     
                     enemy.resolveCollision({
                         type: "enemy is attacked",
                         attackDamage: this.attackDamage,
                         attackType,
                     })
+                    if(enemyName === "AngryEgg") this.game.particles.push(new Hit_V1({
+                        game: this.game,
+                        x: this.hitbox.x + this.hitbox.width,
+                        y: this.hitbox.y + this.hitbox.height * 0.5,
+                        sizeModifier: 1,
+                        src: null
+                    }))
+                    else if (enemyName === "Crawler") this.game.particles.push(
+                        new Hit_V2({
+                            game: this.game,
+                            x: this.hitbox.x + this.hitbox.width,
+                            y: this.hitbox.y + this.hitbox.height * 0.5,
+                            sizeModifier: 1,
+                            src: null,
+                        })
+                    )
+                        
+                        
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 500

@@ -25,3 +25,6 @@ export const SOUND_UPROLL = "./audio/cloth-heavy.wav"
 export const SOUND_DASH = "./audio/unsheathe.wav"
 export const SOUND_DODGE = "./audio/dodge.wav"
 export const SOUND_CLAW_STRIKE = "./audio/gash.wav"
+
+export const FONT_FAMILY = "Chicle"
+export const DAMAGE_FONT_SIZE = 35
