@@ -26,6 +26,8 @@ class Enemy {
             Claw: 35,
             Dash: 15,
             Jump: 10,
+            Up_Roll: 15,
+            Down_Roll: 20
         }
     }
     get enemyName() {
@@ -99,9 +101,9 @@ class Enemy {
         this.hitbox.x = this.x + this.hitbox.xOffset
         this.hitbox.y = this.y + this.hitbox.yOffset
     }
-    resolveCollision({ type, attackDamage }) {
-        if (type === "enemy is attacked") {
-            this.healthPoints -= attackDamage
+    resolveCollision({ target, attackDamage }) {
+        if (target === "enemy is attacked") {
+            this.healthPoints -= (attackDamage - this.defence)
             this.markedForRecoil = true
         }
     }
@@ -116,7 +118,7 @@ export class AngryEgg extends Enemy {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.sizeModifier = Math.random() * 0.4 + 0.5
-        this.healthPoints = 100 * this.sizeModifier
+        this.healthPoints = 50 * this.sizeModifier
         this.spriteWidth = ANGRY_EGG_WIDTH
         this.spriteHeight = ANGRY_EGG_HEIGHT
         this.width = ANGRY_EGG_WIDTH * this.sizeModifier
@@ -125,6 +127,7 @@ export class AngryEgg extends Enemy {
         this.y = this.game.height - this.height - this.game.groundMargin
         this.defaultHorizontalSpeed = 0
         this.horizontalSpeed = 0
+        this.defence = Math.round(5 * this.sizeModifier + 2)
         // this.markedForRecoil = false
         this.attackDirection
         this.image = qs("#angryEgg")
@@ -183,9 +186,10 @@ export class AngryEgg extends Enemy {
             )
             this.deleteEnemy = true
         }
+        
     }
-    resolveCollision({ type, attackDamage, attackType }) {
-        super.resolveCollision({ type, attackDamage })
+    resolveCollision({ target, attackDamage, attackType }) {
+        super.resolveCollision({ target, attackDamage })
         this.attackType = attackType
     }
 }
@@ -214,6 +218,7 @@ export class Crawler extends Enemy {
         this.rightBound = this.game.width - this.width * 0.5
         this.defaultHorizontalSpeed = 0.5
         this.horizontalSpeed = 0.5
+        this.defence = Math.round(10 * this.sizeModifier + 2)
         this.weight = 5 * this.sizeModifier
         this.image = qs("#crawler")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
@@ -348,6 +353,7 @@ export class Spawn extends Enemy {
         this.horizontalSpeed = Math.random() * 1 + 1
         this.image = qs("#crawler")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
+        this.defence = 1
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -414,6 +420,7 @@ export class Ghost extends Enemy {
             (this.game.height - this.height - this.game.groundMargin) *
             Math.random()
         this.image = qs("#ghost")
+        this.defence = 0
         //Flying Pattern
         this.angle = 0
         this.curve = Math.random() * 6
@@ -451,7 +458,7 @@ export class Ghost extends Enemy {
                 })
             )
         this.y += Math.sin(this.angle) * this.curve
-        this.angle += 0.05
+        this.angle += 0.05                  
     }
 
     draw(context) {
@@ -462,9 +469,9 @@ export class Ghost extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision({ type, attackDamage }) {
-        if (type === "enemy is attacked") {
-            this.healthPoints -= attackDamage
+    resolveCollision({ target}) {
+        if (target === "enemy is attacked") {
+            this.healthPoints = 0
         }
     }
 }

@@ -29,6 +29,7 @@ export class HealthBar {
         this.defaultbarColor = defaultbarColor
         this.fillColor = defaultbarColor
         this.damageNumbers = []
+        this.showDamage = showDamage
     }
 
     updatePosition(x, y) {

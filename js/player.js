@@ -51,6 +51,16 @@ export class Player {
         this.deltaTime = 0
         this.isWhiffing = true
         this.stickyMultiplier = 0
+        this.base_damage = {
+            claw: 25,
+            dash: 15,
+            jump: 15,
+            up_roll: 15,
+            down_roll: 20,
+        }
+        this.min_attack_bonus = 0
+        this.attack_bonus = this.min_attack_bonus
+        this.dash_bonus = 0
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -85,7 +95,7 @@ export class Player {
             up_roll: new Audio(SOUND_UPROLL),
             dash: new Audio(SOUND_DASH),
             dodge: new Audio(SOUND_DODGE),
-            claw_strike : new Audio(SOUND_CLAW_STRIKE)
+            claw_strike: new Audio(SOUND_CLAW_STRIKE),
         }
         //vertical
         this.velocityY = 0
@@ -114,7 +124,7 @@ export class Player {
     update(deltaTime, input) {
         this.deltaTime = deltaTime
         this.currentState.handleInput(input)
-        if(this.stickyMultiplier > 0) this.callStickyFunction()
+        if (this.stickyMultiplier > 0) this.callStickyFunction()
         //keep player within gamebox
         if (this.x < STARTING_X) this.x = STARTING_X
         else if (this.x > this.game.width - this.width * 3) {
@@ -209,7 +219,7 @@ export class Player {
         //     )
         //     context.stroke()
         // }
-        
+
         context.drawImage(
             this.image,
             this.animationSheet * this.width,
@@ -265,6 +275,33 @@ export class Player {
     isClawing() {
         return this.currentState === this.states[0]
     }
+    getAttackInfo() {
+        if (this.isClawing())
+            return {
+                type: "Claw",
+                damage: this.base_damage.claw + this.attack_bonus,
+            }
+        if (this.isDashAttacking())
+            return {
+                type: "Dash",
+                damage:
+                    this.base_damage.dash + this.dash_bonus + this.attack_bonus,
+            }
+        if (this.isRollingUp())
+            return {
+                type: "Up_Roll",
+                damage: this.base_damage.up_roll + this.attack_bonus,
+            }
+        if (this.isRollingDown())
+            return {
+                type: "Down_Roll",
+                damage: this.base_damage.down_roll + this.attack_bonus,
+            }
+        return {
+            type: "Jump",
+            damage: this.base_damage.jump + this.attack_bonus,
+        }
+    }
     checkAttackCollision() {
         this.game.enemies.forEach(enemy => {
             const enemyHurtboxes = Object.values(enemy.hurtbox)
@@ -272,36 +309,40 @@ export class Player {
                 if (enemy.invulnerabilityTime > 0) return
 
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
-                    const attackType = this.isClawing() ? "Claw" : this.isDashAttacking() ? "Dash" : "Jump"
+                    const { type, damage } = this.getAttackInfo()
                     this.stickyMultiplier = 3
                     let enemyName = enemy.enemyName
-                    
+
                     enemy.resolveCollision({
-                        type: "enemy is attacked",
-                        attackDamage: this.attackDamage,
-                        attackType,
+                        target: "enemy is attacked",
+                        attackDamage: damage,
+                        attackType: type,
                     })
-                    if(enemyName === "AngryEgg") this.game.particles.push(new Hit_V1({
-                        game: this.game,
-                        x: this.hitbox.x + this.hitbox.width,
-                        y: this.hitbox.y + this.hitbox.height * 0.5,
-                        sizeModifier: 1,
-                        src: null
-                    }))
-                    else if (enemyName === "Crawler") this.game.particles.push(
-                        new Hit_V2({
-                            game: this.game,
-                            x: this.hitbox.x + this.hitbox.width,
-                            y: this.hitbox.y + this.hitbox.height * 0.5,
-                            sizeModifier: 1,
-                            src: null,
-                        })
-                    )
-                        
-                        
+                    if (enemyName === "AngryEgg")
+                        this.game.particles.push(
+                            new Hit_V1({
+                                game: this.game,
+                                x: this.hitbox.x + this.hitbox.width,
+                                y: this.hitbox.y + this.hitbox.height * 0.5,
+                                sizeModifier: 1,
+                                src: null,
+                            })
+                        )
+                    else if (enemyName === "Crawler")
+                        this.game.particles.push(
+                            new Hit_V2({
+                                game: this.game,
+                                x: this.hitbox.x + this.hitbox.width,
+                                y: this.hitbox.y + this.hitbox.height * 0.5,
+                                sizeModifier: 1,
+                                src: null,
+                            })
+                        )
+
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 500
+                    this.attack_bonus++
                     if (this.isFalling()) this.setState(states.JUMPING)
                     // else if (this.isRollingUp()) {
                     //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))

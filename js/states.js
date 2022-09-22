@@ -150,9 +150,10 @@ export class Attacking_Dash extends State {
         this.player.hurtbox.body.width = this.player.width - 60
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey }) {
+    handleInput({ lastKey, keysPressed }) {
         if (this.player.frame === 8 && lastKey === "PRESS Attack") {
             this.player.frame = 7
+            if(this.player.dash_bonus < 5) this.player.dash_bonus++
             if (this.player.game.recoveryTime < 300)
                 this.player.game.recoveryTime += 50
         } else if (lastKey === "PRESS Left")
@@ -172,6 +173,7 @@ export class Attacking_Dash extends State {
         if (this.player.frame == this.player.maxFrame) {
             this.player.game.recoveryTime += 300
             this.player.game.isRecovering = true
+            this.player.dash_bonus = 0
             this.player.setState(states.IDLE)
         }
     }
@@ -272,7 +274,7 @@ export class Resting extends State {
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey }) {
-        if (lastKey === "RELEASE Down") this.player.setState(states.IDLE)
+        if (lastKey === "PRESS Up" || lastKey == "RELEASE Down") this.player.setState(states.IDLE)
         else if (lastKey === "PRESS Right")
             this.player.setState(states.ROLL_ACROSS)
         else if (lastKey === "PRESS Left")
