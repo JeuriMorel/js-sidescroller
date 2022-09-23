@@ -120,3 +120,63 @@ export class Hit_V2 extends Particles {
         this.y = y - this.height * 0.5
     }
 }
+export class Explosion_V1 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#explosion_v1")
+        this.maxFrame = 64
+        this.framesPerRow = 8
+        this.fps = 20
+        this.spriteHeight = 128
+        this.spriteWidth = 128
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
+export class Explosion_V2 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#explosion_v2")
+        this.maxFrame = 64
+        this.framesPerRow = 8
+        this.fps = 20
+        this.spriteHeight = 128
+        this.spriteWidth = 128
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
+export class Explosion_V3 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#explosion_v3")
+        this.maxFrame = 64
+        this.framesPerRow = 8
+        this.fps = 20
+        this.spriteHeight = 128
+        this.spriteWidth = 128
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
+export class Explosion_V4 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#explosion_v4")
+        this.maxFrame = 64
+        this.framesPerRow = 8
+        this.fps = 20
+        this.spriteHeight = 128
+        this.spriteWidth = 128
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}

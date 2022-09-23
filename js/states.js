@@ -1,5 +1,5 @@
 import { DEFAULT_SCROLL_SPEED, SOUND_SNARE } from "./constants.js"
-import { Boom, Fire } from "./particles.js"
+import { Boom, Explosion_V1, Explosion_V2, Fire } from "./particles.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -53,7 +53,6 @@ export class Attacking_Claw extends State {
         if (this.player.frame === 12) {
             if (this.player.isWhiffing) this.player.audio.slash.play()
             else this.player.audio.claw_strike.play()
-            
         }
         if (this.player.frame == this.player.maxFrame) {
             this.player.setState(states.IDLE)
@@ -153,7 +152,7 @@ export class Attacking_Dash extends State {
     handleInput({ lastKey, keysPressed }) {
         if (this.player.frame === 8 && lastKey === "PRESS Attack") {
             this.player.frame = 7
-            if(this.player.dash_bonus < 5) this.player.dash_bonus++
+            if (this.player.dash_bonus < 5) this.player.dash_bonus++
             if (this.player.game.recoveryTime < 300)
                 this.player.game.recoveryTime += 50
         } else if (lastKey === "PRESS Left")
@@ -236,7 +235,6 @@ export class Jumping extends State {
         this.player.hurtbox.head.height = this.player.height - 40
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
-        
     }
     handleInput({ lastKey }) {
         if (lastKey === "PRESS Left")
@@ -274,7 +272,8 @@ export class Resting extends State {
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey }) {
-        if (lastKey === "PRESS Up" || lastKey == "RELEASE Down") this.player.setState(states.IDLE)
+        if (lastKey === "PRESS Up" || lastKey == "RELEASE Down")
+            this.player.setState(states.IDLE)
         else if (lastKey === "PRESS Right")
             this.player.setState(states.ROLL_ACROSS)
         else if (lastKey === "PRESS Left")
