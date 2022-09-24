@@ -1,4 +1,8 @@
-import { DEFAULT_SCROLL_SPEED, SOUND_SNARE } from "./constants.js"
+import {
+    DEFAULT_SCROLL_SPEED,
+    SOUND_SNARE,
+    DEFAULT_WEIGHT,
+} from "./constants.js"
 import { Boom, Explosion_V1, Explosion_V2, Fire } from "./particles.js"
 
 export const states = {
@@ -48,8 +52,13 @@ export class Attacking_Claw extends State {
     }
     handleInput({ lastKey }) {
         if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
-        if (this.player.frame > 5 && this.player.frame < 8) this.player.y -= 6
-        if (this.player.frame > 8 && this.player.frame < 11) this.player.x += 4
+        if (this.player.frame > 5 && this.player.frame < 8 && this.player.frameTimer >= 0) this.player.y -= 6
+        if (
+            this.player.frame > 8 &&
+            this.player.frame < 10 &&
+            this.player.frameTimer >= 0
+        )
+            this.player.x += 5
         if (this.player.frame === 12) {
             if (this.player.isWhiffing) this.player.audio.slash.play()
             else this.player.audio.claw_strike.play()
@@ -58,6 +67,11 @@ export class Attacking_Claw extends State {
             this.player.setState(states.IDLE)
             this.player.isWhiffing = true
         }
+        // if (!this.player.isWhiffing && lastKey == "PRESS Attack") {
+        //     this.player.frame = 6
+        //     this.player.x += 5
+        //     this.player.isWhiffing = true
+        // }
     }
 }
 export class Falling extends State {
@@ -80,14 +94,19 @@ export class Falling extends State {
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey }) {
+    handleInput({ lastKey, keysPressed }) {
+        if (keysPressed.up) {
+            this.player.weight = 0.1
+        }
+        if (lastKey === "RELEASE Up") this.player.weight = DEFAULT_WEIGHT
+        if(!keysPressed.up && !keysPressed.right && !keysPressed.down && !keysPressed.left) this.player.game.scrollSpeed = 0
         if (this.player.isOnGround()) this.player.setState(states.IDLE)
         if (lastKey === "PRESS Attack") this.player.setState(states.ROLL_DOWN)
         else if (lastKey === "PRESS Left")
-            this.player.x -= this.player.game.scrollSpeed
+            this.player.x -= this.player.game.scrollSpeed + 2
         else if (lastKey === "PRESS Right")
-            this.player.x += this.player.game.scrollSpeed * 0.5 + 2
-        else this.player.x += this.player.game.scrollSpeed * 0.15 + 2
+            this.player.x += this.player.game.scrollSpeed * 0.3 + 2
+        else this.player.x += this.player.game.scrollSpeed * 0.15
     }
 }
 export class Game_Over extends State {
@@ -223,8 +242,9 @@ export class Jumping extends State {
     enter() {
         this.player.animationSheet = 6
         this.player.frame = 0
-        this.player.velocityY -= 15
+        this.player.velocityY -=  16 + this.player.game.scrollSpeed
         this.player.maxFrame = 9
+        this.player.weight = DEFAULT_WEIGHT
         this.player.hurtbox.head.isActive = true
         this.player.hurtbox.body.isActive = true
         this.player.hurtbox.head.xOffset = 38
@@ -236,15 +256,18 @@ export class Jumping extends State {
         this.player.hurtbox.body.width = this.player.width - 70
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey }) {
-        if (lastKey === "PRESS Left")
+    handleInput({ lastKey, keysPressed }) {
+        if (keysPressed.left) {
+            if (this.player.game.scrollSpeed > 1)
+                this.player.game.scrollSpeed -= 0.4
             this.player.x -= this.player.game.scrollSpeed * 2 + 2
-        else if (lastKey === "PRESS Right")
-            this.player.x += this.player.game.scrollSpeed + 3
+        } else if (keysPressed.right)
+            this.player.x += this.player.game.scrollSpeed + 1
         else if (lastKey === "RELEASE Up") this.player.velocityY += 0.5
-        else if (lastKey === "PRESS Attack")
+        else if (lastKey === "PRESS Attack") {
+            this.player.game.stickyFriction(3)
             this.player.setState(states.ROLL_UP)
-        else this.player.x += this.player.game.scrollSpeed * 0.3
+        } else this.player.x += this.player.game.scrollSpeed * 0.3
 
         if (this.player.velocityY > 0) this.player.setState(states.FALLING)
     }
@@ -395,8 +418,10 @@ export class Running extends State {
         this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey }) {
-        if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
-            this.player.game.scrollSpeed += 0.1
+        if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED) {
+            this.player.game.scrollSpeed += 0.4
+        }
+
         if (lastKey === "PRESS Left" || lastKey === "RELEASE Right")
             this.player.setState(states.IDLE)
         else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)

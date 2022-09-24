@@ -1,6 +1,7 @@
 import { qs } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
+    DEFAULT_WEIGHT,
     SOUND_CLAW_STRIKE,
     SOUND_DASH,
     SOUND_DODGE,
@@ -99,7 +100,7 @@ export class Player {
         }
         //vertical
         this.velocityY = 0
-        this.weight = 0.5
+        this.weight = DEFAULT_WEIGHT
 
         //state management
         this.states = [
@@ -310,7 +311,7 @@ export class Player {
 
                 if (this.enemyIsGetttingHit(enemyHurtbox)) {
                     const { type, damage } = this.getAttackInfo()
-                    this.stickyMultiplier = 3
+                    this.stickyMultiplier = 5
                     let enemyName = enemy.enemyName
 
                     enemy.resolveCollision({
@@ -341,8 +342,8 @@ export class Player {
 
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
-                    enemy.invulnerabilityTime = 500
-                    this.attack_bonus++
+                    enemy.invulnerabilityTime = 400
+                    // this.attack_bonus++
                     if (this.isFalling()) this.setState(states.JUMPING)
                     // else if (this.isRollingUp()) {
                     //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))

@@ -23,14 +23,14 @@ window.addEventListener("load", function () {
             this.background = new Background(this)
             this.player = new Player(this)
             this.input = new InputHandler(this)
-            this.dash_gauge = new HealthBar({
-                x: 20,
-                y: 20,
-                width: this.maxBarWidth,
-                height: 15,
-                maxhealth: this.maxBarWidth,
-                showDamage: false,
-            })
+            // this.dash_gauge = new HealthBar({
+            //     x: 20,
+            //     y: 20,
+            //     width: this.maxBarWidth,
+            //     height: 15,
+            //     maxhealth: this.maxBarWidth,
+            //     showDamage: false,
+            // })
             this.enemyFrequency = 2500
             this.enemyTimer = 0
             this.enemies = []
@@ -70,9 +70,9 @@ window.addEventListener("load", function () {
                 particle => !particle.markedForDeletion
             )
             this.particles.forEach(particle => particle.update(deltaTime))
-            this.dash_gauge.updateBar(
-                Math.min(this.scrollSpeed * 30, this.maxBarWidth) || 10
-            )
+            // this.dash_gauge.updateBar(
+            //     Math.min(this.scrollSpeed * 30, this.maxBarWidth) || 10
+            // )
         }
 
         draw(context) {
@@ -82,7 +82,7 @@ window.addEventListener("load", function () {
                 enemy.draw(context)
             })
             this.particles.forEach(particle => particle.draw(context))
-            this.dash_gauge.draw(context)
+            // this.dash_gauge.draw(context)
         }
 
         addEnemy() {
@@ -96,7 +96,7 @@ window.addEventListener("load", function () {
         }
 
         stickyFriction(stickyMultiplier) {
-            const sticky = this.deltaTime * -4 * stickyMultiplier
+            const sticky = this.deltaTime * -3 * stickyMultiplier
             if (this.player.frameTimer >= 0) this.player.frameTimer += sticky
             this.enemies.forEach(enemy => {
                 if (enemy.frameTimer >= 0) enemy.frameTimer += sticky
