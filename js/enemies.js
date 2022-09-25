@@ -72,28 +72,33 @@ class Enemy {
         //     )
         //     context.stroke()
         // }
-        // if (this.hitbox.isActive) {
+        // if (this.hitbox.body.isActive) {
         //     context.strokeStyle = "#ff0000"
         //     context.beginPath()
         //     context.rect(
-        //         this.hitbox.x,
-        //         this.hitbox.y,
-        //         this.hitbox.width,
-        //         this.hitbox.height
+        //         this.hitbox.body.x,
+        //         this.hitbox.body.y,
+        //         this.hitbox.body.width,
+        //         this.hitbox.body.height
         //     )
         //     context.stroke()
         // }
-        context.drawImage(
-            this.image,
-            this.frame * this.spriteWidth,
-            this.animationSheet * this.spriteHeight,
-            this.spriteWidth,
-            this.spriteHeight,
-            this.x,
-            this.y,
-            this.width,
-            this.height
+        if (this.invulnerabilityTime > 0) {
+            context.save()
+            context.globalAlpha = Math.random() * 0.5 + 0.4
+        }
+            context.drawImage(
+                this.image,
+                this.frame * this.spriteWidth,
+                this.animationSheet * this.spriteHeight,
+                this.spriteWidth,
+                this.spriteHeight,
+                this.x,
+                this.y,
+                this.width,
+                this.height
         )
+        context.restore()
     }
     updateHitboxes() {
         this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
@@ -154,7 +159,7 @@ export class AngryEgg extends Enemy {
         this.hitbox = {
             body: {
                 isActive: true,
-                xOffset: this.width * 0.1,
+                xOffset: this.width * 0.2,
                 yOffset: this.height * 0.35,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
@@ -433,7 +438,7 @@ export class Ghost extends Enemy {
         this.hurtbox = {
             body: {
                 isActive: true,
-                xOffset: 0,
+                xOffset: this.width * 0.1,
                 yOffset: this.width * 0.1,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
@@ -444,12 +449,12 @@ export class Ghost extends Enemy {
         this.hitbox = {
             body: {
                 isActive: true,
-                xOffset: 0,
-                yOffset: this.width * 0.1,
+                xOffset: this.width * 0.15,
+                yOffset: this.height * 0.1,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.9,
-                height: this.height * 0.7,
+                width: this.width * 0.8,
+                height: this.height * 0.65,
             },
         }
     }

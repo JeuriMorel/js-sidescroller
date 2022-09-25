@@ -126,13 +126,13 @@ export class Explosion_V1 extends Particles {
         this.image = qs("#explosion_v1")
         this.maxFrame = 64
         this.framesPerRow = 8
-        this.fps = 20
+        this.fps = 60
         this.spriteHeight = 128
         this.spriteWidth = 128
         this.height = this.spriteHeight * this.sizeModifier
         this.width = this.spriteWidth * this.sizeModifier
         this.x = x - this.width * 0.5
-        this.y = y - this.height * 0.5
+        this.y = y - this.height
     }
 }
 export class Explosion_V2 extends Particles {

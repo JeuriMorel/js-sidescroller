@@ -314,6 +314,7 @@ export class Player {
                     const { type, damage } = this.getAttackInfo()
                     this.stickyMultiplier = 5
                     let enemyName = enemy.enemyName
+                    let hitAnimationSize = damage * 0.05
 
                     enemy.resolveCollision({
                         target: "enemy is attacked",
@@ -326,7 +327,7 @@ export class Player {
                                 game: this.game,
                                 x: this.hitbox.x + this.hitbox.width,
                                 y: this.hitbox.y + this.hitbox.height * 0.5,
-                                sizeModifier: 1,
+                                sizeModifier: hitAnimationSize,
                                 src: null,
                             })
                         )
@@ -336,7 +337,7 @@ export class Player {
                                 game: this.game,
                                 x: this.hitbox.x + this.hitbox.width,
                                 y: this.hitbox.y + this.hitbox.height * 0.5,
-                                sizeModifier: 1,
+                                sizeModifier: hitAnimationSize,
                                 src: null,
                             })
                         )
@@ -345,10 +346,12 @@ export class Player {
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 400
                     // this.attack_bonus++
-                    if (this.isFalling()) this.setState(states.JUMPING)
-                    // else if (this.isRollingUp()) {
-                    //     this.game.particles.push(new Boom(this.game, this.x + this.width * 0.5, this.y + this.height * 0.5, 0.5))
-                    // }
+                    this.hurtbox.body.isActive = false
+                    this.hurtbox.head.isActive = false
+                    if (this.isFalling() || this.isRollingDown()) {
+                        this.velocityY = 0
+                        this.setState(states.JUMPING)
+                    }
                 }
             })
         })
@@ -418,7 +421,6 @@ export class Player {
                     this.playerIsDodging(hitbox)
                 ) {
                     this.stickyMultiplier = 1
-                    console.log("Dodging")
                 }
             })
         })
