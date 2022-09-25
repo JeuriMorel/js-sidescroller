@@ -98,8 +98,8 @@ class Enemy {
     updateHitboxes() {
         this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
         this.hurtbox.body.y = this.y + this.hurtbox.body.yOffset
-        this.hitbox.x = this.x + this.hitbox.xOffset
-        this.hitbox.y = this.y + this.hitbox.yOffset
+        this.hitbox.body.x = this.x + this.hitbox.body.xOffset
+        this.hitbox.body.y = this.y + this.hitbox.body.yOffset
     }
     resolveCollision({ target, attackDamage }) {
         if (target === "enemy is attacked") {
@@ -152,13 +152,15 @@ export class AngryEgg extends Enemy {
             },
         }
         this.hitbox = {
-            isActive: true,
-            xOffset: this.width * 0.1,
-            yOffset: this.height * 0.35,
-            x: this.x + this.xOffset,
-            y: this.y + this.yOffset,
-            width: this.width * 0.3,
-            height: this.height * 0.5,
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.1,
+                yOffset: this.height * 0.35,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.3,
+                height: this.height * 0.5,
+            },
         }
     }
     update(deltaTime) {
@@ -234,13 +236,15 @@ export class Crawler extends Enemy {
             },
         }
         this.hitbox = {
-            isActive: true,
-            xOffset: this.width * 0.06,
-            yOffset: this.width * 0.65,
-            x: this.x + this.xOffset,
-            y: this.y + this.yOffset,
-            width: this.width * 0.9,
-            height: this.height * 0.25,
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.06,
+                yOffset: this.width * 0.65,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.9,
+                height: this.height * 0.25,
+            },
         }
         this.healthBar = new HealthBar({
             x: this.x,
@@ -277,7 +281,7 @@ export class Crawler extends Enemy {
                 this.horizontalSpeed = this.defaultHorizontalSpeed
                 this.fps = 15
                 this.hurtbox.body.isActive = true
-                this.hitbox.isActive = true
+                this.hitbox.body.isActive = true
             }
         }
         if (this.frame === this.maxFrame && this.animationSheet === 0) {
@@ -308,7 +312,7 @@ export class Crawler extends Enemy {
         this.fps = 60
         this.transparency = 0.075
         this.hurtbox.body.isActive = false
-        this.hitbox.isActive = false
+        this.hitbox.body.isActive = false
     }
     spawn() {
         let numberOfSpawns = Math.floor(Math.random() * 7 + 3)
@@ -366,13 +370,15 @@ export class Spawn extends Enemy {
             },
         }
         this.hitbox = {
-            isActive: true,
-            xOffset: this.width * 0.06,
-            yOffset: this.width * 0.65,
-            x: this.x + this.xOffset,
-            y: this.y + this.yOffset,
-            width: this.width * 0.9,
-            height: this.height * 0.25,
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.06,
+                yOffset: this.width * 0.65,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.9,
+                height: this.height * 0.25,
+            },
         }
         this.healthBar = new HealthBar({
             x: this.x,
@@ -436,13 +442,15 @@ export class Ghost extends Enemy {
             },
         }
         this.hitbox = {
-            isActive: true,
-            xOffset: 0,
-            yOffset: this.width * 0.1,
-            x: this.x + this.xOffset,
-            y: this.y + this.yOffset,
-            width: this.width * 0.9,
-            height: this.height * 0.7,
+            body: {
+                isActive: true,
+                xOffset: 0,
+                yOffset: this.width * 0.1,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.9,
+                height: this.height * 0.7,
+            },
         }
     }
     update(deltaTime) {

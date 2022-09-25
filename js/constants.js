@@ -26,6 +26,8 @@ export const SOUND_DASH = "./audio/unsheathe.wav"
 export const SOUND_DODGE = "./audio/dodge.wav"
 export const SOUND_CLAW_STRIKE = "./audio/gash.wav"
 export const DEFAULT_WEIGHT = 0.75
+export const FALLING_WEIGHT = 2
+export const FLOATING_WEIGHT = 0.2
 
 export const FONT_FAMILY = "Chicle"
 export const DAMAGE_FONT_SIZE = 35

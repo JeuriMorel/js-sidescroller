@@ -186,6 +186,7 @@ export class Player {
         if (this.hitbox.isActive) this.checkAttackCollision()
         if (this.hurtbox.body.isActive || this.hurtbox.head.isActive)
             this.checkHitCollision()
+        else this.checkForDodge()
     }
     draw(context) {
         // if (this.hurtbox.body.isActive) {
@@ -383,6 +384,15 @@ export class Player {
                 enemyHitbox.y + enemyHitbox.height >= this.hurtbox.head.y)
         )
     }
+    playerIsDodging(enemyHitbox) {
+        return (
+            enemyHitbox.isActive &&
+            enemyHitbox.x <= this.x + this.width &&
+            enemyHitbox.x + enemyHitbox.width >= this.x &&
+            enemyHitbox.y <= this.y + this.height &&
+            enemyHitbox.y + enemyHitbox.height >= this.y
+        )
+    }
     checkHitCollision() {
         this.game.enemies.forEach(enemy => {
             const enemyHitboxes = Object.values(enemy.hitbox)
@@ -393,6 +403,22 @@ export class Player {
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
                     enemy.resolveCollision("player is attacked")
+                }
+            })
+        })
+    }
+    checkForDodge() {
+        this.game.enemies.forEach(enemy => {
+            const enemyHitboxes = Object.values(enemy.hitbox)
+
+            enemyHitboxes.forEach(hitbox => {
+                if (
+                    (this.currentState === this.states[10] ||
+                        this.currentState === this.states[11]) &&
+                    this.playerIsDodging(hitbox)
+                ) {
+                    this.stickyMultiplier = 1
+                    console.log("Dodging")
                 }
             })
         })
