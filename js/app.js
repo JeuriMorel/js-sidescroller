@@ -23,19 +23,10 @@ window.addEventListener("load", function () {
             this.background = new Background(this)
             this.player = new Player(this)
             this.input = new InputHandler(this)
-            // this.dash_gauge = new HealthBar({
-            //     x: 20,
-            //     y: 20,
-            //     width: this.maxBarWidth,
-            //     height: 15,
-            //     maxhealth: this.maxBarWidth,
-            //     showDamage: false,
-            // })
-            this.enemyFrequency = 2500
+            this.enemyFrequency = 1500
             this.enemyTimer = 0
             this.enemies = []
             this.particles = []
-
             this.maxEnemies = 5
             this.recoveryTime = 0
             this.isRecovering = false
@@ -70,9 +61,7 @@ window.addEventListener("load", function () {
                 particle => !particle.markedForDeletion
             )
             this.particles.forEach(particle => particle.update(deltaTime))
-            // this.dash_gauge.updateBar(
-            //     Math.min(this.scrollSpeed * 30, this.maxBarWidth) || 10
-            // )
+            
         }
 
         draw(context) {
@@ -87,11 +76,11 @@ window.addEventListener("load", function () {
 
         addEnemy() {
             if (Math.random() > 0.7) this.enemies.push(new Ghost(this))
-            else if (
-                Math.random() > 0.4 &&
-                !this.enemies.some(obj => obj instanceof Crawler)
-            )
-                this.enemies.push(new Crawler(this))
+            // else if (
+            //     Math.random() > 0.4 &&
+            //     !this.enemies.some(obj => obj instanceof Crawler)
+            // )
+            //     this.enemies.push(new Crawler(this))
             else this.enemies.push(new AngryEgg(this))
         }
 

@@ -27,11 +27,17 @@ class Enemy {
             Dash: 15,
             Jump: 10,
             Up_Roll: 15,
-            Down_Roll: 20
+            Down_Roll: 20,
         }
     }
     get enemyName() {
         return this.constructor.name
+    }
+    isOnGround() {
+        return this.y >= this.game.height - this.height - this.game.groundMargin
+    }
+    tossInAir() {
+        this.velocityY -= 45 * this.sizeModifier
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
@@ -54,8 +60,14 @@ class Enemy {
         }
         if (this.healthPoints <= 0) this.deleteEnemy = true
         this.updateHitboxes()
-        if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
-        else this.hurtbox.body.isActive = true
+        if (this.invulnerabilityTime > 0) {
+            this.invulnerabilityTime -= deltaTime
+            this.hitbox.body.isActive = false
+        }
+        else {
+            this.hurtbox.body.isActive = true
+            this.hitbox.body.isActive = true
+        }
 
         if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
     }
@@ -87,16 +99,16 @@ class Enemy {
             context.save()
             context.globalAlpha = Math.random() * 0.5 + 0.4
         }
-            context.drawImage(
-                this.image,
-                this.frame * this.spriteWidth,
-                this.animationSheet * this.spriteHeight,
-                this.spriteWidth,
-                this.spriteHeight,
-                this.x,
-                this.y,
-                this.width,
-                this.height
+        context.drawImage(
+            this.image,
+            this.frame * this.spriteWidth,
+            this.animationSheet * this.spriteHeight,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x,
+            this.y,
+            this.width,
+            this.height
         )
         context.restore()
     }
@@ -108,7 +120,7 @@ class Enemy {
     }
     resolveCollision({ target, attackDamage }) {
         if (target === "enemy is attacked") {
-            this.healthPoints -= (attackDamage - this.defence)
+            this.healthPoints -= attackDamage - this.defence
             this.markedForRecoil = true
         }
     }
@@ -138,6 +150,7 @@ export class AngryEgg extends Enemy {
         this.image = qs("#angryEgg")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
+        this.velocityY = 0
         this.healthBar = new HealthBar({
             x: this.x,
             y: this.y,
@@ -193,11 +206,21 @@ export class AngryEgg extends Enemy {
             )
             this.deleteEnemy = true
         }
-        
+
+        //vertical movement
+        this.y += this.velocityY
+        if (!this.isOnGround()) {
+            this.velocityY += this.weight
+        } else {
+            this.velocityY = 0
+        }
+        if (this.y > this.game.height - this.height - this.game.groundMargin)
+            this.y = this.game.height - this.height - this.game.groundMargin
     }
     resolveCollision({ target, attackDamage, attackType }) {
         super.resolveCollision({ target, attackDamage })
         this.attackType = attackType
+        if(this.attackType === "Dash") this.tossInAir()
     }
 }
 export class Crawler extends Enemy {

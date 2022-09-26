@@ -146,6 +146,8 @@ export class Player {
         }
         if (this.y > this.game.height - this.height - this.game.groundMargin)
             this.y = this.game.height - this.height - this.game.groundMargin
+        
+        if(this.y <= this.game.y) this.y = this.game.y
 
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
@@ -345,6 +347,7 @@ export class Player {
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 400
+                    if(type === "Dash") this.audio.dash.play()
                     // this.attack_bonus++
                     this.hurtbox.body.isActive = false
                     this.hurtbox.head.isActive = false
@@ -421,6 +424,7 @@ export class Player {
                     this.playerIsDodging(hitbox)
                 ) {
                     this.stickyMultiplier = 1
+                    this.audio.dodge.play()
                 }
             })
         })
