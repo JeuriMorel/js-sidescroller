@@ -16,6 +16,7 @@ import {
     SOUND_BOSS_RETREAT,
     SOUND_TONGUE,
 } from "./constants.js"
+import { HealthBar } from "./health_bar.js"
 
 export class Armored_Frog {
     constructor(game) {
@@ -46,6 +47,7 @@ export class Armored_Frog {
         this.attackInterval = 6000
         this.attackTimer = 0
         this.idleXOffsetModifier = 0.25
+
         this.audio = {
             damaged: new Audio(BOSS_DAMAGED),
             retreat: new Audio(SOUND_BOSS_RETREAT),
@@ -128,6 +130,14 @@ export class Armored_Frog {
         //vertical
         this.velocityY = 0
         this.weight = 3
+
+        this.healthBar = new HealthBar({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: 15 * this.sizeModifier,
+            maxhealth: this.healthPoints,
+        })
     }
 
     setState(state) {
@@ -143,11 +153,15 @@ export class Armored_Frog {
             this.frameTimer += deltaTime
         }
 
+        //healthBar
+        this.healthBar.updatePosition(this.x, this.y)
+
         //Attack
         if (
             this.attackTimer > this.attackInterval &&
             this.isOnGround() &&
-            !this.isDefeated
+            !this.isDefeated &&
+            !this.game.player.isDashAttacking()
         ) {
             this.attackTimer = 0
             this.attackInterval =
@@ -216,7 +230,7 @@ export class Armored_Frog {
         //     )
         //     context.stroke()
         // }
-
+        this.healthBar.draw(context)
         context.drawImage(
             this.image,
             this.frame * this.spriteWidth,
@@ -295,10 +309,12 @@ export class Armored_Frog {
         this.hitbox.claws.x = this.x + this.hitbox.claws.xOffset
         this.hitbox.claws.y = this.y + this.hitbox.claws.yOffset
     }
-    resolveCollision(type) {
-        if (type === "enemy is attacked") {
+    resolveCollision({ target, attackDamage }) {
+        if (target === "enemy is attacked") {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
+                this.healthPoints -= attackDamage
+                this.healthBar.updateBar(this.healthPoints)
             }
             this.setState(
                 this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT
@@ -312,9 +328,9 @@ export class Armored_Frog {
         //     this.phase = new Phase_Two(this)
         // }
 
-        if (type === "player is attacked") {
+        if (target === "player is attacked") {
             if (this.currentState === "ATTACK") this.x += this.attackOffsetX
-            this.setState(STATES.RETREAT)
+            this.setState(STATES.JUMP_FORWARD)
         }
     }
 

@@ -121,7 +121,7 @@ export class Retreat extends Boss_State {
 
     }
     update() {
-        this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
+        this.boss.x += (this.boss.game.scrollSpeed + this.boss.horizontalSpeed)
         this.boss.game.particles.push(
             new Boom({
                 game: this.boss.game,
@@ -193,7 +193,7 @@ export class Jump_Forward extends Boss_State {
         this.boss.image = qs("#jump_up")
         this.boss.velocityY -= 55
         this.boss.jumpTarget =
-            this.boss.game.player.x < this.boss.x
+            this.boss.game.player.x < this.boss.x && this.boss.game.player.currentState !== this.boss.game.player.states[3]
                 ? this.boss.game.player.x
                 : this.boss.game.width - this.boss.width
         this.boss.hitbox.claws.width *= 1.5

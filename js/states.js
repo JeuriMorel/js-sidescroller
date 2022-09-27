@@ -150,17 +150,22 @@ export class Get_Hit extends State {
     enter() {
         this.player.animationSheet = 3
         this.player.frame = 0
-        this.player.game.scrollSpeed = 2
+        this.player.game.scrollSpeed = 0
         this.player.maxFrame = 7
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
-        this.player.x -= 15
-        this.player.y -= 10
+        this.player.x -= 35
+        this.player.velocityY = -10
+        this.player.stickyMultiplier = 3
     }
     handleInput({ lastKey }) {
         this.player.x -= 15
-        if (this.player.frame == this.player.maxFrame)
-            this.player.setState(states.IDLE)
+        if (this.player.frame == this.player.maxFrame) {
+            if(this.player.isOnGround())
+                this.player.setState(states.IDLE)
+            else this.player.setState(states.FALLING)
+        }
+
     }
 }
 export class Attacking_Dash extends State {
@@ -331,7 +336,6 @@ export class Roll_Down extends State {
         this.player.frame = 0
         this.player.maxFrame = 8
         this.player.hurtbox.body.isActive = false
-        this.player.hurtbox.head.isActive = false
     }
     handleInput() {
         if (this.player.isOnGround()) {

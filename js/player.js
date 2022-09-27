@@ -428,7 +428,7 @@ export class Player {
 
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
-                    enemy.resolveCollision("player is attacked")
+                    enemy.resolveCollision({target: "player is attacked"})
                 }
             })
         })
