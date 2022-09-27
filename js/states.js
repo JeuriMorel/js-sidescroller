@@ -239,7 +239,8 @@ export class Idle extends State {
             this.player.x -= this.player.game.scrollSpeed
         }
         if (lastKey === "PRESS Attack") this.player.setState(states.CLAW_ATTACK)
-        else if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
+        else if (lastKey === "PRESS Up" || lastKey === "PRESS Jump")
+            this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
         else if (lastKey === "PRESS Right" || keysPressed.right)
             this.player.setState(states.RUNNING)
@@ -271,9 +272,10 @@ export class Jumping extends State {
         if (keysPressed.left) {
             if (this.player.game.scrollSpeed > 1)
                 this.player.game.scrollSpeed -= 0.4
-            this.player.x -= this.player.game.scrollSpeed * 2 + 2
+            this.player.x -= Math.max(this.player.game.scrollSpeed * 2, 2)
         } else if (keysPressed.right) this.player.x++
-        else if (lastKey === "RELEASE Up") this.player.velocityY += 1
+        if (lastKey === "RELEASE Up" || lastKey === "RELEASE Jump")
+            this.player.velocityY += 1
         else if (lastKey === "PRESS Attack") {
             this.player.stickyMultiplier = 3
             this.player.setState(states.ROLL_UP)
@@ -333,21 +335,10 @@ export class Roll_Down extends State {
     }
     handleInput() {
         if (this.player.isOnGround()) {
-            this.player.game.particles.push(
-                new Fire({
-                    game: this.player.game,
-                    x: this.player.x + this.player.width * 0.5,
-                    y:
-                        this.player.game.height -
-                        this.player.game.groundMargin +
-                        this.player.height * 0.5,
-                    sizeModifier: 1,
-                    src: SOUND_SNARE,
-                })
-            )
             this.player.setState(states.RESTING)
             this.player.game.recoveryTime += 300
             this.player.game.isRecovering = true
+            this.player.audio.down_roll.play()
         }
     }
 }
@@ -445,7 +436,8 @@ export class Running extends State {
             this.player.game.scrollSpeed += 0.4
         }
 
-        if (lastKey === "PRESS Up") this.player.setState(states.JUMPING)
+        if (lastKey === "PRESS Up" || lastKey === "PRESS Jump")
+            this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") {
             if (!keysPressed.right) this.player.setState(states.RESTING)
             if (keysPressed.right) this.player.setState(states.ROLL_ACROSS)

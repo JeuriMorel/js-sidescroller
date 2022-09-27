@@ -8,6 +8,7 @@ export default class InputHandler {
             left: false,
             up: false,
             attack: false,
+            jump: false,
         }
 
         window.addEventListener("keydown", e => {
@@ -32,6 +33,10 @@ export default class InputHandler {
                 case "d":
                     this.lastKey = "PRESS Attack"
                     this.keysPressed.attack = true
+                    break
+                case "f":
+                    this.lastKey = "PRESS Jump"
+                    this.keysPressed.jump = true
                     break
             }
         })
@@ -61,6 +66,10 @@ export default class InputHandler {
                     this.lastKey = "RELEASE Attack"
                     this.keysPressed.attack = false
 
+                    break
+                case "f":
+                    this.lastKey = "RELEASE Jump"
+                    this.keysPressed.jump = false
                     break
             }
         })

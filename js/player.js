@@ -6,6 +6,7 @@ import {
     SOUND_DASH,
     SOUND_DODGE,
     SOUND_SLASH,
+    SOUND_SNARE,
     SOUND_UPROLL,
     SPRITE_HEIGHT,
     SPRITE_WIDTH,
@@ -51,6 +52,7 @@ export class Player {
         this.poweredUp = true
         this.deltaTime = 0
         this.isWhiffing = true
+        this.invulnerabilityTime = 0
         this.stickyMultiplier = 0
         this.base_damage = {
             claw: 25,
@@ -97,6 +99,7 @@ export class Player {
             dash: new Audio(SOUND_DASH),
             dodge: new Audio(SOUND_DODGE),
             claw_strike: new Audio(SOUND_CLAW_STRIKE),
+            down_roll: new Audio(SOUND_SNARE)
         }
         //vertical
         this.velocityY = 0
@@ -124,12 +127,19 @@ export class Player {
     }
     update(deltaTime, input) {
         this.deltaTime = deltaTime
+
+        //invul
         this.currentState.handleInput(input)
+        if (this.invulnerabilityTime > 0) {
+            this.hurtbox.head.isActive = false
+            this.hurtbox.body.isActive = false
+            this.invulnerabilityTime -= deltaTime
+        }
         if (this.stickyMultiplier > 0) this.callStickyFunction()
         //keep player within gamebox
         if (this.x < STARTING_X) this.x = STARTING_X
-        else if (this.x > this.game.width - this.width * 3) {
-            this.x = this.game.width - this.width * 3
+        else if (this.x > this.game.width * 0.5 - this.width) {
+            this.x = this.game.width * 0.5 - this.width
             this.game.scrollSpeed = DEFAULT_SCROLL_SPEED * 2
         }
         //vertical movement
@@ -191,38 +201,38 @@ export class Player {
         else this.checkForDodge()
     }
     draw(context) {
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hurtbox.head.isActive) {
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.head.x,
-        //         this.hurtbox.head.y,
-        //         this.hurtbox.head.width,
-        //         this.hurtbox.head.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hitbox.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.x,
-        //         this.hitbox.y,
-        //         this.hitbox.width,
-        //         this.hitbox.height
-        //     )
-        //     context.stroke()
-        // }
+        if (this.hurtbox.body.isActive) {
+            context.strokeStyle = "black"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hurtbox.head.isActive) {
+            context.beginPath()
+            context.rect(
+                this.hurtbox.head.x,
+                this.hurtbox.head.y,
+                this.hurtbox.head.width,
+                this.hurtbox.head.height
+            )
+            context.stroke()
+        }
+        if (this.hitbox.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.x,
+                this.hitbox.y,
+                this.hitbox.width,
+                this.hitbox.height
+            )
+            context.stroke()
+        }
 
         context.drawImage(
             this.image,
@@ -347,6 +357,7 @@ export class Player {
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 400
+                    this.invulnerabilityTime = 400
                     if(type === "Dash") this.audio.dash.play()
                     // this.attack_bonus++
                     this.hurtbox.body.isActive = false
@@ -400,11 +411,20 @@ export class Player {
         )
     }
     checkHitCollision() {
+        if (
+            this.invulnerabilityTime > 0 ||
+            this.currentState === this.states[3]
+        )
+            return
         this.game.enemies.forEach(enemy => {
             const enemyHitboxes = Object.values(enemy.hitbox)
 
             enemyHitboxes.forEach(hitbox => {
-                if (this.currentState === this.states[3]) return
+                if (
+                    this.invulnerabilityTime > 0 ||
+                    this.currentState === this.states[3]
+                )
+                    return
 
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
