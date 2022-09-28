@@ -131,12 +131,17 @@ export class Armored_Frog {
         this.velocityY = 0
         this.weight = 3
 
+        this.healthBarPadding = 20
+        this.healthBarY = this.game.height - this.game.groundMargin * 0.5
+
         this.healthBar = new HealthBar({
-            x: this.x,
-            y: this.y,
-            width: this.width,
-            height: 15 * this.sizeModifier,
+            x: this.healthBarPadding,
+            y: this.healthBarY,
+            width: this.game.width - this.healthBarPadding * 2,
+            height: 20,
             maxhealth: this.healthPoints,
+            defaultbarColor: "#e95e27",
+            borderColor: "#e9e0b3",
         })
     }
 
@@ -153,8 +158,7 @@ export class Armored_Frog {
             this.frameTimer += deltaTime
         }
 
-        //healthBar
-        this.healthBar.updatePosition(this.x, this.y)
+        this.healthBar.updatePosition(this.healthBarPadding, this.healthBarY)
 
         //Attack
         if (
@@ -313,9 +317,10 @@ export class Armored_Frog {
         if (target === "enemy is attacked") {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
-                this.healthPoints -= attackDamage
-                this.healthBar.updateBar(this.healthPoints)
             }
+            this.healthPoints -= attackDamage
+            if(this.healthPoints < 0) this.healthPoints = 0
+            this.healthBar.updateBar(this.healthPoints)
             this.setState(
                 this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT
             )

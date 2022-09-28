@@ -10,7 +10,7 @@ export class HealthBar {
         maxhealth,
         borderColor = "black",
         defaultbarColor = "#abff2e",
-        showDamage = true
+        showDamage = true,
     }) {
         this.barOffset = 2
         this.x = x
@@ -54,17 +54,17 @@ export class HealthBar {
             this.defaultbarColor,
             this.health / this.maxhealth
         )
-        if (this.showDamage) this.damageNumbers.push(
-            new DamageNumbers({
-                value: damageTaken,
-                x: this.x + this.width,
-                y: this.y - this.height,
-            })
-        )
+        if (this.showDamage)
+            this.damageNumbers.push(
+                new DamageNumbers({
+                    value: damageTaken,
+                    x: this.x + this.width,
+                    y: this.y - this.height,
+                })
+            )
     }
 
     draw(context) {
-        
         context.strokeStyle = this.borderColor
         context.fillStyle = this.fillColor
         context.lineWidth = 2
