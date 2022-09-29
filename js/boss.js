@@ -145,6 +145,10 @@ export class Armored_Frog {
         })
     }
 
+    get enemyName() {
+        return this.constructor.name
+    }
+
     setState(state) {
         this.currentState = this.states[state]
         this.currentState.enter()
@@ -180,7 +184,7 @@ export class Armored_Frog {
         this.currentState.update()
         this.updateHitboxes()
         if (this.invulnerabilityTime > 0) this.invulnerabilityTime -= deltaTime
-        else {
+        else if (!this.isDefeated) {
             this.hurtbox.body.isActive = true
             this.hurtbox.tongue.isActive = true
         }
@@ -246,28 +250,28 @@ export class Armored_Frog {
             this.width,
             this.height
         )
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hurtbox.tongue.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.tongue.x,
-        //         this.hurtbox.tongue.y,
-        //         this.hurtbox.tongue.width,
-        //         this.hurtbox.tongue.height
-        //     )
-        //     context.stroke()
-        // }
+        if (this.hurtbox.body.isActive) {
+            context.strokeStyle = "black"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hurtbox.tongue.isActive) {
+            context.strokeStyle = "red"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.tongue.x,
+                this.hurtbox.tongue.y,
+                this.hurtbox.tongue.width,
+                this.hurtbox.tongue.height
+            )
+            context.stroke()
+        }
         // if (this.hitbox.tongue.isActive) {
         //     context.strokeStyle = "#ff0000"
         //     context.beginPath()
@@ -279,21 +283,21 @@ export class Armored_Frog {
         //     )
         //     context.stroke()
         // }
-        context.strokeStyle = "yellow"
-        context.beginPath()
-        context.rect(this.x, this.y, this.width, this.height)
-        context.stroke()
-        if (this.hitbox.claws.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.claws.x,
-                this.hitbox.claws.y,
-                this.hitbox.claws.width,
-                this.hitbox.claws.height
-            )
-            context.stroke()
-        }
+        // context.strokeStyle = "yellow"
+        // context.beginPath()
+        // context.rect(this.x, this.y, this.width, this.height)
+        // context.stroke()
+        // if (this.hitbox.claws.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.claws.x,
+        //         this.hitbox.claws.y,
+        //         this.hitbox.claws.width,
+        //         this.hitbox.claws.height
+        //     )
+        //     context.stroke()
+        // }
     }
     attack() {
         let attackToPerform =
@@ -319,7 +323,7 @@ export class Armored_Frog {
                 this.x += this.attackOffsetX
             }
             this.healthPoints -= attackDamage
-            if(this.healthPoints < 0) this.healthPoints = 0
+            if (this.healthPoints < 0) this.healthPoints = 0
             this.healthBar.updateBar(this.healthPoints)
             this.setState(
                 this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT

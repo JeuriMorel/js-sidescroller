@@ -29,7 +29,7 @@ import {
     Sleeping,
     states,
 } from "./states.js"
-import { Boom, Hit_V1, Hit_V2, Smoke } from "./particles.js"
+import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2, Smoke } from "./particles.js"
 
 export class Player {
     constructor(game) {
@@ -99,7 +99,7 @@ export class Player {
             dash: new Audio(SOUND_DASH),
             dodge: new Audio(SOUND_DODGE),
             claw_strike: new Audio(SOUND_CLAW_STRIKE),
-            down_roll: new Audio(SOUND_SNARE)
+            down_roll: new Audio(SOUND_SNARE),
         }
         //vertical
         this.velocityY = 0
@@ -156,8 +156,8 @@ export class Player {
         }
         if (this.y > this.game.height - this.height - this.game.groundMargin)
             this.y = this.game.height - this.height - this.game.groundMargin
-        
-        if(this.y <= this.game.y) this.y = this.game.y
+
+        if (this.y <= this.game.y) this.y = this.game.y
 
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
@@ -201,38 +201,38 @@ export class Player {
         else this.checkForDodge()
     }
     draw(context) {
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hurtbox.head.isActive) {
-            context.beginPath()
-            context.rect(
-                this.hurtbox.head.x,
-                this.hurtbox.head.y,
-                this.hurtbox.head.width,
-                this.hurtbox.head.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.x,
-                this.hitbox.y,
-                this.hitbox.width,
-                this.hitbox.height
-            )
-            context.stroke()
-        }
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hurtbox.head.isActive) {
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.head.x,
+        //         this.hurtbox.head.y,
+        //         this.hurtbox.head.width,
+        //         this.hurtbox.head.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hitbox.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.x,
+        //         this.hitbox.y,
+        //         this.hitbox.width,
+        //         this.hitbox.height
+        //     )
+        //     context.stroke()
+        // }
 
         context.drawImage(
             this.image,
@@ -353,12 +353,32 @@ export class Player {
                                 src: null,
                             })
                         )
+                    else if (enemyName === "Armored_Frog")
+                        if (this.isClawing()) {
+                            this.game.particles.push(
+                                new Red_Hit_V1({
+                                    game: this.game,
+                                    x: this.hitbox.x + this.hitbox.width,
+                                    y: this.hitbox.y + this.hitbox.height * 0.5,
+                                    sizeModifier: hitAnimationSize,
+                                    src: null,
+                                })
+                            )
+                        } else this.game.particles.push(
+                            new Red_Hit_V2({
+                                game: this.game,
+                                x: this.hitbox.x + this.hitbox.width,
+                                y: this.hitbox.y + this.hitbox.height * 0.5,
+                                sizeModifier: hitAnimationSize,
+                                src: null,
+                            })
+                        )
 
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false
                     enemy.invulnerabilityTime = 400
                     this.invulnerabilityTime = 400
-                    if(type === "Dash") this.audio.dash.play()
+                    if (type === "Dash") this.audio.dash.play()
                     // this.attack_bonus++
                     this.hurtbox.body.isActive = false
                     this.hurtbox.head.isActive = false
@@ -428,7 +448,7 @@ export class Player {
 
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
-                    enemy.resolveCollision({target: "player is attacked"})
+                    enemy.resolveCollision({ target: "player is attacked" })
                 }
             })
         })

@@ -180,3 +180,33 @@ export class Explosion_V4 extends Particles {
         this.y = y - this.height * 0.5
     }
 }
+export class Red_Hit_V1 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#red_hit_V1")
+        this.maxFrame = 16
+        this.framesPerRow = 4
+        this.fps = 20
+        this.spriteHeight = 256
+        this.spriteWidth = 256
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
+export class Red_Hit_V2 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#red_hit_V2")
+        this.maxFrame = 16
+        this.framesPerRow = 4
+        this.fps = 20
+        this.spriteHeight = 256
+        this.spriteWidth = 256
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
