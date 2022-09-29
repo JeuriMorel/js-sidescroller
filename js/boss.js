@@ -250,28 +250,28 @@ export class Armored_Frog {
             this.width,
             this.height
         )
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hurtbox.tongue.isActive) {
-            context.strokeStyle = "red"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.tongue.x,
-                this.hurtbox.tongue.y,
-                this.hurtbox.tongue.width,
-                this.hurtbox.tongue.height
-            )
-            context.stroke()
-        }
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hurtbox.tongue.isActive) {
+        //     context.strokeStyle = "red"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.tongue.x,
+        //         this.hurtbox.tongue.y,
+        //         this.hurtbox.tongue.width,
+        //         this.hurtbox.tongue.height
+        //     )
+        //     context.stroke()
+        // }
         // if (this.hitbox.tongue.isActive) {
         //     context.strokeStyle = "#ff0000"
         //     context.beginPath()

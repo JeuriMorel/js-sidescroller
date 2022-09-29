@@ -6,6 +6,7 @@ import InputHandler from "./inputs.js"
 import { AngryEgg, Ghost, Crawler } from "./enemies.js"
 import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
+import { UI } from "./UI.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -23,6 +24,7 @@ window.addEventListener("load", function () {
             this.background = new Background(this)
             this.player = new Player(this)
             this.input = new InputHandler(this)
+            this.UI = new UI(this)
             this.enemyFrequency = 1500
             this.enemyTimer = 0
             this.enemies = [new Armored_Frog(this)]
@@ -31,6 +33,7 @@ window.addEventListener("load", function () {
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
+            
         }
         update(deltaTime, input) {
             this.background.update()
@@ -71,6 +74,7 @@ window.addEventListener("load", function () {
                 enemy.draw(context)
             })
             this.particles.forEach(particle => particle.draw(context))
+            this.UI.draw(context)
             // this.dash_gauge.draw(context)
         }
 

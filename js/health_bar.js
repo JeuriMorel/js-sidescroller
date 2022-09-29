@@ -71,37 +71,38 @@ export class HealthBar {
 
         // const border = new Path2D()
         const bar = new Path2D()
-
-        bar.moveTo(this.barX + this.barRadius, this.barY)
-        bar.arcTo(
-            this.barX + this.width,
-            this.barY,
-            this.barX + this.width,
-            this.barY + this.barheight,
-            this.barRadius
-        )
-        bar.arcTo(
-            this.barX + this.width,
-            this.barY + this.barheight,
-            this.barX,
-            this.barY + this.barheight,
-            this.barRadius
-        )
-        bar.arcTo(
-            this.barX,
-            this.barY + this.barheight,
-            this.barX,
-            this.barY,
-            this.barRadius
-        )
-        bar.arcTo(
-            this.barX,
-            this.barY,
-            this.barX + this.width,
-            this.barY,
-            this.barRadius
-        )
-        bar.closePath()
+        if (this.health > 0) {
+            bar.moveTo(this.barX + this.barRadius, this.barY)
+            bar.arcTo(
+                this.barX + this.width,
+                this.barY,
+                this.barX + this.width,
+                this.barY + this.barheight,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX + this.width,
+                this.barY + this.barheight,
+                this.barX,
+                this.barY + this.barheight,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX,
+                this.barY + this.barheight,
+                this.barX,
+                this.barY,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX,
+                this.barY,
+                this.barX + this.width,
+                this.barY,
+                this.barRadius
+            )
+            bar.closePath()
+        }
 
         context.beginPath()
         context.moveTo(this.x + this.radius, this.y)
