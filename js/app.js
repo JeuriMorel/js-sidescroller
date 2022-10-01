@@ -3,7 +3,7 @@ import { Background } from "./background.js"
 import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
-import { AngryEgg, Ghost, Crawler, Bee } from "./enemies.js"
+import { AngryEgg, Ghost, Crawler, Bee, PumpKing } from "./enemies.js"
 import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
@@ -25,7 +25,7 @@ window.addEventListener("load", function () {
             this.player = new Player(this)
             this.input = new InputHandler(this)
             this.UI = new UI(this)
-            this.enemyFrequency = 1500
+            this.enemyFrequency = 3500
             this.enemyTimer = 0
             this.enemies = []
             this.particles = []
@@ -79,13 +79,14 @@ window.addEventListener("load", function () {
         }
 
         addEnemy() {
-            if (Math.random() > 0.4) this.addBees()
+            // if (Math.random() > 0.4) this.addBees()
             // else if (
             //     Math.random() > 0.4 &&
             //     !this.enemies.some(obj => obj instanceof Crawler)
             // )
             //     this.enemies.push(new Crawler(this))
-            else this.enemies.push(new AngryEgg(this))
+            // else this.enemies.push(new AngryEgg(this))
+            this.enemies.push(new PumpKing(this))
         }
 
         addBees() {

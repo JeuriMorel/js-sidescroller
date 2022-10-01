@@ -16,6 +16,12 @@ import { qs } from "./utils.js"
 
 import { Boom, Smoke } from "./particles.js"
 import { HealthBar } from "./health_bar.js"
+import {
+    Pumpkin_Explode,
+    Pumpkin_Idle,
+    Pumpkin_Walk,
+    PUMPKIN_STATES,
+} from "./pumpkin_states.js"
 
 class Enemy {
     constructor(game) {
@@ -46,15 +52,6 @@ class Enemy {
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
-        //
-        // if (this.frameTimer > this.frameInterval && this.markedForRecoil) {
-        //     this.horizontalSpeed -= 35
-        //     this.markedForRecoil = false
-        // }
-        // if (this.horizontalSpeed <= 0) this.horizontalSpeed += this.weight
-        // if (this.horizontalSpeed > this.defaultHorizontalSpeed)
-        //     this.horizontalSpeed = this.defaultHorizontalSpeed
-        //
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
@@ -605,12 +602,10 @@ export class Bee extends Enemy {
             this.isAttacking = false
         }
 
-
         //KEEP ABOVE GROUND
         if (this.y > this.game.height - this.height - this.game.groundMargin) {
             this.y = this.game.height - this.height - this.game.groundMargin
         }
-
 
         //ATTACK
         if (this.attackTimer >= this.attackInterval) {
@@ -646,5 +641,154 @@ export class Bee extends Enemy {
 
     resolveCollision() {
         this.healthPoints = 0
+    }
+}
+
+export class PumpKing extends Enemy {
+    constructor(game) {
+        super(game)
+
+        this.fps = 30
+        this.frameInterval = 1000 / this.fps
+        this.frameTimer = 0
+        this.sizeModifier = Math.random() * 0.4 + 0.5
+        this.healthPoints = 50 * this.sizeModifier
+        this.spriteWidth = 0
+        this.spriteHeight = 0
+        this.width = 0
+        this.height = 0
+        this.walkTimer = 0
+        this.walkInterval = 2000
+
+        this.defaultHorizontalSpeed = 0
+        this.horizontalSpeed = 0
+        this.defence = Math.round(5 * this.sizeModifier + 2)
+        this.markedForRecoil = false
+        this.attackDirection
+        this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
+        this.weight = 3 * this.sizeModifier
+        this.velocityY = 0
+        this.states = [
+            new Pumpkin_Idle(this),
+            new Pumpkin_Walk(this),
+            new Pumpkin_Explode(this),
+        ]
+        this.currentState = this.states[PUMPKIN_STATES.IDLE]
+        this.currentState.enter()
+
+        this.x = this.game.width
+        this.y = this.game.height - this.height - this.game.groundMargin
+
+        this.healthBar = new HealthBar({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: 15 * this.sizeModifier,
+            maxhealth: this.healthPoints,
+        })
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.17,
+                yOffset: this.height * 0.2,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.6,
+                height: this.height * 0.75,
+            },
+        }
+        this.hitbox = {
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.2,
+                yOffset: this.height * 0.35,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.3,
+                height: this.height * 0.5,
+            },
+        }
+    }
+    update(deltaTime) {
+        if (
+            this.frameTimer + deltaTime > this.frameInterval &&
+            this.markedForRecoil
+        ) {
+            this.horizontalSpeed -= this.recoilSpeeds[this.attackType]
+            if (this.healthBar) this.healthBar.updateBar(this.healthPoints)
+            this.markedForRecoil = false
+        }
+
+        if (this.horizontalSpeed <= 0) this.horizontalSpeed += this.weight
+        if (this.horizontalSpeed > this.defaultHorizontalSpeed)
+            this.horizontalSpeed = this.defaultHorizontalSpeed
+
+        //vertical movement
+        this.y += this.velocityY
+        if (!this.isOnGround()) {
+            this.velocityY += this.weight
+        } else {
+            this.velocityY = 0
+        }
+        if (this.y > this.game.height - this.height - this.game.groundMargin)
+            this.y = this.game.height - this.height - this.game.groundMargin
+
+        this.currentState.update(deltaTime)
+
+        this.x -= this.horizontalSpeed + this.game.scrollSpeed
+        if (this.x < -this.game.width - this.width) this.deleteEnemy = true
+        if (this.frameTimer > this.frameInterval) {
+            this.frameTimer = 0
+            
+            if (this.frame < this.maxFrame) this.frame++
+            else this.frame = 0
+        } else {
+            this.frameTimer += deltaTime
+        }
+        this.updateHitboxes()
+        if (this.invulnerabilityTime > 0) {
+            this.invulnerabilityTime -= deltaTime
+            this.hitbox.body.isActive = false
+        } else {
+            this.hurtbox.body.isActive = true
+            this.hitbox.body.isActive = true
+        }
+        if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
+    }
+    setState(state) {
+        this.currentState = this.states[state]
+        this.currentState.enter()
+    }
+    resolveCollision({ target, attackDamage, attackType }) {
+        super.resolveCollision({ target, attackDamage })
+        if (this.healthPoints <= 0) {
+            this.setState(PUMPKIN_STATES.EXPLODE)
+        }
+        this.attackType = attackType
+        if (this.attackType === "Dash") this.tossInAir()
+
+        if (target === "player is attacked") {
+            this.attackType = "Bite"
+            this.markedForRecoil = true
+            this.healthPoints--
+        }
+    }
+    resetBoxes() {
+        // if (this.hurtbox) {
+        //     this.hurtbox.body.xOffset =
+        //         this.width * this.idleXOffsetModifier * this.sizeModifier
+        //     this.hurtbox.tongue.xOffset =
+        //         this.width * this.idleXOffsetModifier * this.sizeModifier
+        // }
+        // if (this.hitbox) {
+        //     this.hitbox.body.xOffset =
+        //         this.width * this.idleXOffsetModifier * this.sizeModifier
+        //     this.hitbox.tongue.xOffset =
+        //         this.width * this.idleXOffsetModifier * this.sizeModifier
+        //     this.hitbox.claws.xOffset =
+        //         this.width * this.idleXOffsetModifier * this.sizeModifier
+        //     this.hitbox.claws.width = this.width * 1.4 * this.sizeModifier
+        //     this.hitbox.claws.yOffset = this.height * 1.4 * this.sizeModifier
+        // }
     }
 }
