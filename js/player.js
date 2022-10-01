@@ -333,7 +333,7 @@ export class Player {
                         attackDamage: damage,
                         attackType: type,
                     })
-                    if (enemyName === "AngryEgg")
+                    if (enemyName === "AngryEgg" || enemyName === "Bee")
                         this.game.particles.push(
                             new Hit_V1({
                                 game: this.game,
@@ -364,15 +364,16 @@ export class Player {
                                     src: null,
                                 })
                             )
-                        } else this.game.particles.push(
-                            new Red_Hit_V2({
-                                game: this.game,
-                                x: this.hitbox.x + this.hitbox.width,
-                                y: this.hitbox.y + this.hitbox.height * 0.5,
-                                sizeModifier: hitAnimationSize,
-                                src: null,
-                            })
-                        )
+                        } else
+                            this.game.particles.push(
+                                new Red_Hit_V2({
+                                    game: this.game,
+                                    x: this.hitbox.x + this.hitbox.width,
+                                    y: this.hitbox.y + this.hitbox.height * 0.5,
+                                    sizeModifier: hitAnimationSize,
+                                    src: null,
+                                })
+                            )
 
                     this.isWhiffing = false
                     enemyHurtbox.isActive = false

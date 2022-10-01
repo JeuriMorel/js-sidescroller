@@ -3,7 +3,7 @@ import { Background } from "./background.js"
 import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
-import { AngryEgg, Ghost, Crawler } from "./enemies.js"
+import { AngryEgg, Ghost, Crawler, Bee } from "./enemies.js"
 import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
@@ -27,7 +27,7 @@ window.addEventListener("load", function () {
             this.UI = new UI(this)
             this.enemyFrequency = 1500
             this.enemyTimer = 0
-            this.enemies = [new Armored_Frog(this)]
+            this.enemies = []
             this.particles = []
             this.maxEnemies = 5
             this.recoveryTime = 0
@@ -50,15 +50,15 @@ window.addEventListener("load", function () {
                 enemy.update(deltaTime)
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
-            // if (
-            //     this.enemyTimer > this.enemyFrequency &&
-            //     this.enemies.length < this.maxEnemies
-            // ) {
-            //     this.enemyTimer = 0
-            //     this.addEnemy()
-            // } else {
-            //     this.enemyTimer += deltaTime
-            // }
+            if (
+                this.enemyTimer > this.enemyFrequency &&
+                this.enemies.length < this.maxEnemies
+            ) {
+                this.enemyTimer = 0
+                this.addEnemy()
+            } else {
+                this.enemyTimer += deltaTime
+            }
 
             this.particles = this.particles.filter(
                 particle => !particle.markedForDeletion
@@ -79,7 +79,7 @@ window.addEventListener("load", function () {
         }
 
         addEnemy() {
-            if (Math.random() > 0.7) this.enemies.push(new Ghost(this))
+            if (Math.random() > 0.4) this.enemies.push(new Bee(this))
             // else if (
             //     Math.random() > 0.4 &&
             //     !this.enemies.some(obj => obj instanceof Crawler)

@@ -8,6 +8,9 @@ import {
     SOUND_CRACKS_1,
     SOUND_CRACKS_2,
     SOUND_GHOST_DIE,
+    BEE_WIDTH,
+    BEE_HEIGHT,
+    SOUND_CLAW_STRIKE,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -28,6 +31,7 @@ class Enemy {
             Jump: 10,
             Up_Roll: 15,
             Down_Roll: 20,
+            Bite: 20,
         }
     }
     get enemyName() {
@@ -63,8 +67,7 @@ class Enemy {
         if (this.invulnerabilityTime > 0) {
             this.invulnerabilityTime -= deltaTime
             this.hitbox.body.isActive = false
-        }
-        else {
+        } else {
             this.hurtbox.body.isActive = true
             this.hitbox.body.isActive = true
         }
@@ -220,7 +223,12 @@ export class AngryEgg extends Enemy {
     resolveCollision({ target, attackDamage, attackType }) {
         super.resolveCollision({ target, attackDamage })
         this.attackType = attackType
-        if(this.attackType === "Dash") this.tossInAir()
+        if (this.attackType === "Dash") this.tossInAir()
+
+        if (target === "player is attacked") {
+            this.attackType = "Bite"
+            this.markedForRecoil = true
+        }
     }
 }
 export class Crawler extends Enemy {
@@ -494,7 +502,7 @@ export class Ghost extends Enemy {
                 })
             )
         this.y += Math.sin(this.angle) * this.curve
-        this.angle += 0.05                  
+        this.angle += 0.05
     }
 
     draw(context) {
@@ -505,7 +513,130 @@ export class Ghost extends Enemy {
         super.draw(context)
         context.restore()
     }
-    resolveCollision({ target}) {
+    resolveCollision({ target }) {
+        if (target === "enemy is attacked") {
+            this.healthPoints = 0
+        }
+    }
+}
+export class Bee extends Enemy {
+    constructor(game) {
+        super(game)
+
+        this.healthPoints = 20
+        this.transparency = Math.random() * 0.2 + 0.3
+        this.maxFrame = 12
+        this.fps = 30
+        this.frameInterval = 1000 / this.fps
+        this.frameTimer = 0
+        this.sizeModifier = Math.random() * 0.4 + 0.2
+        this.spriteWidth = BEE_WIDTH
+        this.spriteHeight = BEE_HEIGHT
+        this.width = BEE_WIDTH * this.sizeModifier
+        this.height = BEE_HEIGHT * this.sizeModifier
+        this.horizontalSpeed = 2
+        this.attackTimer = 0
+        this.attackInterval = 4000
+        this.isAttacking = false
+        this.isReturning = false
+        this.target = {
+            x: 0,
+            y: 0,
+        }
+        this.previousPosition = {
+            x: 0,
+            y: 0,
+        }
+        this.x = this.game.width
+        this.y =
+            (this.game.height - this.height - this.game.groundMargin) *
+            Math.random()
+        this.image = qs("#bee")
+        this.defence = 0
+        //Flying Pattern
+        this.angle = 0
+        this.curve = Math.random() * 6
+        this.hurtbox = {
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.1,
+                yOffset: this.width * 0.1,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.9,
+                height: this.height * 0.7,
+            },
+        }
+        this.hitbox = {
+            body: {
+                isActive: true,
+                xOffset: this.width * 0.15,
+                yOffset: this.height * 0.1,
+                x: this.x + this.xOffset,
+                y: this.y + this.yOffset,
+                width: this.width * 0.8,
+                height: this.height * 0.65,
+            },
+        }
+    }
+
+    update(deltaTime) {
+        super.update(deltaTime)
+        if (!this.isAttacking) {
+            this.x += Math.random() * 3 - 1.5
+            this.y += Math.random() * 5 - 2.5
+        } else {
+            this.x += (this.target.x - this.x) * 0.05
+            this.y += (this.target.y - this.y) * 0.05
+        }
+        //RETURN TO POSITION
+        if (this.x <= this.target.x + 10) {
+            this.isReturning = true
+            this.attackTimer = 0
+        }
+        if (this.isReturning) {
+            this.x += (this.previousPosition.x - this.x) * 0.1
+            this.y += (this.previousPosition.y - this.y) * 0.1
+            this.isAttacking = false
+        }
+
+        //ATTACk
+        if (this.attackTimer >= this.attackInterval) {
+            this.isReturning = false
+            this.isAttacking = true
+            this.attackTimer = 0
+            this.target.x = this.game.player.x
+            this.target.y = this.game.player.y
+            this.previousPosition.x = this.x
+            this.previousPosition.y = this.y + this.game.player.height
+        } else if (!this.isAttacking && this.x > this.game.width * 0.3)
+            this.attackTimer += deltaTime
+
+        //HEALTH
+        if (this.healthPoints <= 0)
+            this.game.particles.push(
+                new Boom({
+                    game: this.game,
+                    x: this.x + this.width * 0.5,
+                    y: this.y + this.height * 0.5,
+                    sizeModifier: this.sizeModifier,
+                    src: SOUND_CLAW_STRIKE,
+                })
+            )
+
+        // this.y += Math.sin(this.angle) * this.curve
+        // this.angle += 0.05
+    }
+
+    // draw(context) {
+    //     context.save()
+    //     if (this.frame % 4 == 0) {
+    //         context.globalAlpha = this.transparency
+    //     } else context.globalAlpha = this.transparency - 0.1
+    //     super.draw(context)
+    //     context.restore()
+    // }
+    resolveCollision({ target }) {
         if (target === "enemy is attacked") {
             this.healthPoints = 0
         }
