@@ -657,14 +657,12 @@ export class PumpKing extends Enemy {
         this.spriteHeight = 0
         this.width = 0
         this.height = 0
-        this.walkTimer = 0
-        this.walkInterval = 2000
-
         this.defaultHorizontalSpeed = 0
         this.horizontalSpeed = 0
         this.defence = Math.round(5 * this.sizeModifier + 2)
         this.markedForRecoil = false
         this.attackDirection
+        this.explodeXOffset = -120
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
         this.velocityY = 0
@@ -732,9 +730,6 @@ export class PumpKing extends Enemy {
         }
         if (this.y > this.game.height - this.height - this.game.groundMargin)
             this.y = this.game.height - this.height - this.game.groundMargin
-
-        this.currentState.update(deltaTime)
-
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
         if (this.frameTimer > this.frameInterval) {
@@ -749,11 +744,14 @@ export class PumpKing extends Enemy {
         if (this.invulnerabilityTime > 0) {
             this.invulnerabilityTime -= deltaTime
             this.hitbox.body.isActive = false
-        } else {
+        } else if (
+            this.currentState.state !== "EXPLODE"
+        ) {
             this.hurtbox.body.isActive = true
             this.hitbox.body.isActive = true
         }
         if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
+        this.currentState.update()
     }
     setState(state) {
         this.currentState = this.states[state]

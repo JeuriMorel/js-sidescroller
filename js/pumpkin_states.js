@@ -29,12 +29,9 @@ export class Pumpkin_Idle extends Pumpkin_State {
         this.self.horizontalSpeed = 0
         this.self.resetBoxes()
     }
-    update(deltaTime) {
-        if (this.self.walkTimer >= this.self.walkInterval) {
+    update() {
+        if (this.self.frame === this.self.maxFrame) {
             this.self.setState(PUMPKIN_STATES.WALK)
-            this.self.walkTimer = 0
-        } else {
-            this.self.walkTimer += deltaTime
         }
     }
 }
@@ -78,6 +75,7 @@ export class Pumpkin_Explode extends Pumpkin_State {
         this.self.defaultHorizontalSpeed = 0
         this.self.hitbox.body.isActive = false
         this.self.hurtbox.body.isActive = false
+        this.self.x += this.self.explodeXOffset
         this.self.resetBoxes()
     }
     update() {
