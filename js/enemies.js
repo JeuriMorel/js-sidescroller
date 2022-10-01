@@ -228,6 +228,7 @@ export class AngryEgg extends Enemy {
         if (target === "player is attacked") {
             this.attackType = "Bite"
             this.markedForRecoil = true
+            this.healthPoints--
         }
     }
 }
@@ -529,14 +530,14 @@ export class Bee extends Enemy {
         this.fps = 30
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
-        this.sizeModifier = Math.random() * 0.4 + 0.2
+        this.sizeModifier = Math.random() * 0.2 + 0.2
         this.spriteWidth = BEE_WIDTH
         this.spriteHeight = BEE_HEIGHT
         this.width = BEE_WIDTH * this.sizeModifier
         this.height = BEE_HEIGHT * this.sizeModifier
-        this.horizontalSpeed = 2
+        this.horizontalSpeed = 1
         this.attackTimer = 0
-        this.attackInterval = 4000
+        this.attackInterval = 1500 + Math.random() * 500
         this.isAttacking = false
         this.isReturning = false
         this.target = {
@@ -560,38 +561,42 @@ export class Bee extends Enemy {
             body: {
                 isActive: true,
                 xOffset: this.width * 0.1,
-                yOffset: this.width * 0.1,
+                yOffset: this.width * 0.25,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.9,
-                height: this.height * 0.7,
+                width: this.width * 0.75,
+                height: this.height * 0.5,
             },
         }
         this.hitbox = {
             body: {
                 isActive: true,
-                xOffset: this.width * 0.15,
-                yOffset: this.height * 0.1,
+                xOffset: this.width * 0.1,
+                yOffset: this.height * 0.65,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.8,
-                height: this.height * 0.65,
+                width: this.width * 0.5,
+                height: this.height * 0.3,
             },
         }
     }
 
     update(deltaTime) {
         super.update(deltaTime)
-        if (!this.isAttacking) {
-            this.x += Math.random() * 3 - 1.5
-            this.y += Math.random() * 5 - 2.5
-        } else {
+        if (this.isAttacking) {
             this.x += (this.target.x - this.x) * 0.05
             this.y += (this.target.y - this.y) * 0.05
+        } else {
+            this.x += Math.random() * 3 - 1.5
+            this.y += Math.random() * 5 - 2.5
         }
         //RETURN TO POSITION
-        if (this.x <= this.target.x + 10) {
+        if (this.x <= this.target.x + 10 && this.isAttacking) {
             this.isReturning = true
+            this.attackTimer = 0
+        }
+        if (this.previousPosition.x - this.x < 20 && this.isReturning) {
+            this.isReturning = false
             this.attackTimer = 0
         }
         if (this.isReturning) {
@@ -600,16 +605,27 @@ export class Bee extends Enemy {
             this.isAttacking = false
         }
 
-        //ATTACk
+
+        //KEEP ABOVE GROUND
+        if (this.y > this.game.height - this.height - this.game.groundMargin) {
+            this.y = this.game.height - this.height - this.game.groundMargin
+        }
+
+
+        //ATTACK
         if (this.attackTimer >= this.attackInterval) {
             this.isReturning = false
             this.isAttacking = true
             this.attackTimer = 0
-            this.target.x = this.game.player.x
-            this.target.y = this.game.player.y
+            if (this.x > this.game.player.x) {
+                this.target.x = this.game.player.x
+                this.target.y = this.game.player.y + this.game.player.height
+            } else {
+                this.target.x, (this.previousPosition.x = -this.game.width)
+            }
             this.previousPosition.x = this.x
-            this.previousPosition.y = this.y + this.game.player.height
-        } else if (!this.isAttacking && this.x > this.game.width * 0.3)
+            this.previousPosition.y = this.y
+        } else if (!this.isAttacking && this.x > this.game.player.x)
             this.attackTimer += deltaTime
 
         //HEALTH
@@ -628,17 +644,7 @@ export class Bee extends Enemy {
         // this.angle += 0.05
     }
 
-    // draw(context) {
-    //     context.save()
-    //     if (this.frame % 4 == 0) {
-    //         context.globalAlpha = this.transparency
-    //     } else context.globalAlpha = this.transparency - 0.1
-    //     super.draw(context)
-    //     context.restore()
-    // }
-    resolveCollision({ target }) {
-        if (target === "enemy is attacked") {
-            this.healthPoints = 0
-        }
+    resolveCollision() {
+        this.healthPoints = 0
     }
 }

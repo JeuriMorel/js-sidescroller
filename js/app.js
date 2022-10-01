@@ -79,13 +79,20 @@ window.addEventListener("load", function () {
         }
 
         addEnemy() {
-            if (Math.random() > 0.4) this.enemies.push(new Bee(this))
+            if (Math.random() > 0.4) this.addBees()
             // else if (
             //     Math.random() > 0.4 &&
             //     !this.enemies.some(obj => obj instanceof Crawler)
             // )
             //     this.enemies.push(new Crawler(this))
             else this.enemies.push(new AngryEgg(this))
+        }
+
+        addBees() {
+            let numberOfBees = Math.floor(Math.random() * 3 + 1)
+            for (let i = 0; i <= numberOfBees; i++) {
+                this.enemies.push(new Bee(this))
+            }
         }
 
         stickyFriction(stickyMultiplier) {

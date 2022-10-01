@@ -198,7 +198,7 @@ export class Player {
         if (this.hitbox.isActive) this.checkAttackCollision()
         if (this.hurtbox.body.isActive || this.hurtbox.head.isActive)
             this.checkHitCollision()
-        else this.checkForDodge()
+        
     }
     draw(context) {
         // if (this.hurtbox.body.isActive) {
@@ -333,7 +333,7 @@ export class Player {
                         attackDamage: damage,
                         attackType: type,
                     })
-                    if (enemyName === "AngryEgg" || enemyName === "Bee")
+                    if (enemyName === "AngryEgg")
                         this.game.particles.push(
                             new Hit_V1({
                                 game: this.game,
@@ -450,22 +450,6 @@ export class Player {
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
                     enemy.resolveCollision({ target: "player is attacked" })
-                }
-            })
-        })
-    }
-    checkForDodge() {
-        this.game.enemies.forEach(enemy => {
-            const enemyHitboxes = Object.values(enemy.hitbox)
-
-            enemyHitboxes.forEach(hitbox => {
-                if (
-                    (this.currentState === this.states[10] ||
-                        this.currentState === this.states[11]) &&
-                    this.playerIsDodging(hitbox)
-                ) {
-                    this.stickyMultiplier = 1
-                    this.audio.dodge.play()
                 }
             })
         })
