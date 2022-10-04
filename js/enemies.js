@@ -73,28 +73,28 @@ class Enemy {
     }
     draw(context) {
         if (this.healthBar) this.healthBar.draw(context)
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hitbox.body.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.body.x,
-        //         this.hitbox.body.y,
-        //         this.hitbox.body.width,
-        //         this.hitbox.body.height
-        //     )
-        //     context.stroke()
-        // }
+        if (this.hurtbox.body.isActive) {
+            context.strokeStyle = "black"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hitbox.body.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.body.x,
+                this.hitbox.body.y,
+                this.hitbox.body.width,
+                this.hitbox.body.height
+            )
+            context.stroke()
+        }
         if (this.invulnerabilityTime > 0) {
             context.save()
             context.globalAlpha = Math.random() * 0.5 + 0.4
@@ -687,23 +687,23 @@ export class PumpKing extends Enemy {
         this.hurtbox = {
             body: {
                 isActive: true,
-                xOffset: this.width * 0.17,
-                yOffset: this.height * 0.2,
+                xOffset: this.width * 0.02,
+                yOffset: this.height * 0.3,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.6,
-                height: this.height * 0.75,
+                width: this.width * 0.95,
+                height: this.height * 0.7,
             },
         }
         this.hitbox = {
             body: {
                 isActive: true,
-                xOffset: this.width * 0.2,
-                yOffset: this.height * 0.35,
+                xOffset: this.width * 0.02,
+                yOffset: this.height * 0.55,
                 x: this.x + this.xOffset,
                 y: this.y + this.yOffset,
-                width: this.width * 0.3,
-                height: this.height * 0.5,
+                width: this.width * 0.9,
+                height: this.height * 0.3,
             },
         }
     }
@@ -734,7 +734,7 @@ export class PumpKing extends Enemy {
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
-            
+
             if (this.frame < this.maxFrame) this.frame++
             else this.frame = 0
         } else {
@@ -744,9 +744,7 @@ export class PumpKing extends Enemy {
         if (this.invulnerabilityTime > 0) {
             this.invulnerabilityTime -= deltaTime
             this.hitbox.body.isActive = false
-        } else if (
-            this.currentState.state !== "EXPLODE"
-        ) {
+        } else if (this.currentState.state !== "EXPLODE") {
             this.hurtbox.body.isActive = true
             this.hitbox.body.isActive = true
         }
@@ -772,21 +770,15 @@ export class PumpKing extends Enemy {
         }
     }
     resetBoxes() {
-        // if (this.hurtbox) {
-        //     this.hurtbox.body.xOffset =
-        //         this.width * this.idleXOffsetModifier * this.sizeModifier
-        //     this.hurtbox.tongue.xOffset =
-        //         this.width * this.idleXOffsetModifier * this.sizeModifier
-        // }
-        // if (this.hitbox) {
-        //     this.hitbox.body.xOffset =
-        //         this.width * this.idleXOffsetModifier * this.sizeModifier
-        //     this.hitbox.tongue.xOffset =
-        //         this.width * this.idleXOffsetModifier * this.sizeModifier
-        //     this.hitbox.claws.xOffset =
-        //         this.width * this.idleXOffsetModifier * this.sizeModifier
-        //     this.hitbox.claws.width = this.width * 1.4 * this.sizeModifier
-        //     this.hitbox.claws.yOffset = this.height * 1.4 * this.sizeModifier
-        // }
+        if (this.hurtbox) this.hurtbox.body.height = this.height * 0.7
+        if (this.hitbox)
+            this.hitbox.body.height =
+                this.currentState.state === "IDLE"
+                    ? this.height * 0.3
+                    : this.height * 0.35
+    }
+
+    isWithinRetreatingRange() {
+        return this.x < this.game.width * 0.5 && this.x > this.game.player.x
     }
 }

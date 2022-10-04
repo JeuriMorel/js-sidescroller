@@ -48,8 +48,8 @@ export class Pumpkin_Walk extends Pumpkin_State {
         this.self.height = this.self.spriteHeight * this.self.sizeModifier
         this.self.maxFrame = 15
         this.self.image = qs("#pumpkin_walk")
-        this.self.horizontalSpeed = 2
-        this.self.defaultHorizontalSpeed = 2
+        this.self.horizontalSpeed = this.self.isWithinRetreatingRange() ? -2 : 2
+        this.self.defaultHorizontalSpeed = this.self.horizontalSpeed
         this.self.resetBoxes()
     }
     update() {

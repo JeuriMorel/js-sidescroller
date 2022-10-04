@@ -1,3 +1,5 @@
+import { qs } from "./utils.js"
+
 class Icon {
     constructor(game) {
         this.game = game
@@ -12,7 +14,7 @@ class Icon {
             0,
             this.spriteWidth,
             this.spriteHeight,
-            this.x + this.spriteWidth * 0.5,
+            this.x,
             this.y,
             this.width,
             this.height
@@ -21,18 +23,18 @@ class Icon {
     }
 }
 
-export class Egg extends Icon {
-    constructor({ game, image, x, transparency, sizeModifier }) {
+export class Heart extends Icon {
+    constructor({ game, x, transparency, sizeModifier }) {
         super(game)
-        this.image = image
-        this.spriteHeight = 150
-        this.spriteWidth = 150
-        
+        this.image = qs("#heart")
+        this.spriteWidth = 158
+        this.spriteHeight = 130
+
         this.sizeModifier = sizeModifier
         this.width = this.spriteHeight * this.sizeModifier
         this.height = this.spriteHeight * this.sizeModifier
         this.transparency = transparency
         this.x = x
-        this.y = this.spriteHeight * 0.5 - this.height * 0.5
+        this.y = 20
     }
 }

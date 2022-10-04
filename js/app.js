@@ -77,14 +77,14 @@ window.addEventListener("load", function () {
         }
 
         addEnemy() {
-            if (Math.random() > 0.4) this.addBees()
+            // if (Math.random() > 0.4) this.addBees()
             // else if (
             //     Math.random() > 0.4 &&
             //     !this.enemies.some(obj => obj instanceof Crawler)
             // )
             //     this.enemies.push(new Crawler(this))
             // else this.enemies.push(new AngryEgg(this))
-            else this.enemies.push(new PumpKing(this))
+            this.enemies.push(new PumpKing(this))
         }
 
         addBees() {

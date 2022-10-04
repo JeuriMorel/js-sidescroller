@@ -1,31 +1,28 @@
 import { PROGRESS_ICON_X } from "./constants.js"
-import { Egg } from "./icon.js"
-import { qs } from "./utils.js"
+import { Heart } from "./icon.js"
+
 
 export class UI {
     constructor(game) {
         this.game = game
         this.progessIcons = [
-            new Egg({
+            new Heart({
                 game: this.game,
-                image: qs("#eggs_01"),
-                x: PROGRESS_ICON_X * 0,
-                transparency: 0.2,
-                sizeModifier: 0.5,
+                x: PROGRESS_ICON_X * 0 + 10,
+                transparency: 1,
+                sizeModifier: 0.25,
             }),
-            new Egg({
+            new Heart({
                 game: this.game,
-                image: qs("#eggs_02"),
-                x: PROGRESS_ICON_X * 1,
+                x: PROGRESS_ICON_X * 1 + 10,
                 transparency: 0.2,
-                sizeModifier: 0.5,
+                sizeModifier: 0.25,
             }),
-            new Egg({
+            new Heart({
                 game: this.game,
-                image: qs("#eggs_03"),
-                x: PROGRESS_ICON_X * 2,
-                transparency: 0.2,
-                sizeModifier: 0.5,
+                x: PROGRESS_ICON_X * 2 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
             }),
         ]
     }
