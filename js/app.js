@@ -7,7 +7,7 @@ import { AngryEgg, Ghost, Crawler, Bee, PumpKing } from "./enemies.js"
 import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
-import { ENEMY_TYPES, getEnemy, Wave_One } from "./waves.js"
+import { Wave_Eight, Wave_Five, Wave_Four, Wave_Nine, Wave_One, Wave_Seven, Wave_Six, Wave_Three, Wave_Two } from "./waves.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -35,7 +35,7 @@ window.addEventListener("load", function () {
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
-            this.wave = new Wave_One(this)
+            this.wave = new Wave_Eight(this)
         }
         update(deltaTime, input) {
             this.background.update()
@@ -57,7 +57,7 @@ window.addEventListener("load", function () {
                 this.enemies.length < this.maxEnemies
             ) {
                 this.enemyTimer = 0
-                this.addEnemy()
+                this.wave.addEnemy()
             } else {
                 this.enemyTimer += deltaTime
             }
@@ -79,21 +79,21 @@ window.addEventListener("load", function () {
             // this.dash_gauge.draw(context)
         }
 
-        addEnemy() {
-            let enemyToGet =
-                this.availableEnemiesList[
-                    Math.floor(Math.random() * this.availableEnemiesList.length)
-                ]
-            let enemyRetrievalFunction = getEnemy(enemyToGet)
-            this.enemies.push(enemyRetrievalFunction(this))
-        }
+        // addEnemy() {
+        //     let enemyToGet =
+        //         this.availableEnemiesList[
+        //             Math.floor(Math.random() * this.availableEnemiesList.length)
+        //         ]
+        //     let enemyRetrievalFunction = getEnemy(enemyToGet)
+        //     this.enemies.push(enemyRetrievalFunction(this))
+        // }
 
-        addBees() {
-            let numberOfBees = Math.floor(Math.random() * 3 + 1)
-            for (let i = 0; i <= numberOfBees; i++) {
-                this.enemies.push(new Bee(this))
-            }
-        }
+        // addBees() {
+        //     let numberOfBees = Math.floor(Math.random() * 3 + 1)
+        //     for (let i = 0; i <= numberOfBees; i++) {
+        //         this.enemies.push(new Bee(this))
+        //     }
+        // }
 
         stickyFriction(stickyMultiplier) {
             const sticky = this.deltaTime * -3 * stickyMultiplier

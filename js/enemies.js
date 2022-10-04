@@ -73,28 +73,28 @@ class Enemy {
     }
     draw(context) {
         if (this.healthBar) this.healthBar.draw(context)
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.body.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.body.x,
-                this.hitbox.body.y,
-                this.hitbox.body.width,
-                this.hitbox.body.height
-            )
-            context.stroke()
-        }
+        // if (this.hurtbox.body.isActive) {
+        //     context.strokeStyle = "black"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hurtbox.body.x,
+        //         this.hurtbox.body.y,
+        //         this.hurtbox.body.width,
+        //         this.hurtbox.body.height
+        //     )
+        //     context.stroke()
+        // }
+        // if (this.hitbox.body.isActive) {
+        //     context.strokeStyle = "#ff0000"
+        //     context.beginPath()
+        //     context.rect(
+        //         this.hitbox.body.x,
+        //         this.hitbox.body.y,
+        //         this.hitbox.body.width,
+        //         this.hitbox.body.height
+        //     )
+        //     context.stroke()
+        // }
         if (this.invulnerabilityTime > 0) {
             context.save()
             context.globalAlpha = Math.random() * 0.5 + 0.4
@@ -659,7 +659,7 @@ export class PumpKing extends Enemy {
         this.height = 0
         this.defaultHorizontalSpeed = 0
         this.horizontalSpeed = 0
-        this.defence = Math.round(5 * this.sizeModifier + 2)
+        this.defence = Math.round(5 * this.sizeModifier + 3)
         this.markedForRecoil = false
         this.attackDirection
         this.explodeXOffset = -120

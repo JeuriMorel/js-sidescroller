@@ -24,6 +24,42 @@ export class UI {
                 transparency: 0.1,
                 sizeModifier: 0.25,
             }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 3 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 4 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 5 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 6 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 7 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
+            new Heart({
+                game: this.game,
+                x: PROGRESS_ICON_X * 8 + 10,
+                transparency: 0.1,
+                sizeModifier: 0.25,
+            }),
         ]
     }
     draw(context) {
