@@ -7,7 +7,17 @@ import { AngryEgg, Ghost, Crawler, Bee, PumpKing } from "./enemies.js"
 import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
-import { Wave_Eight, Wave_Five, Wave_Four, Wave_Nine, Wave_One, Wave_Seven, Wave_Six, Wave_Three, Wave_Two } from "./waves.js"
+import {
+    Wave_Eight,
+    Wave_Five,
+    Wave_Four,
+    Wave_Nine,
+    Wave_One,
+    Wave_Seven,
+    Wave_Six,
+    Wave_Three,
+    Wave_Two,
+} from "./waves.js"
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -41,10 +51,12 @@ window.addEventListener("load", function () {
                 new Wave_Six(this),
                 new Wave_Seven(this),
                 new Wave_Eight(this),
-                new Wave_Nine(this)
+                new Wave_Nine(this),
             ]
             this.currentWave = this.waves[0]
+            this.currentWave.enter()
         }
+
         update(deltaTime, input) {
             this.background.update()
             this.player.update(deltaTime, input)
@@ -62,7 +74,7 @@ window.addEventListener("load", function () {
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
             if (
                 this.enemyTimer > this.currentWave.enemyFrequency &&
-                this.enemies.length < this.currentWave.maxEnemies 
+                this.enemies.length < this.currentWave.maxEnemies
             ) {
                 this.enemyTimer = 0
                 this.currentWave.addEnemy()
@@ -71,7 +83,9 @@ window.addEventListener("load", function () {
             }
 
             //SWITCH WAVES
-            if (this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat) {
+            if (
+                this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat
+            ) {
                 this.player.enemiesDefeated = 0
                 this.currentWave.exit()
             }

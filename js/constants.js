@@ -34,3 +34,5 @@ export const FLOATING_WEIGHT = 0.2
 export const FONT_FAMILY = "Chicle"
 export const DAMAGE_FONT_SIZE = 35
 export const PROGRESS_ICON_X = 35
+
+export const MAX_LIVES = 9

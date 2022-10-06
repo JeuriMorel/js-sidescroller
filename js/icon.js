@@ -3,7 +3,7 @@ import { qs } from "./utils.js"
 class Icon {
     constructor(game) {
         this.game = game
-        this.transparency = 1
+        this.transparency = 0
     }
     draw(context) {
         context.save()
@@ -36,5 +36,7 @@ export class Heart extends Icon {
         this.transparency = transparency
         this.x = x
         this.y = 20
+        this.waveCompleted = false
+        this.isCurrentWave = false
     }
 }

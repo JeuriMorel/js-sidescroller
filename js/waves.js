@@ -82,30 +82,42 @@ class Wave {
         let enemyRetrievalFunction = this.getEnemy(enemyToGet)
         this.game.enemies.push(enemyRetrievalFunction(this.game))
     }
+    
+    enter() {
+        let { UI } = this.game
+        console.log(UI.progressIcons)
+    }
+    exit() {
+        console.log(this.game.UI.progressIcons, this.waveIndex)
+        this.game.currentWave = this.game.waves[this.nextWave]
+        this.game.currentWave.enter()
+        // this.game.UI.progressIcons[this.waveIndex].waveCompleted = true
+    }
 }
 
 export class Wave_One extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG]
-        this.enemiesToDefeat = 20
+        this.enemiesToDefeat = 10
         this.maxEnemies = 1
         this.enemyFrequency = 500
+        this.waveIndex = WAVES.ONE
+        this.nextWave = WAVES.TWO
+        
     }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.TWO]
-    }
+    
 }
 export class Wave_Two extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG, ENEMY_TYPES.GHOST]
-        this.enemiesToDefeat = 30
+        this.enemiesToDefeat = 10 //30
         this.maxEnemies = 2
         this.enemyFrequency = 1000
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.THREE]
+        this.waveIndex = WAVES.TWO
+        this.nextWave = WAVES.THREE
+        
     }
 }
 export class Wave_Three extends Wave {
@@ -115,14 +127,14 @@ export class Wave_Three extends Wave {
         this.enemiesToDefeat = 30
         this.maxEnemies = 1
         this.enemyFrequency = 500
+        this.waveIndex = WAVES.THREE
+        this.nextWave = WAVES.FOUR
+        
     }
 
     addEnemy() {
         let enemyRetrievalFunction = ENEMIES_FETCH_ARRAY[ENEMY_TYPES.CRAWLER]
         this.game.enemies.push(enemyRetrievalFunction(this.game))
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.FOUR]
     }
 }
 export class Wave_Four extends Wave {
@@ -136,9 +148,9 @@ export class Wave_Four extends Wave {
         this.enemiesToDefeat = 45
         this.maxEnemies = 4
         this.enemyFrequency = 1500
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.FIVE]
+        this.waveIndex = WAVES.FOUR
+        this.nextWave = WAVES.FIVE
+        
     }
 }
 export class Wave_Five extends Wave {
@@ -148,14 +160,14 @@ export class Wave_Five extends Wave {
         this.enemiesToDefeat = 40
         this.maxEnemies = 1
         this.enemyFrequency = 500
+        this.waveIndex = WAVES.FIVE
+        this.nextWave = WAVES.SIX
+        
     }
 
     addEnemy() {
         let enemyRetrievalFunction = ENEMIES_FETCH_ARRAY[ENEMY_TYPES.PUMPKIN]
         this.game.enemies.push(enemyRetrievalFunction(this.game))
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.SIX]
     }
 }
 export class Wave_Six extends Wave {
@@ -165,9 +177,9 @@ export class Wave_Six extends Wave {
         this.enemiesToDefeat = 50
         this.maxEnemies = 3
         this.enemyFrequency = 2500
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.SEVEN]
+        this.waveIndex = WAVES.SIX
+        this.nextWave = WAVES.SEVEN
+        
     }
 }
 export class Wave_Seven extends Wave {
@@ -177,9 +189,9 @@ export class Wave_Seven extends Wave {
         this.enemiesToDefeat = 40
         this.maxEnemies = 3
         this.enemyFrequency = 2500
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.EIGHT]
+        this.waveIndex = WAVES.SEVEN
+        this.nextWave = WAVES.EIGHT
+        
     }
 }
 export class Wave_Eight extends Wave {
@@ -193,9 +205,9 @@ export class Wave_Eight extends Wave {
         this.enemiesToDefeat = 40
         this.maxEnemies = 4
         this.enemyFrequency = 2500
-    }
-    exit() {
-        this.game.currentWave = this.game.waves[WAVES.NINE]
+        this.waveIndex = WAVES.EIGHT
+        this.nextWave = WAVES.NINE
+        
     }
 }
 export class Wave_Nine extends Wave {
@@ -209,9 +221,11 @@ export class Wave_Nine extends Wave {
         this.enemiesToDefeat = 60
         this.maxEnemies = 5
         this.enemyFrequency = 2500
+        this.waveIndex = WAVES.NINE
+        this.nextWave = WAVES.TWO
+        
     }
     exit() {
-        // this.game.currentWave = this.game.waves[WAVES.TWO]
         console.log("time to fight the bossy boss")
     }
 }

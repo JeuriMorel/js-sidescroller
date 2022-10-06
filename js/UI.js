@@ -1,68 +1,36 @@
-import { PROGRESS_ICON_X } from "./constants.js"
+import { MAX_LIVES, PROGRESS_ICON_X } from "./constants.js"
 import { Heart } from "./icon.js"
-
 
 export class UI {
     constructor(game) {
         this.game = game
-        this.progessIcons = [
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 0 + 10,
-                transparency: 1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 1 + 10,
-                transparency: 0.2,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 2 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 3 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 4 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 5 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 6 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 7 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-            new Heart({
-                game: this.game,
-                x: PROGRESS_ICON_X * 8 + 10,
-                transparency: 0.1,
-                sizeModifier: 0.25,
-            }),
-        ]
+        this.progessIcons = []
+
+        for (let i = 0; i < MAX_LIVES; i++) {
+            this.progessIcons.push(
+                new Heart({
+                    game: this.game,
+                    x: PROGRESS_ICON_X * i + 10,
+                    transparency: 0.1,
+                    sizeModifier: 0.2,
+                })
+            )
+        }
     }
     draw(context) {
-        this.progessIcons.forEach(icon => icon.draw(context))
+        this.progessIcons.forEach(icon => {
+            let numerator = icon.game.player.enemiesDefeated
+            if (icon.waveCompleted) icon.transparency = 1
+            else if (icon.isCurrentWave)
+                icon.transparency = Math.max(
+                    numerator / icon.game.currentWave.enemiesToDefeat,
+                    0.1
+                )
+
+            if (icon.isCurrentWave || icon.waveCompleted)
+                icon.sizeModifier = 0.25
+
+            icon.draw(context)
+        })
     }
 }
