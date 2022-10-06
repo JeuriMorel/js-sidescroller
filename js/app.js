@@ -26,16 +26,24 @@ window.addEventListener("load", function () {
             this.player = new Player(this)
             this.input = new InputHandler(this)
             this.UI = new UI(this)
-            this.availableEnemiesList = []
-            this.enemyFrequency = 3500
             this.enemyTimer = 0
             this.enemies = []
             this.particles = []
-            this.maxEnemies = 5
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
-            this.wave = new Wave_Eight(this)
+            this.waves = [
+                new Wave_One(this),
+                new Wave_Two(this),
+                new Wave_Three(this),
+                new Wave_Four(this),
+                new Wave_Five(this),
+                new Wave_Six(this),
+                new Wave_Seven(this),
+                new Wave_Eight(this),
+                new Wave_Nine(this)
+            ]
+            this.currentWave = this.waves[0]
         }
         update(deltaTime, input) {
             this.background.update()
@@ -53,13 +61,19 @@ window.addEventListener("load", function () {
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
             if (
-                this.enemyTimer > this.enemyFrequency &&
-                this.enemies.length < this.maxEnemies
+                this.enemyTimer > this.currentWave.enemyFrequency &&
+                this.enemies.length < this.currentWave.maxEnemies 
             ) {
                 this.enemyTimer = 0
-                this.wave.addEnemy()
+                this.currentWave.addEnemy()
             } else {
                 this.enemyTimer += deltaTime
+            }
+
+            //SWITCH WAVES
+            if (this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat) {
+                this.player.enemiesDefeated = 0
+                this.currentWave.exit()
             }
 
             this.particles = this.particles.filter(
@@ -76,24 +90,7 @@ window.addEventListener("load", function () {
             })
             this.particles.forEach(particle => particle.draw(context))
             this.UI.draw(context)
-            // this.dash_gauge.draw(context)
         }
-
-        // addEnemy() {
-        //     let enemyToGet =
-        //         this.availableEnemiesList[
-        //             Math.floor(Math.random() * this.availableEnemiesList.length)
-        //         ]
-        //     let enemyRetrievalFunction = getEnemy(enemyToGet)
-        //     this.enemies.push(enemyRetrievalFunction(this))
-        // }
-
-        // addBees() {
-        //     let numberOfBees = Math.floor(Math.random() * 3 + 1)
-        //     for (let i = 0; i <= numberOfBees; i++) {
-        //         this.enemies.push(new Bee(this))
-        //     }
-        // }
 
         stickyFriction(stickyMultiplier) {
             const sticky = this.deltaTime * -3 * stickyMultiplier

@@ -49,6 +49,9 @@ class Enemy {
     tossInAir() {
         this.velocityY -= 45 * this.sizeModifier
     }
+    addOneToEnemiesDefeated() {
+        this.game.player.enemiesDefeated += this.defeatBonus
+    }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
@@ -151,6 +154,7 @@ export class AngryEgg extends Enemy {
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
         this.velocityY = 0
+        this.defeatBonus = Math.ceil(5 * this.sizeModifier)
         this.healthBar = new HealthBar({
             x: this.x,
             y: this.y,
@@ -205,6 +209,7 @@ export class AngryEgg extends Enemy {
                 })
             )
             this.deleteEnemy = true
+            this.addOneToEnemiesDefeated()
         }
 
         //vertical movement
@@ -254,7 +259,7 @@ export class Crawler extends Enemy {
         this.rightBound = this.game.width - this.width * 0.5
         this.defaultHorizontalSpeed = 0.5
         this.horizontalSpeed = 0.5
-        this.defence = Math.round(10 * this.sizeModifier + 2)
+        this.defence = Math.round(12 * this.sizeModifier + 2)
         this.weight = 5 * this.sizeModifier
         this.image = qs("#crawler")
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
@@ -288,6 +293,7 @@ export class Crawler extends Enemy {
             maxhealth: this.healthPoints,
         })
         this.turnsUntilSpawn = 3
+        this.defeatBonus = Math.ceil(10 * this.sizeModifier)
     }
     update(deltaTime) {
         if (
@@ -322,7 +328,7 @@ export class Crawler extends Enemy {
             this.spawn()
         }
 
-        if (this.healthPoints <= 0)
+        if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Smoke({
                     game: this.game,
@@ -332,6 +338,8 @@ export class Crawler extends Enemy {
                     src: this.src,
                 })
             )
+            this.addOneToEnemiesDefeated()
+        }
     }
     draw(context) {
         context.save()
@@ -421,10 +429,11 @@ export class Spawn extends Enemy {
             height: 15 * this.sizeModifier,
             maxhealth: this.healthPoints,
         })
+        this.defeatBonus = 1
     }
     update(deltaTime) {
         super.update(deltaTime)
-        if (this.healthPoints <= 0)
+        if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Smoke({
                     game: this.game,
@@ -434,6 +443,8 @@ export class Spawn extends Enemy {
                     src: this.src,
                 })
             )
+            this.addOneToEnemiesDefeated()
+        }
     }
     resolveCollision() {
         this.healthPoints = 0
@@ -486,10 +497,11 @@ export class Ghost extends Enemy {
                 height: this.height * 0.65,
             },
         }
+        this.defeatBonus = Math.ceil(5 * this.sizeModifier)
     }
     update(deltaTime) {
         super.update(deltaTime)
-        if (this.healthPoints <= 0)
+        if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Boom({
                     game: this.game,
@@ -499,6 +511,8 @@ export class Ghost extends Enemy {
                     src: SOUND_GHOST_DIE,
                 })
             )
+            this.addOneToEnemiesDefeated()
+        }
         this.y += Math.sin(this.angle) * this.curve
         this.angle += 0.05
     }
@@ -576,6 +590,7 @@ export class Bee extends Enemy {
                 height: this.height * 0.3,
             },
         }
+        this.defeatBonus = Math.ceil(6 * this.sizeModifier)
     }
 
     update(deltaTime) {
@@ -624,7 +639,7 @@ export class Bee extends Enemy {
             this.attackTimer += deltaTime
 
         //HEALTH
-        if (this.healthPoints <= 0)
+        if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Boom({
                     game: this.game,
@@ -634,6 +649,8 @@ export class Bee extends Enemy {
                     src: SOUND_CLAW_STRIKE,
                 })
             )
+            this.addOneToEnemiesDefeated()
+        }
 
         // this.y += Math.sin(this.angle) * this.curve
         // this.angle += 0.05
@@ -706,6 +723,7 @@ export class PumpKing extends Enemy {
                 height: this.height * 0.3,
             },
         }
+        this.defeatBonus = Math.ceil(12 * this.sizeModifier)
     }
     update(deltaTime) {
         if (
@@ -759,6 +777,7 @@ export class PumpKing extends Enemy {
         super.resolveCollision({ target, attackDamage })
         if (this.healthPoints <= 0) {
             this.setState(PUMPKIN_STATES.EXPLODE)
+            this.addOneToEnemiesDefeated()
         }
         this.attackType = attackType
         if (this.attackType === "Dash") this.tossInAir()

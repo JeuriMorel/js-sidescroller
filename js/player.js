@@ -29,7 +29,14 @@ import {
     Sleeping,
     states,
 } from "./states.js"
-import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2, Smoke } from "./particles.js"
+import {
+    Boom,
+    Hit_V1,
+    Hit_V2,
+    Red_Hit_V1,
+    Red_Hit_V2,
+    Smoke,
+} from "./particles.js"
 
 export class Player {
     constructor(game) {
@@ -124,6 +131,8 @@ export class Player {
         ]
         this.currentState = this.states[5]
         this.currentState.enter()
+
+        this.enemiesDefeated = 0
     }
     update(deltaTime, input) {
         this.deltaTime = deltaTime
@@ -198,7 +207,6 @@ export class Player {
         if (this.hitbox.isActive) this.checkAttackCollision()
         if (this.hurtbox.body.isActive || this.hurtbox.head.isActive)
             this.checkHitCollision()
-        
     }
     draw(context) {
         // if (this.hurtbox.body.isActive) {
@@ -333,6 +341,8 @@ export class Player {
                         attackDamage: damage,
                         attackType: type,
                     })
+
+                    console.log(this.game.currentWave, this.enemiesDefeated)
                     if (enemyName === "AngryEgg")
                         this.game.particles.push(
                             new Hit_V1({

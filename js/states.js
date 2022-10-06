@@ -157,6 +157,7 @@ export class Get_Hit extends State {
         this.player.x -= 35
         this.player.velocityY = -10
         this.player.stickyMultiplier = 3
+        this.player.enemiesDefeated = 0
     }
     handleInput({ lastKey }) {
         this.player.x -= 15
