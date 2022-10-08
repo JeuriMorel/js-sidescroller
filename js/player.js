@@ -341,8 +341,6 @@ export class Player {
                         attackDamage: damage,
                         attackType: type,
                     })
-
-                    console.log(this.game.currentWave, this.enemiesDefeated)
                     if (enemyName === "AngryEgg")
                         this.game.particles.push(
                             new Hit_V1({

@@ -43,15 +43,15 @@ window.addEventListener("load", function () {
             this.isRecovering = false
             this.deltaTime = 0
             this.waves = [
-                new Wave_One(this),
-                new Wave_Two(this),
-                new Wave_Three(this),
-                new Wave_Four(this),
-                new Wave_Five(this),
-                new Wave_Six(this),
-                new Wave_Seven(this),
-                new Wave_Eight(this),
-                new Wave_Nine(this),
+                new Wave_One(this, this.UI.progessIcons),
+                new Wave_Two(this, this.UI.progessIcons),
+                new Wave_Three(this, this.UI.progessIcons),
+                new Wave_Four(this, this.UI.progessIcons),
+                new Wave_Five(this, this.UI.progessIcons),
+                new Wave_Six(this, this.UI.progessIcons),
+                new Wave_Seven(this, this.UI.progessIcons),
+                new Wave_Eight(this, this.UI.progessIcons),
+                new Wave_Nine(this, this.UI.progessIcons),
             ]
             this.currentWave = this.waves[0]
             this.currentWave.enter()
@@ -94,6 +94,7 @@ window.addEventListener("load", function () {
                 particle => !particle.markedForDeletion
             )
             this.particles.forEach(particle => particle.update(deltaTime))
+            this.UI.update(deltaTime)
         }
 
         draw(context) {

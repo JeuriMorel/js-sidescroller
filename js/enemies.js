@@ -22,6 +22,7 @@ import {
     Pumpkin_Walk,
     PUMPKIN_STATES,
 } from "./pumpkin_states.js"
+import { FloatingMessage } from "./UI.js"
 
 class Enemy {
     constructor(game) {
@@ -51,6 +52,7 @@ class Enemy {
     }
     addOneToEnemiesDefeated() {
         this.game.player.enemiesDefeated += this.defeatBonus
+        this.game.UI.floatingMessages.push(new FloatingMessage({value: this.defeatBonus, x: this.x, y: this.y}))
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
@@ -777,6 +779,7 @@ export class PumpKing extends Enemy {
         super.resolveCollision({ target, attackDamage })
         if (this.healthPoints <= 0) {
             this.setState(PUMPKIN_STATES.EXPLODE)
+            delete this.healthBar
             this.addOneToEnemiesDefeated()
         }
         this.attackType = attackType
