@@ -41,6 +41,7 @@ export default class InputHandler {
             }
         })
         window.addEventListener("keyup", e => {
+            if (this.game.isRecovering) return
             switch (e.key) {
                 case "ArrowLeft":
                     this.lastKey = "RELEASE Left"

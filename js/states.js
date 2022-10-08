@@ -159,15 +159,14 @@ export class Get_Hit extends State {
         this.player.stickyMultiplier = 3
         this.player.enemiesDefeated = 0
         this.player.audio.get_hit.play()
+        this.player.attack_bonus = this.player.min_attack_bonus
     }
     handleInput({ lastKey }) {
         this.player.x -= 15
         if (this.player.frame == this.player.maxFrame) {
-            if(this.player.isOnGround())
-                this.player.setState(states.IDLE)
+            if (this.player.isOnGround()) this.player.setState(states.IDLE)
             else this.player.setState(states.FALLING)
         }
-
     }
 }
 export class Attacking_Dash extends State {
@@ -192,11 +191,12 @@ export class Attacking_Dash extends State {
         this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey, keysPressed }) {
-        if (this.player.frame === 8 && lastKey === "PRESS Attack") {
+        if (this.player.frame === 8 && keysPressed.attack) {
             this.player.frame = 7
-            if (this.player.dash_bonus < 5) this.player.dash_bonus++
-            if (this.player.game.recoveryTime < 300)
+            if (this.player.dash_bonus < this.player.max_attack_bonus) {
+                this.player.dash_bonus++
                 this.player.game.recoveryTime += 50
+            }
         } else if (lastKey === "PRESS Left")
             this.player.setState(states.ROLL_BACK)
         if (this.player.frame > 10) {
@@ -212,6 +212,7 @@ export class Attacking_Dash extends State {
 
         if (this.player.frame == this.player.maxFrame) {
             this.player.game.recoveryTime += 300
+            console.log(this.player.attack_bonus)
             this.player.game.isRecovering = true
             this.player.dash_bonus = 0
             this.player.setState(states.IDLE)

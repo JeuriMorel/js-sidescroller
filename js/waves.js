@@ -86,12 +86,16 @@ class Wave {
 
     enter() {
         this.icons[this.waveIndex].isCurrentWave = true
+        this.resetPlayerAttackSettings()
     }
     exit() {
         this.icons[this.waveIndex].isCurrentWave = false
         this.icons[this.waveIndex].waveCompleted = true
         this.game.currentWave = this.game.waves[this.nextWave]
         this.game.currentWave.enter()
+    }
+    resetPlayerAttackSettings() { 
+        this.game.player.max_attack_bonus = this.waveIndex + 5
     }
 }
 

@@ -71,6 +71,7 @@ export class Player {
             down_roll: 20,
         }
         this.min_attack_bonus = 0
+        this.max_attack_bonus = this.min_attack_bonus + 5
         this.attack_bonus = this.min_attack_bonus
         this.dash_bonus = 0
         this.hurtbox = {
@@ -110,7 +111,7 @@ export class Player {
             claw_strike: new Audio(SOUND_CLAW_STRIKE),
             down_roll: new Audio(SOUND_SNARE),
             get_hit: new Audio(SOUND_GET_HIT),
-            bounce: new Audio(SOUND_BOUNCE)
+            bounce: new Audio(SOUND_BOUNCE),
         }
         //vertical
         this.velocityY = 0
@@ -392,7 +393,8 @@ export class Player {
                     enemy.invulnerabilityTime = 400
                     this.invulnerabilityTime = 400
                     if (type === "Dash") this.audio.dash.play()
-                    // this.attack_bonus++
+                    if (this.attack_bonus < this.max_attack_bonus)
+                        this.attack_bonus++
                     this.hurtbox.body.isActive = false
                     this.hurtbox.head.isActive = false
                     if (this.isFalling() || this.isRollingDown()) {
