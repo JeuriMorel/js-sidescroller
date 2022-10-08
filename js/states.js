@@ -158,6 +158,7 @@ export class Get_Hit extends State {
         this.player.velocityY = -10
         this.player.stickyMultiplier = 3
         this.player.enemiesDefeated = 0
+        this.player.audio.get_hit.play()
     }
     handleInput({ lastKey }) {
         this.player.x -= 15

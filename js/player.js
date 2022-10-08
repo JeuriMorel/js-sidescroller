@@ -2,9 +2,11 @@ import { qs } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
     DEFAULT_WEIGHT,
+    SOUND_BOUNCE,
     SOUND_CLAW_STRIKE,
     SOUND_DASH,
     SOUND_DODGE,
+    SOUND_GET_HIT,
     SOUND_SLASH,
     SOUND_SNARE,
     SOUND_UPROLL,
@@ -107,6 +109,8 @@ export class Player {
             dodge: new Audio(SOUND_DODGE),
             claw_strike: new Audio(SOUND_CLAW_STRIKE),
             down_roll: new Audio(SOUND_SNARE),
+            get_hit: new Audio(SOUND_GET_HIT),
+            bounce: new Audio(SOUND_BOUNCE)
         }
         //vertical
         this.velocityY = 0
@@ -393,6 +397,7 @@ export class Player {
                     this.hurtbox.head.isActive = false
                     if (this.isFalling() || this.isRollingDown()) {
                         this.velocityY = 0
+                        this.audio.bounce.play()
                         this.setState(states.JUMPING)
                     }
                 }

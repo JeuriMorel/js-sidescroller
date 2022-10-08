@@ -11,6 +11,7 @@ import {
     BEE_WIDTH,
     BEE_HEIGHT,
     SOUND_CLAW_STRIKE,
+    SOUND_PUMP_DIE,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -690,6 +691,7 @@ export class PumpKing extends Enemy {
             new Pumpkin_Walk(this),
             new Pumpkin_Explode(this),
         ]
+        this.audio = new Audio(SOUND_PUMP_DIE)
         this.currentState = this.states[PUMPKIN_STATES.IDLE]
         this.currentState.enter()
 
@@ -779,6 +781,7 @@ export class PumpKing extends Enemy {
         super.resolveCollision({ target, attackDamage })
         if (this.healthPoints <= 0) {
             this.setState(PUMPKIN_STATES.EXPLODE)
+            this.audio.play()
             delete this.healthBar
             this.addOneToEnemiesDefeated()
         }
