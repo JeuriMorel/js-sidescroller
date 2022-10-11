@@ -279,6 +279,7 @@ export class Defeated extends Boss_State {
                     src: null,
                 })
             )
+            this.boss.game.currentWave.exit()
         }
     }
 }

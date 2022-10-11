@@ -7,6 +7,7 @@ import {
     SOUND_DASH,
     SOUND_DODGE,
     SOUND_GET_HIT,
+    SOUND_SHATTER,
     SOUND_SLASH,
     SOUND_SNARE,
     SOUND_UPROLL,
@@ -61,6 +62,7 @@ export class Player {
         this.poweredUp = true
         this.deltaTime = 0
         this.isWhiffing = true
+        this.isGameOver = false
         this.invulnerabilityTime = 0
         this.stickyMultiplier = 0
         this.base_damage = {
@@ -465,6 +467,20 @@ export class Player {
                 if (this.playerIsGettingHit(hitbox)) {
                     this.setState(states.GET_HIT)
                     enemy.resolveCollision({ target: "player is attacked" })
+                    if (enemy.enemyName === "Armored_Frog") {
+                        let heartIcon = this.game.UI.progressIcons.pop()
+                        this.game.particles.push(
+                            new Boom({
+                                game: this.game,
+                                x: heartIcon.x + heartIcon.width * 0.5,
+                                y: heartIcon.y + heartIcon.height * 0.5,
+                                sizeModifier: 0.5,
+                                src: SOUND_SHATTER,
+                            })
+                        )
+                    }
+                    if (!this.game.UI.progressIcons.length)
+                        this.setState(states.GAME_OVER)
                 }
             })
         })

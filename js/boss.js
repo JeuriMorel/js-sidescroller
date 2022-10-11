@@ -1,4 +1,4 @@
-import { Phase_One, Phase_Two } from "./boss_phases.js"
+import { Phase_One, Phase_Three, Phase_Two } from "./boss_phases.js"
 import {
     Attack,
     Defeated,
@@ -21,7 +21,7 @@ import { HealthBar } from "./health_bar.js"
 export class Armored_Frog {
     constructor(game) {
         this.game = game
-        this.healthPoints = 50
+        this.healthPoints = 100
         this.animationSheet = 0
         this.frame = 0
         this.maxFrame = 11
@@ -33,14 +33,15 @@ export class Armored_Frog {
         this.isDefeated = false
         this.invulnerabilityTime = 0
         this.phase = new Phase_One(this)
-        this.phase2Threshold = 120
+        this.phase2Threshold = 60
+        this.phase3Threshold = 20
         this.spriteHeight = 0
         this.spriteWidth = 0
         this.width = 0
         this.height = 0
         this.horizontalSpeed = 0
         this.spriteGroundOffsetModifier = 0.9
-        this.attackIntervals = [6000, 3000, 8000]
+        this.attackIntervals = [4000, 3000, 5000]
         this.attackOffsetX = 95
         this.got_hitOffsetX = 48
         this.hitOffsetX = 0
@@ -330,12 +331,17 @@ export class Armored_Frog {
             )
         }
 
-        // if (
-        //     this.phase.phase === "Phase_One" &&
-        //     this.healthPoints <= this.phase2Threshold
-        // ) {
-        //     this.phase = new Phase_Two(this)
-        // }
+        if (
+            this.phase.phase === "Phase_One" &&
+            this.healthPoints <= this.phase2Threshold
+        ) {
+            this.phase = new Phase_Two(this)
+        } else if (
+            this.phase.phase === "Phase_Two" &&
+            this.healthPoints <= this.phase3Threshold
+        ) {
+            this.phase = new Phase_Three(this)
+        }
 
         if (target === "player is attacked") {
             if (this.currentState === "ATTACK") this.x += this.attackOffsetX

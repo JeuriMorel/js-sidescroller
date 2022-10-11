@@ -1,3 +1,4 @@
+import { Armored_Frog } from "./boss.js"
 import { AngryEgg, Bee, Crawler, Ghost, PumpKing } from "./enemies.js"
 
 const ENEMY_TYPES = {
@@ -6,6 +7,7 @@ const ENEMY_TYPES = {
     BEE: 2,
     GHOST: 3,
     PUMPKIN: 4,
+    ARMORED_FROG: 5
 }
 
 const WAVES = {
@@ -18,6 +20,8 @@ const WAVES = {
     SEVEN: 6,
     EIGHT: 7,
     NINE: 8,
+    BOSS: 9,
+    WIN: 10
 }
 
 const ENEMIES_FETCH_ARRAY = [
@@ -36,12 +40,15 @@ const ENEMIES_FETCH_ARRAY = [
     function (game) {
         return new PumpKing(game)
     },
+    function (game) {
+        return new Armored_Frog(game)
+    },
 ]
 
 class Wave {
-    constructor(game, icons) {
+    constructor(game) {
         this.game = game
-        this.icons = icons
+        this.icons = this.game.UI.progressIcons
     }
 
     getEnemy(enemyType) {
@@ -91,7 +98,7 @@ class Wave {
     exit() {
         this.icons[this.waveIndex].isCurrentWave = false
         this.icons[this.waveIndex].waveCompleted = true
-        this.game.currentWave = this.game.waves[this.nextWave]
+        this.game.currentWave = this.game.waves[this.nextWave]  
         this.game.currentWave.enter()
     }
     resetPlayerAttackSettings() { 
@@ -100,8 +107,8 @@ class Wave {
 }
 
 export class Wave_One extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG]
         this.enemiesToDefeat = 10
         this.maxEnemies = 1
@@ -111,8 +118,8 @@ export class Wave_One extends Wave {
     }
 }
 export class Wave_Two extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG, ENEMY_TYPES.GHOST]
         this.enemiesToDefeat = 10 //30
         this.maxEnemies = 2
@@ -122,8 +129,8 @@ export class Wave_Two extends Wave {
     }
 }
 export class Wave_Three extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.CRAWLER]
         this.enemiesToDefeat = 15
         this.maxEnemies = 1
@@ -138,8 +145,8 @@ export class Wave_Three extends Wave {
     }
 }
 export class Wave_Four extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [
             ENEMY_TYPES.CRAWLER,
             ENEMY_TYPES.ANGRY_EGG,
@@ -153,8 +160,8 @@ export class Wave_Four extends Wave {
     }
 }
 export class Wave_Five extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.PUMPKIN]
         this.enemiesToDefeat = 40
         this.maxEnemies = 1
@@ -169,8 +176,8 @@ export class Wave_Five extends Wave {
     }
 }
 export class Wave_Six extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.PUMPKIN, ENEMY_TYPES.GHOST]
         this.enemiesToDefeat = 50
         this.maxEnemies = 3
@@ -180,8 +187,8 @@ export class Wave_Six extends Wave {
     }
 }
 export class Wave_Seven extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [ENEMY_TYPES.PUMPKIN, ENEMY_TYPES.CRAWLER]
         this.enemiesToDefeat = 40
         this.maxEnemies = 3
@@ -191,8 +198,8 @@ export class Wave_Seven extends Wave {
     }
 }
 export class Wave_Eight extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [
             ENEMY_TYPES.PUMPKIN,
             ENEMY_TYPES.BEE,
@@ -206,20 +213,53 @@ export class Wave_Eight extends Wave {
     }
 }
 export class Wave_Nine extends Wave {
-    constructor(game, icons) {
-        super(game, icons)
+    constructor(game) {
+        super(game)
         this.availableEnemiesList = [
             ENEMY_TYPES.PUMPKIN,
             ENEMY_TYPES.BEE,
             ENEMY_TYPES.CRAWLER,
         ]
-        this.enemiesToDefeat = 60
-        this.maxEnemies = 5
-        this.enemyFrequency = 2500
+        this.enemiesToDefeat = 5 // 60
+        this.maxEnemies = 1 // 5
+        this.enemyFrequency = 500
         this.waveIndex = WAVES.NINE
-        this.nextWave = WAVES.TWO
+        this.nextWave = WAVES.BOSS
+    }
+    
+}
+export class Wave_Boss extends Wave {
+    constructor(game) {
+        super(game)
+        this.availableEnemiesList = [ENEMY_TYPES.ARMORED_FROG]
+        this.enemiesToDefeat = 0 // 60
+        this.maxEnemies = 1 // 5
+        this.enemyFrequency = 500
+        this.waveIndex = WAVES.BOSS
+        this.nextWave = WAVES.WIN
+    }
+    enter() {
+        this.resetPlayerAttackSettings()
     }
     exit() {
-        console.log("time to fight the bossy boss")
+        this.game.currentWave = this.game.waves[this.nextWave]
+        this.game.currentWave.enter()
+    }
+}
+export class Wave_Win extends Wave {
+    constructor(game) {
+        super(game)
+        this.availableEnemiesList = [
+        ]
+        this.enemiesToDefeat = 0 // 60
+        this.maxEnemies = 0 // 5
+        this.enemyFrequency = 0
+        this.waveIndex = WAVES.WIN
+        this.nextWave = null
+    }
+    enter() {
+        this.resetPlayerAttackSettings()
+    }
+    exit() {
     }
 }

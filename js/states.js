@@ -5,7 +5,7 @@ import {
     FALLING_WEIGHT,
     FLOATING_WEIGHT,
 } from "./constants.js"
-import { Boom, Explosion_V1, Explosion_V2, Fire } from "./particles.js"
+import { Boom, Explosion_V1, Explosion_V2, Fire, Red_Hit_V1 } from "./particles.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -138,8 +138,19 @@ export class Game_Over extends State {
         this.player.hurtbox.head.isActive = false
         this.player.hurtbox.body.isActive = false
     }
-    handleInput({ lastKey }) {
-        if (lastKey === "PRESS Down") this.player.setState(states.IDLE)
+    handleInput() {
+        if (this.player.frame == this.player.maxFrame) {
+            this.player.isGameOver = true
+            this.player.game.particles.push(
+                new Red_Hit_V1({
+                    game: this.player.game,
+                    x: this.player.x + this.player.width * 0.5,
+                    y: this.player.y + this.player.height,
+                    sizeModifier: 2,
+                    src: null,
+                })
+            )
+        } 
     }
 }
 export class Get_Hit extends State {
@@ -212,7 +223,6 @@ export class Attacking_Dash extends State {
 
         if (this.player.frame == this.player.maxFrame) {
             this.player.game.recoveryTime += 300
-            console.log(this.player.attack_bonus)
             this.player.game.isRecovering = true
             this.player.dash_bonus = 0
             this.player.setState(states.IDLE)

@@ -8,6 +8,7 @@ import { Armored_Frog } from "./boss.js"
 import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
 import {
+    Wave_Boss,
     Wave_Eight,
     Wave_Five,
     Wave_Four,
@@ -17,6 +18,7 @@ import {
     Wave_Six,
     Wave_Three,
     Wave_Two,
+    Wave_Win,
 } from "./waves.js"
 
 window.addEventListener("load", function () {
@@ -43,23 +45,28 @@ window.addEventListener("load", function () {
             this.isRecovering = false
             this.deltaTime = 0
             this.waves = [
-                new Wave_One(this, this.UI.progessIcons),
-                new Wave_Two(this, this.UI.progessIcons),
-                new Wave_Three(this, this.UI.progessIcons),
-                new Wave_Four(this, this.UI.progessIcons),
-                new Wave_Five(this, this.UI.progessIcons),
-                new Wave_Six(this, this.UI.progessIcons),
-                new Wave_Seven(this, this.UI.progessIcons),
-                new Wave_Eight(this, this.UI.progessIcons),
-                new Wave_Nine(this, this.UI.progessIcons),
+                new Wave_One(this),
+                new Wave_Two(this),
+                new Wave_Three(this),
+                new Wave_Four(this),
+                new Wave_Five(this),
+                new Wave_Six(this),
+                new Wave_Seven(this),
+                new Wave_Eight(this),
+                new Wave_Nine(this),
+                new Wave_Boss(this),
+                new Wave_Win(this)
             ]
-            this.currentWave = this.waves[0]
+            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
         }
 
         update(deltaTime, input) {
             this.background.update()
-            this.player.update(deltaTime, input)
+            if (!this.player.isGameOver) {
+                this.player.update(deltaTime, input)
+            }
+
             if (this.scrollSpeed > DEFAULT_SCROLL_SPEED)
                 this.scrollSpeed -= 0.03
             if (this.recoveryTime > 0 && this.isRecovering)
@@ -73,8 +80,9 @@ window.addEventListener("load", function () {
             })
             this.enemies = this.enemies.filter(enemy => !enemy.deleteEnemy)
             if (
+                this.currentWave.enemyFrequency &&
                 this.enemyTimer > this.currentWave.enemyFrequency &&
-                this.enemies.length < this.currentWave.maxEnemies
+                this.enemies.length < this.currentWave.maxEnemies 
             ) {
                 this.enemyTimer = 0
                 this.currentWave.addEnemy()
@@ -84,7 +92,7 @@ window.addEventListener("load", function () {
 
             //SWITCH WAVES
             if (
-                this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat
+                this.currentWave.enemiesToDefeat && this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat
             ) {
                 this.player.enemiesDefeated = 0
                 this.currentWave.exit()
