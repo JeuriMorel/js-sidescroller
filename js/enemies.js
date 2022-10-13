@@ -250,7 +250,7 @@ export class Crawler extends Enemy {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.sizeModifier = Math.random() * 0.4 + 0.5
-        this.healthPoints = 75 * this.sizeModifier
+        this.healthPoints = 55 * this.sizeModifier
         this.spriteWidth = CRAWLER_WIDTH
         this.spriteHeight = CRAWLER_HEIGHT
         this.width = CRAWLER_WIDTH * this.sizeModifier

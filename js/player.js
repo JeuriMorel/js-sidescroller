@@ -401,8 +401,9 @@ export class Player {
                     this.hurtbox.head.isActive = false
                     if (this.isFalling() || this.isRollingDown()) {
                         this.velocityY = 0
-                        this.audio.bounce.play()
                         this.setState(states.JUMPING)
+                        if (this.attack_bonus > 5 && Math.random() > 0.5)
+                            this.audio.bounce.play()
                     }
                 }
             })

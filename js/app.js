@@ -1,6 +1,12 @@
 import { qs, qsa } from "./utils.js"
 import { Background } from "./background.js"
-import { LAYER_HEIGHT, LAYER_WIDTH, DEFAULT_SCROLL_SPEED } from "./constants.js"
+import {
+    LAYER_HEIGHT,
+    LAYER_WIDTH,
+    DEFAULT_SCROLL_SPEED,
+    MUSIC_MAIN_THEME,
+    MUSIC_FOREST_PATH,
+} from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
 import { AngryEgg, Ghost, Crawler, Bee, PumpKing } from "./enemies.js"
@@ -44,6 +50,15 @@ window.addEventListener("load", function () {
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
+            this.mainTheme = new Audio(MUSIC_MAIN_THEME)
+            this.mainTheme.loop = true
+            this.mainTheme.volume = 0.1
+            this.forestTheme = new Audio(MUSIC_FOREST_PATH)
+            this.forestTheme.addEventListener("loadedmetadata", () => {
+                this.forestThemeFadeOutPoint = this.forestTheme.duration - 5
+            })
+            this.themeTimer = 0
+            this.themeInterval = 200
             this.waves = [
                 new Wave_One(this),
                 new Wave_Two(this),
@@ -55,9 +70,9 @@ window.addEventListener("load", function () {
                 new Wave_Eight(this),
                 new Wave_Nine(this),
                 new Wave_Boss(this),
-                new Wave_Win(this)
+                new Wave_Win(this),
             ]
-            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
         }
 
@@ -65,6 +80,30 @@ window.addEventListener("load", function () {
             this.background.update()
             if (!this.player.isGameOver) {
                 this.player.update(deltaTime, input)
+            }
+            //FADE OUT FOREST PATH THEME
+            if (
+                !this.forestTheme.paused &&
+                this.forestTheme.currentTime >= this.forestThemeFadeOutPoint &&
+                this.forestTheme.volume > 0.2 &&
+                !this.forestTheme.ended
+            ) {
+                if (this.themeTimer > this.themeInterval) {
+                    this.forestTheme.volume -= 0.1
+                    this.themeTimer = 0
+                } else this.themeTimer += deltaTime
+            }
+            //FADE IN MAIN THEME
+            if (
+                !this.mainTheme.paused &&
+                !this.mainTheme.ended &&
+                this.mainTheme.currentTime > 0 &&
+                this.mainTheme.volume < 1
+            ) {
+                if (this.themeTimer > this.themeInterval) {
+                    this.mainTheme.volume = Math.min(this.mainTheme.volume + 0.01, 1)
+                    this.themeTimer = 0
+                } else this.themeTimer += deltaTime
             }
 
             if (this.scrollSpeed > DEFAULT_SCROLL_SPEED)
@@ -82,7 +121,7 @@ window.addEventListener("load", function () {
             if (
                 this.currentWave.enemyFrequency &&
                 this.enemyTimer > this.currentWave.enemyFrequency &&
-                this.enemies.length < this.currentWave.maxEnemies 
+                this.enemies.length < this.currentWave.maxEnemies
             ) {
                 this.enemyTimer = 0
                 this.currentWave.addEnemy()
@@ -92,7 +131,8 @@ window.addEventListener("load", function () {
 
             //SWITCH WAVES
             if (
-                this.currentWave.enemiesToDefeat && this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat
+                this.currentWave.enemiesToDefeat &&
+                this.player.enemiesDefeated >= this.currentWave.enemiesToDefeat
             ) {
                 this.player.enemiesDefeated = 0
                 this.currentWave.exit()
