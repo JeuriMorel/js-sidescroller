@@ -66,14 +66,16 @@ export class Armored_Frog {
             new Got_Hit(this),
             new Defeated(this),
         ]
+
         this.currentState = this.states[2]
         this.currentState.enter()
 
         this.x = this.game.width - this.width
-        this.y =
-            this.game.height -
-            this.height * this.spriteGroundOffsetModifier -
-            this.game.groundMargin
+        // this.y =
+        //     this.game.height -
+        //     this.height * this.spriteGroundOffsetModifier -
+        //     this.game.groundMargin
+        this.y = this.game.height * -4
         this.hurtbox = {
             body: {
                 isActive: true,

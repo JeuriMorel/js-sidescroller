@@ -264,6 +264,7 @@ export class Defeated extends Boss_State {
         this.boss.hitbox.tongue.isActive = false
         this.boss.hitbox.claws.isActive = false
         this.boss.isDefeated = true
+        this.boss.game.bossTheme.pause()
         this.boss.audio.growl.play()
     }
     update() {

@@ -32,6 +32,7 @@ export const SOUND_GET_HIT = "./audio/cat_mewpurr.wav"
 export const SOUND_BOUNCE = "./audio/Meow.wav"
 export const MUSIC_MAIN_THEME = "./audio/main_theme.ogg"
 export const MUSIC_FOREST_PATH = "./audio/forest_path.ogg"
+export const MUSIC_BOSS_FIGHT = "./audio/GameMusic_ForestTheme_24.mp3"
 export const DEFAULT_WEIGHT = 0.75
 export const FALLING_WEIGHT = 2
 export const FLOATING_WEIGHT = 0.2

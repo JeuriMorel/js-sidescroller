@@ -243,9 +243,13 @@ export class Wave_Boss extends Wave {
         this.enemyFrequency = 500
         this.waveIndex = WAVES.BOSS
         this.nextWave = WAVES.WIN
+        
     }
     enter() {
         this.resetPlayerAttackSettings()
+        this.game.enemies.forEach(enemy => (enemy.healthPoints = 0))
+        this.game.mainTheme.pause()
+        this.game.bossTheme.play()
     }
     exit() {
         this.game.currentWave = this.game.waves[this.nextWave]

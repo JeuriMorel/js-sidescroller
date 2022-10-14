@@ -6,6 +6,7 @@ import {
     DEFAULT_SCROLL_SPEED,
     MUSIC_MAIN_THEME,
     MUSIC_FOREST_PATH,
+    MUSIC_BOSS_FIGHT,
 } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
@@ -54,6 +55,9 @@ window.addEventListener("load", function () {
             this.mainTheme.loop = true
             this.mainTheme.volume = 0.1
             this.forestTheme = new Audio(MUSIC_FOREST_PATH)
+            this.bossTheme = new Audio(MUSIC_BOSS_FIGHT)
+            this.bossTheme.volume = 0.1
+            this.bossTheme.loop = true
             this.forestTheme.addEventListener("loadedmetadata", () => {
                 this.forestThemeFadeOutPoint = this.forestTheme.duration - 5
             })
@@ -72,7 +76,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
         }
 
@@ -101,7 +105,25 @@ window.addEventListener("load", function () {
                 this.mainTheme.volume < 1
             ) {
                 if (this.themeTimer > this.themeInterval) {
-                    this.mainTheme.volume = Math.min(this.mainTheme.volume + 0.01, 1)
+                    this.mainTheme.volume = Math.min(
+                        this.mainTheme.volume + 0.01,
+                        1
+                    )
+                    this.themeTimer = 0
+                } else this.themeTimer += deltaTime
+            }
+            //FADE IN BOSS THEME
+            if (
+                !this.bossTheme.paused &&
+                !this.bossTheme.ended &&
+                this.bossTheme.currentTime > 0 &&
+                this.bossTheme.volume < 1
+            ) {
+                if (this.themeTimer > this.themeInterval) {
+                    this.bossTheme.volume = Math.min(
+                        this.bossTheme.volume + 0.01,
+                        1
+                    )
                     this.themeTimer = 0
                 } else this.themeTimer += deltaTime
             }
