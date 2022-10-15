@@ -17,6 +17,7 @@ import {
     SOUND_TONGUE,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
+import { setSfxVolume } from "./utils.js"
 
 export class Armored_Frog {
     constructor(game) {
@@ -56,6 +57,8 @@ export class Armored_Frog {
             tongue: new Audio(SOUND_TONGUE),
             growl: new Audio(BOSS_GROWL),
         }
+
+        setSfxVolume(this.audio)
 
         this.states = [
             new Retreat(this),
@@ -321,7 +324,7 @@ export class Armored_Frog {
         this.hitbox.claws.y = this.y + this.hitbox.claws.yOffset
     }
     resolveCollision({ target, attackDamage }) {
-        if (target === "enemy is attacked") {
+        if (target === "Attacked: ENEMY") {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
             }
@@ -345,7 +348,7 @@ export class Armored_Frog {
             this.phase = new Phase_Three(this)
         }
 
-        if (target === "player is attacked") {
+        if (target === "Attacked: PLAYER") {
             if (this.currentState === "ATTACK") this.x += this.attackOffsetX
             this.setState(STATES.JUMP_FORWARD)
         }

@@ -1,7 +1,9 @@
-import { qs } from "./utils.js"
+import { qs, setSfxVolume } from "./utils.js"
 import {
+    BASE_DAMAGE,
     DEFAULT_SCROLL_SPEED,
     DEFAULT_WEIGHT,
+    INVULNERABILITY_TIME,
     SOUND_BOUNCE,
     SOUND_CLAW_STRIKE,
     SOUND_DASH,
@@ -32,19 +34,11 @@ import {
     Sleeping,
     states,
 } from "./states.js"
-import {
-    Boom,
-    Hit_V1,
-    Hit_V2,
-    Red_Hit_V1,
-    Red_Hit_V2,
-    Smoke,
-} from "./particles.js"
+import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2 } from "./particles.js"
 
 export class Player {
     constructor(game) {
         this.game = game
-        this.attackDamage = 20
         this.width = SPRITE_WIDTH
         this.height = SPRITE_HEIGHT
         this.x = STARTING_X
@@ -57,9 +51,6 @@ export class Player {
         this.fps = 30
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
-        this.speed = 0
-        this.maxSpeed = 10
-        this.poweredUp = true
         this.deltaTime = 0
         this.isWhiffing = true
         this.isGameOver = false
@@ -115,6 +106,9 @@ export class Player {
             get_hit: new Audio(SOUND_GET_HIT),
             bounce: new Audio(SOUND_BOUNCE),
         }
+
+        setSfxVolume(this.audio)
+
         //vertical
         this.velocityY = 0
         this.weight = DEFAULT_WEIGHT
@@ -136,7 +130,7 @@ export class Player {
             new Running(this),
             new Sleeping(this),
         ]
-        this.currentState = this.states[5]
+        this.currentState = this.states[states.IDLE]
         this.currentState.enter()
 
         this.enemiesDefeated = 0
@@ -278,31 +272,38 @@ export class Player {
         return this.y >= this.game.height - this.height - this.game.groundMargin
     }
     isRollingUp() {
-        return this.currentState === this.states[8]
+        return this.currentState === this.states[states.ROLL_UP]
     }
     isFalling() {
-        return this.currentState === this.states[1]
+        return this.currentState === this.states[states.FALLING]
     }
     isRollingDown() {
-        return this.currentState === this.states[9]
+        return this.currentState === this.states[states.ROLL_DOWN]
     }
     isRollingAcross() {
-        return this.currentState === this.states[10]
+        return this.currentState === this.states[states.ROLL_ACROSS]
     }
     isRollingBack() {
-        return this.currentState === this.states[11]
-    }
-    isAtStartingPosition() {
-        return this.x <= STARTING_X
+        return this.currentState === this.states[states.ROLL_BACK]
     }
     isClawing() {
-        return this.currentState === this.states[0]
+        return this.currentState === this.states[states.CLAW_ATTACK]
     }
     isDashAttacking() {
-        return this.currentState === this.states[4]
+        return this.currentState === this.states[states.DASH_ATTACK]
     }
-    isClawing() {
-        return this.currentState === this.states[0]
+    skipCollisionCheck() {
+        return (
+            this.invulnerabilityTime > 0 ||
+            this.currentState === this.states[states.GET_HIT]
+        )
+    }
+
+    callStickyFunction() {
+        if (this.stickyMultiplier > 0) {
+            this.game.stickyFriction(this.stickyMultiplier)
+            this.stickyMultiplier--
+        }
     }
     getAttackInfo() {
         if (this.isClawing())
@@ -331,91 +332,95 @@ export class Player {
             damage: this.base_damage.jump + this.attack_bonus,
         }
     }
-    checkAttackCollision() {
-        this.game.enemies.forEach(enemy => {
-            const enemyHurtboxes = Object.values(enemy.hurtbox)
-            enemyHurtboxes.forEach(enemyHurtbox => {
-                if (enemy.invulnerabilityTime > 0) return
-
-                if (this.enemyIsGetttingHit(enemyHurtbox)) {
-                    const { type, damage } = this.getAttackInfo()
-                    this.stickyMultiplier = 5
-                    let enemyName = enemy.enemyName
-                    let hitAnimationSize = damage * 0.05
-
-                    enemy.resolveCollision({
-                        target: "enemy is attacked",
-                        attackDamage: damage,
-                        attackType: type,
-                    })
-                    if (enemyName === "AngryEgg")
-                        this.game.particles.push(
-                            new Hit_V1({
-                                game: this.game,
-                                x: this.hitbox.x + this.hitbox.width,
-                                y: this.hitbox.y + this.hitbox.height * 0.5,
-                                sizeModifier: hitAnimationSize,
-                                src: null,
-                            })
-                        )
-                    else if (enemyName === "Crawler")
-                        this.game.particles.push(
-                            new Hit_V2({
-                                game: this.game,
-                                x: this.hitbox.x + this.hitbox.width,
-                                y: this.hitbox.y + this.hitbox.height * 0.5,
-                                sizeModifier: hitAnimationSize,
-                                src: null,
-                            })
-                        )
-                    else if (enemyName === "Armored_Frog")
-                        if (this.isClawing()) {
-                            this.game.particles.push(
-                                new Red_Hit_V1({
-                                    game: this.game,
-                                    x: this.hitbox.x + this.hitbox.width,
-                                    y: this.hitbox.y + this.hitbox.height * 0.5,
-                                    sizeModifier: hitAnimationSize,
-                                    src: null,
-                                })
-                            )
-                        } else
-                            this.game.particles.push(
-                                new Red_Hit_V2({
-                                    game: this.game,
-                                    x: this.hitbox.x + this.hitbox.width,
-                                    y: this.hitbox.y + this.hitbox.height * 0.5,
-                                    sizeModifier: hitAnimationSize,
-                                    src: null,
-                                })
-                            )
-
-                    this.isWhiffing = false
-                    enemyHurtbox.isActive = false
-                    enemy.invulnerabilityTime = 400
-                    this.invulnerabilityTime = 400
-                    if (type === "Dash") this.audio.dash.play()
-                    if (this.attack_bonus < this.max_attack_bonus)
-                        this.attack_bonus++
-                    this.hurtbox.body.isActive = false
-                    this.hurtbox.head.isActive = false
-                    if (this.isFalling() || this.isRollingDown()) {
-                        this.velocityY = 0
-                        this.setState(states.JUMPING)
-                        if (this.attack_bonus > 5 && Math.random() > 0.5)
-                            this.audio.bounce.play()
-                    }
-                }
-            })
-        })
+    resolvePlayerGettingHit(enemy) {
+        this.setState(states.GET_HIT)
+        enemy.resolveCollision({ target: "Attacked: PLAYER" })
+        if (enemy.enemyName === "Armored_Frog") {
+            let heartIcon = this.game.UI.progressIcons.pop()
+            this.game.particles.push(
+                new Boom({
+                    game: this.game,
+                    x: heartIcon.x + heartIcon.width * 0.5,
+                    y: heartIcon.y + heartIcon.height * 0.5,
+                    sizeModifier: 0.5,
+                    src: SOUND_SHATTER,
+                })
+            )
+        }
+        if (!this.game.UI.progressIcons.length) this.setState(states.GAME_OVER)
     }
-    callStickyFunction() {
-        if (this.stickyMultiplier > 0) {
-            this.game.stickyFriction(this.stickyMultiplier)
-            this.stickyMultiplier--
+    resolveEnemyGettingHit(enemy, enemyHurtbox) {
+        const { type, damage } = this.getAttackInfo()
+        this.stickyMultiplier = 5
+        let enemyName = enemy.enemyName
+        let hitAnimationSize = damage * 0.05
+
+        enemy.resolveCollision({
+            target: "Attacked: ENEMY",
+            attackDamage: damage,
+            attackType: type,
+        })
+        this.setAfterCollisionParameters(enemy, enemyHurtbox)
+        if (enemyName === "AngryEgg")
+            this.game.particles.push(
+                new Hit_V1({
+                    game: this.game,
+                    x: this.hitbox.x + this.hitbox.width,
+                    y: this.hitbox.y + this.hitbox.height * 0.5,
+                    sizeModifier: hitAnimationSize,
+                    src: null,
+                })
+            )
+        else if (enemyName === "Crawler")
+            this.game.particles.push(
+                new Hit_V2({
+                    game: this.game,
+                    x: this.hitbox.x + this.hitbox.width,
+                    y: this.hitbox.y + this.hitbox.height * 0.5,
+                    sizeModifier: hitAnimationSize,
+                    src: null,
+                })
+            )
+        else if (enemyName === "Armored_Frog")
+            if (this.isClawing()) {
+                this.game.particles.push(
+                    new Red_Hit_V1({
+                        game: this.game,
+                        x: this.hitbox.x + this.hitbox.width,
+                        y: this.hitbox.y + this.hitbox.height * 0.5,
+                        sizeModifier: hitAnimationSize,
+                        src: null,
+                    })
+                )
+            } else
+                this.game.particles.push(
+                    new Red_Hit_V2({
+                        game: this.game,
+                        x: this.hitbox.x + this.hitbox.width,
+                        y: this.hitbox.y + this.hitbox.height * 0.5,
+                        sizeModifier: hitAnimationSize,
+                        src: null,
+                    })
+                )
+    }
+    setAfterCollisionParameters(enemy, enemyHurtbox) {
+        this.isWhiffing = false
+        enemyHurtbox.isActive = false
+        enemy.invulnerabilityTime = INVULNERABILITY_TIME
+        this.invulnerabilityTime = INVULNERABILITY_TIME
+        if (type === "Dash") this.audio.dash.play()
+        if (this.attack_bonus < this.max_attack_bonus) this.attack_bonus++
+        this.hurtbox.body.isActive = false
+        this.hurtbox.head.isActive = false
+        if (this.isFalling() || this.isRollingDown()) {
+            this.velocityY = 0
+            this.setState(states.JUMPING)
+            if (this.attack_bonus > 5 && Math.random() > 0.5)
+                this.audio.bounce.play()
         }
     }
-    enemyIsGetttingHit(enemyHurtbox) {
+
+    enemyIsGettingHit(enemyHurtbox) {
         return (
             enemyHurtbox.isActive &&
             this.hitbox.isActive &&
@@ -440,50 +445,44 @@ export class Player {
                 enemyHitbox.y + enemyHitbox.height >= this.hurtbox.head.y)
         )
     }
-    playerIsDodging(enemyHitbox) {
-        return (
-            enemyHitbox.isActive &&
-            enemyHitbox.x <= this.x + this.width &&
-            enemyHitbox.x + enemyHitbox.width >= this.x &&
-            enemyHitbox.y <= this.y + this.height &&
-            enemyHitbox.y + enemyHitbox.height >= this.y
-        )
-    }
     checkHitCollision() {
-        if (
-            this.invulnerabilityTime > 0 ||
-            this.currentState === this.states[3]
-        )
-            return
+        if (this.skipCollisionCheck()) return
         this.game.enemies.forEach(enemy => {
             const enemyHitboxes = Object.values(enemy.hitbox)
 
             enemyHitboxes.forEach(hitbox => {
-                if (
-                    this.invulnerabilityTime > 0 ||
-                    this.currentState === this.states[3]
-                )
-                    return
+                if (this.skipCollisionCheck()) return
 
                 if (this.playerIsGettingHit(hitbox)) {
-                    this.setState(states.GET_HIT)
-                    enemy.resolveCollision({ target: "player is attacked" })
-                    if (enemy.enemyName === "Armored_Frog") {
-                        let heartIcon = this.game.UI.progressIcons.pop()
-                        this.game.particles.push(
-                            new Boom({
-                                game: this.game,
-                                x: heartIcon.x + heartIcon.width * 0.5,
-                                y: heartIcon.y + heartIcon.height * 0.5,
-                                sizeModifier: 0.5,
-                                src: SOUND_SHATTER,
-                            })
-                        )
-                    }
-                    if (!this.game.UI.progressIcons.length)
-                        this.setState(states.GAME_OVER)
+                    this.resolvePlayerGettingHit(enemy)
+                }
+            })
+        })
+    }
+    checkAttackCollision() {
+        this.game.enemies.forEach(enemy => {
+            const enemyHurtboxes = Object.values(enemy.hurtbox)
+            enemyHurtboxes.forEach(enemyHurtbox => {
+                if (enemy.invulnerabilityTime > 0) return
+
+                if (this.enemyIsGettingHit(enemyHurtbox)) {
+                    this.resolveEnemyGettingHit(enemy, enemyHurtbox)
                 }
             })
         })
     }
 }
+
+// playerIsDodging(enemyHitbox) {
+//     return (
+//         enemyHitbox.isActive &&
+//         enemyHitbox.x <= this.x + this.width &&
+//         enemyHitbox.x + enemyHitbox.width >= this.x &&
+//         enemyHitbox.y <= this.y + this.height &&
+//         enemyHitbox.y + enemyHitbox.height >= this.y
+//     )
+// }
+
+// isAtStartingPosition() {
+//     return this.x <= STARTING_X
+// }

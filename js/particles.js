@@ -1,5 +1,6 @@
 import { qs } from "./utils.js"
 import {
+    SFX_VOLUME,
     SOUND_CRACKS_1,
     SOUND_CRACKS_2,
     SOUND_GHOST_DIE,
@@ -17,6 +18,7 @@ class Particles {
         this.frameX = 0
         this.frameY = 0
         if (src) this.audio = new Audio(src)
+        if(this.audio) this.audio.volume = SFX_VOLUME
     }
 
     update(deltaTime) {

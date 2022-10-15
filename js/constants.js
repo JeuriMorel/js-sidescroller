@@ -42,3 +42,6 @@ export const DAMAGE_FONT_SIZE = 35
 export const PROGRESS_ICON_X = 35
 
 export const MAX_LIVES = 9
+export const SFX_VOLUME = 0.6
+
+export const INVULNERABILITY_TIME = 400

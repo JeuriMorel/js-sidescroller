@@ -125,7 +125,7 @@ class Enemy {
         this.hitbox.body.y = this.y + this.hitbox.body.yOffset
     }
     resolveCollision({ target, attackDamage }) {
-        if (target === "enemy is attacked") {
+        if (target === "Attacked: ENEMY") {
             this.healthPoints -= attackDamage - this.defence
             this.markedForRecoil = true
         }
@@ -529,7 +529,7 @@ export class Ghost extends Enemy {
         context.restore()
     }
     resolveCollision({ target }) {
-        if (target === "enemy is attacked") {
+        if (target === "Attacked: ENEMY") {
             this.healthPoints = 0
         }
     }
@@ -788,7 +788,7 @@ export class PumpKing extends Enemy {
         this.attackType = attackType
         if (this.attackType === "Dash") this.tossInAir()
 
-        if (target === "player is attacked") {
+        if (target === "Attacked: PLAYER") {
             this.attackType = "Bite"
             this.markedForRecoil = true
             this.healthPoints--
