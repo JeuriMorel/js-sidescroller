@@ -51,12 +51,12 @@ export class UI {
 }
 
 export class FloatingMessage{
-    constructor({value, x, y}) {
+    constructor({value, x, y, targetX = 30, targetY = 80}) {
         this.value = value
         this.x = x
         this.y = y
-        this.targetX = 30
-        this.targetY = 80
+        this.targetX = targetX
+        this.targetY = targetY
         this.markedForDeletion = false
         this.timer = 0
     }

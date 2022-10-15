@@ -306,17 +306,21 @@ export class Player {
         }
     }
     getAttackInfo() {
-        if (this.isClawing())
+        if (this.isClawing()) {
+            this.audio.claw_strike.play()
             return {
                 type: "Claw",
                 damage: this.base_damage.claw + this.attack_bonus,
             }
-        if (this.isDashAttacking())
+        }
+        if (this.isDashAttacking()) {
+            this.audio.dash.play()
             return {
                 type: "Dash",
                 damage:
                     this.base_damage.dash + this.dash_bonus + this.attack_bonus,
             }
+        }
         if (this.isRollingUp())
             return {
                 type: "Up_Roll",
@@ -404,14 +408,14 @@ export class Player {
                 )
     }
     setAfterCollisionParameters(enemy, enemyHurtbox) {
-        this.isWhiffing = false
         enemyHurtbox.isActive = false
         enemy.invulnerabilityTime = INVULNERABILITY_TIME
         this.invulnerabilityTime = INVULNERABILITY_TIME
-        if (type === "Dash") this.audio.dash.play()
-        if (this.attack_bonus < this.max_attack_bonus) this.attack_bonus++
+        this.isWhiffing = false
         this.hurtbox.body.isActive = false
         this.hurtbox.head.isActive = false
+        
+        if (this.attack_bonus < this.max_attack_bonus) this.attack_bonus++
         if (this.isFalling() || this.isRollingDown()) {
             this.velocityY = 0
             this.setState(states.JUMPING)

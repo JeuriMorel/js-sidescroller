@@ -1,11 +1,11 @@
 import {
     DEFAULT_SCROLL_SPEED,
-    SOUND_SNARE,
     DEFAULT_WEIGHT,
     FALLING_WEIGHT,
     FLOATING_WEIGHT,
 } from "./constants.js"
-import { Boom, Explosion_V1, Explosion_V2, Fire, Red_Hit_V1 } from "./particles.js"
+import { Red_Hit_V1 } from "./particles.js"
+import { FloatingMessage } from "./UI.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -63,10 +63,9 @@ export class Attacking_Claw extends State {
             this.player.frameTimer >= 0
         )
             this.player.x += 5
-        if (this.player.frame === 12) {
-            if (this.player.isWhiffing) this.player.audio.slash.play()
-            else this.player.audio.claw_strike.play()
-        }
+        if (this.player.frame === 12 && this.player.isWhiffing)
+            this.player.audio.slash.play()
+
         if (this.player.frame == this.player.maxFrame) {
             this.player.setState(states.IDLE)
             this.player.isWhiffing = true
@@ -150,7 +149,7 @@ export class Game_Over extends State {
                     src: null,
                 })
             )
-        } 
+        }
     }
 }
 export class Get_Hit extends State {
@@ -337,6 +336,8 @@ export class Resting extends State {
             lastKey === "PRESS Left"
         )
             this.player.setState(states.IDLE)
+        else if (lastKey === "PRESS Attack")
+            this.player.setState(states.SLEEPING)
     }
 }
 export class Roll_Down extends State {
@@ -489,17 +490,33 @@ export class Sleeping extends State {
         this.player.hurtbox.head.height = this.player.height - 50
         this.player.hurtbox.body.width = this.player.width - 50
         this.player.hurtbox.body.height = this.player.height - 55
-
         this.player.game.scrollSpeed = 0
+
+        this.addAttackBonus = true
     }
-    handleInput({ lastKey }) {
+    handleInput({ keysPressed }) {
+        if (!keysPressed.attack) this.player.setState(states.IDLE)
+
+        if (this.player.frame === 0) this.addAttackBonus = true
+
         if (
-            lastKey === "PRESS Up" ||
-            lastKey === "PRESS Right" ||
-            lastKey === "PRESS Left" ||
-            lastKey === "PRESS Right" ||
-            lastKey === "RELEASE Down"
-        )
-            this.player.setState(states.IDLE)
+            this.addAttackBonus &&
+            this.player.enemiesDefeated > 5 &&
+            this.player.frame === this.player.maxFrame &&
+            this.player.attack_bonus < this.player.max_attack_bonus
+        ) {
+            this.player.attack_bonus++
+            this.player.enemiesDefeated -= 5
+            this.addAttackBonus = false
+            this.player.game.UI.floatingMessages.push(
+                new FloatingMessage({
+                    value: "attack UP",
+                    x: this.player.x,
+                    y: this.player.y,
+                    targetX: this.player.x,
+                    targetY: this.player.y - 150,
+                })
+            )
+        }
     }
 }
