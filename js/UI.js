@@ -67,9 +67,9 @@ export class FloatingMessage{
         if(this.timer > 1000) this.markedForDeletion = true
     }
     draw(context) {
-        context.font = `24px ${FONT_FAMILY}`
-        context.strokeText(`+${this.value}`, this.x, this.y)
+        context.font = `28px ${FONT_FAMILY}`
+        context.strokeText(`${this.value}`, this.x, this.y)
         context.fillColor = '#333333'
-        context.fillText(`+${this.value}`, this.x, this.y)
+        context.fillText(`${this.value}`, this.x, this.y)
     }
 }

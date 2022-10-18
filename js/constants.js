@@ -45,3 +45,4 @@ export const MAX_LIVES = 9
 export const SFX_VOLUME = 0.6
 
 export const INVULNERABILITY_TIME = 400
+export const SLEEP_PENALTY = 3

@@ -1,4 +1,4 @@
-import { SFX_VOLUME } from "./constants"
+import { SFX_VOLUME } from "./constants.js"
 
 export function qs(selector, parent = document) {
     return parent.querySelector(selector)
@@ -121,6 +121,6 @@ function HSLToHex(h, s, l) {
 
 export function setSfxVolume(audioObject){
     for (const sfx in audioObject) {
-        sfx.volume = SFX_VOLUME
+        audioObject[sfx].volume = SFX_VOLUME
     }
 }

@@ -1,6 +1,5 @@
 import { qs, setSfxVolume } from "./utils.js"
 import {
-    BASE_DAMAGE,
     DEFAULT_SCROLL_SPEED,
     DEFAULT_WEIGHT,
     INVULNERABILITY_TIME,
@@ -138,8 +137,8 @@ export class Player {
     update(deltaTime, input) {
         this.deltaTime = deltaTime
 
+        this.currentState.handleInput(input, deltaTime)
         //invul
-        this.currentState.handleInput(input)
         if (this.invulnerabilityTime > 0) {
             this.hurtbox.head.isActive = false
             this.hurtbox.body.isActive = false
@@ -414,7 +413,7 @@ export class Player {
         this.isWhiffing = false
         this.hurtbox.body.isActive = false
         this.hurtbox.head.isActive = false
-        
+
         if (this.attack_bonus < this.max_attack_bonus) this.attack_bonus++
         if (this.isFalling() || this.isRollingDown()) {
             this.velocityY = 0
@@ -475,6 +474,9 @@ export class Player {
             })
         })
     }
+    isAtStartingPosition() {
+        return this.x <= STARTING_X
+    }
 }
 
 // playerIsDodging(enemyHitbox) {
@@ -485,8 +487,4 @@ export class Player {
 //         enemyHitbox.y <= this.y + this.height &&
 //         enemyHitbox.y + enemyHitbox.height >= this.y
 //     )
-// }
-
-// isAtStartingPosition() {
-//     return this.x <= STARTING_X
 // }

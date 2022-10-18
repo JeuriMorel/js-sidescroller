@@ -53,7 +53,7 @@ class Enemy {
     }
     addOneToEnemiesDefeated() {
         this.game.player.enemiesDefeated += this.defeatBonus
-        this.game.UI.floatingMessages.push(new FloatingMessage({value: this.defeatBonus, x: this.x, y: this.y}))
+        this.game.UI.floatingMessages.push(new FloatingMessage({value: `+${this.defeatBonus}`, x: this.x, y: this.y}))
     }
     update(deltaTime) {
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
@@ -230,7 +230,7 @@ export class AngryEgg extends Enemy {
         this.attackType = attackType
         if (this.attackType === "Dash") this.tossInAir()
 
-        if (target === "player is attacked") {
+        if (target === "Attacked: PLAYER") {
             this.attackType = "Bite"
             this.markedForRecoil = true
             this.healthPoints--
