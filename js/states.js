@@ -533,8 +533,8 @@ export class Sleeping extends State {
                             targetY: enemy.y + 100,
                         })
                     )
+                    this.player.game.sfx.defenceDownSFX.play()
                 }
-                console.log(enemy.defence)
             })
             this.bonusTimer = 0
         } else {

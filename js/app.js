@@ -1,4 +1,4 @@
-import { qs, qsa } from "./utils.js"
+import { qs, setSfxVolume } from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -7,12 +7,11 @@ import {
     MUSIC_MAIN_THEME,
     MUSIC_FOREST_PATH,
     MUSIC_BOSS_FIGHT,
+    SOUND_DEFENCE_UP,
+    SOUND_DEFENCE_DOWN,
 } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
-import { AngryEgg, Ghost, Crawler, Bee, PumpKing } from "./enemies.js"
-import { Armored_Frog } from "./boss.js"
-import { HealthBar } from "./health_bar.js"
 import { UI } from "./UI.js"
 import {
     Wave_Boss,
@@ -56,6 +55,11 @@ window.addEventListener("load", function () {
             this.mainTheme.volume = 0.1
             this.forestTheme = new Audio(MUSIC_FOREST_PATH)
             this.bossTheme = new Audio(MUSIC_BOSS_FIGHT)
+
+            this.sfx = {
+                defenceUpSFX: new Audio(SOUND_DEFENCE_UP),
+                defenceDownSFX: new Audio(SOUND_DEFENCE_DOWN),
+            }
             this.bossTheme.volume = 0.1
             this.bossTheme.loop = true
             this.forestTheme.addEventListener("loadedmetadata", () => {
@@ -78,6 +82,8 @@ window.addEventListener("load", function () {
             ]
             this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
+
+            setSfxVolume(this.sfx)
         }
 
         update(deltaTime, input) {

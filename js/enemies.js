@@ -42,6 +42,7 @@ class Enemy {
             Down_Roll: 20,
             Bite: 20,
         }
+        
         this.canBeDebuffed = false
         this.hasBeenDebuffed = false
         this.isDebuffed = false
@@ -81,6 +82,7 @@ class Enemy {
                     })
                 )
                 this.isDebuffed = false
+                this.game.sfx.defenceUpSFX.play()
             } else this.debuffTimer += deltaTime
         }
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
