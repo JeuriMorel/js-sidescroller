@@ -1,4 +1,4 @@
-import { FONT_FAMILY, MAX_LIVES, PROGRESS_ICON_X } from "./constants.js"
+import { FLOATING_DEFAULT_FONT_SIZE, FONT_FAMILY, MAX_LIVES, PROGRESS_ICON_X } from "./constants.js"
 import { Heart } from "./icon.js"
 
 export class UI {
@@ -51,7 +51,7 @@ export class UI {
 }
 
 export class FloatingMessage{
-    constructor({value, x, y, targetX = 30, targetY = 80}) {
+    constructor({value, x, y, targetX = 30, targetY = 80, sizeModifier = 0}) {
         this.value = value
         this.x = x
         this.y = y
@@ -59,17 +59,33 @@ export class FloatingMessage{
         this.targetY = targetY
         this.markedForDeletion = false
         this.timer = 0
+        this.opacity = 1
+        this.sizeModifier = sizeModifier
+        this.fontBonus = 0
     }
     update(deltaTime) {
         this.x +=(this.targetX - this.x) * 0.03
         this.y += (this.targetY - this.y) * 0.03
         this.timer+= deltaTime
         if(this.timer > 1000) this.markedForDeletion = true
+        if (this.timer > 900) {
+            this.opacity = 0.3
+            this.fontBonus = this.sizeModifier * 4
+        }else if (this.timer > 700) {
+            this.opacity = 0.6
+            this.fontBonus = this.sizeModifier * 2
+        }else if(this.timer > 600) {
+            this.opacity = 0.8
+            this.fontBonus = this.sizeModifier
+        }
     }
     draw(context) {
-        context.font = `28px ${FONT_FAMILY}`
+        context.save()
+        context.globalAlpha = this.opacity
+        context.font = `${FLOATING_DEFAULT_FONT_SIZE + this.fontBonus}px ${FONT_FAMILY}`
         context.strokeText(`${this.value}`, this.x, this.y)
         context.fillColor = '#333333'
         context.fillText(`${this.value}`, this.x, this.y)
+        context.restore()
     }
 }

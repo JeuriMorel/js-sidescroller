@@ -40,9 +40,10 @@ export const FLOATING_WEIGHT = 0.2
 export const FONT_FAMILY = "Chicle"
 export const DAMAGE_FONT_SIZE = 35
 export const PROGRESS_ICON_X = 35
+export const FLOATING_DEFAULT_FONT_SIZE = 28
 
 export const MAX_LIVES = 9
 export const SFX_VOLUME = 0.6
 
 export const INVULNERABILITY_TIME = 400
-export const SLEEP_PENALTY = 3
+export const DEFENCE_DEBUFF = 4

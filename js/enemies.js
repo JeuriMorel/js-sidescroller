@@ -12,6 +12,7 @@ import {
     BEE_HEIGHT,
     SOUND_CLAW_STRIKE,
     SOUND_PUMP_DIE,
+    DEFENCE_DEBUFF,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -41,6 +42,11 @@ class Enemy {
             Down_Roll: 20,
             Bite: 20,
         }
+        this.canBeDebuffed = false
+        this.hasBeenDebuffed = false
+        this.isDebuffed = false
+        this.debuffTimer = 0
+        this.debuffInterval = 4500
     }
     get enemyName() {
         return this.constructor.name
@@ -53,9 +59,30 @@ class Enemy {
     }
     addOneToEnemiesDefeated() {
         this.game.player.enemiesDefeated += this.defeatBonus
-        this.game.UI.floatingMessages.push(new FloatingMessage({value: `+${this.defeatBonus}`, x: this.x, y: this.y}))
+        this.game.UI.floatingMessages.push(
+            new FloatingMessage({
+                value: `+${this.defeatBonus}`,
+                x: this.x,
+                y: this.y,
+            })
+        )
     }
     update(deltaTime) {
+        if (this.isDebuffed) {
+            if (this.debuffTimer > this.debuffInterval) {
+                this.defence += DEFENCE_DEBUFF
+                this.game.UI.floatingMessages.push(
+                    new FloatingMessage({
+                        value: "+ defence RESTORED",
+                        x: this.x,
+                        y: this.y + 100,
+                        targetX: this.x,
+                        targetY: this.y,
+                    })
+                )
+                this.isDebuffed = false
+            } else this.debuffTimer += deltaTime
+        }
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true
         if (this.frameTimer > this.frameInterval) {
@@ -222,6 +249,8 @@ export class AngryEgg extends Enemy {
         } else {
             this.velocityY = 0
         }
+        if (!this.hasBeenDebuffed && this.x < this.game.width - this.width)
+            this.canBeDebuffed = true
         if (this.y > this.game.height - this.height - this.game.groundMargin)
             this.y = this.game.height - this.height - this.game.groundMargin
     }
@@ -331,6 +360,9 @@ export class Crawler extends Enemy {
             this.spawn()
         }
 
+        if (!this.hasBeenDebuffed && this.x < this.game.width - this.width)
+            this.canBeDebuffed = true
+
         if (this.healthPoints <= 0) {
             this.game.particles.push(
                 new Smoke({
@@ -425,13 +457,6 @@ export class Spawn extends Enemy {
                 height: this.height * 0.25,
             },
         }
-        this.healthBar = new HealthBar({
-            x: this.x,
-            y: this.y,
-            width: this.width,
-            height: 15 * this.sizeModifier,
-            maxhealth: this.healthPoints,
-        })
         this.defeatBonus = 1
     }
     update(deltaTime) {
@@ -730,6 +755,8 @@ export class PumpKing extends Enemy {
         this.defeatBonus = Math.ceil(12 * this.sizeModifier)
     }
     update(deltaTime) {
+        if (!this.hasBeenDebuffed && this.x < this.game.width - this.width)
+            this.canBeDebuffed = true
         if (
             this.frameTimer + deltaTime > this.frameInterval &&
             this.markedForRecoil
@@ -755,7 +782,6 @@ export class PumpKing extends Enemy {
         if (this.y > this.game.height - this.height - this.game.groundMargin)
             this.y = this.game.height - this.height - this.game.groundMargin
 
-        
         this.x -= this.horizontalSpeed + this.game.scrollSpeed
 
         if (this.x < -this.game.width - this.width) this.deleteEnemy = true

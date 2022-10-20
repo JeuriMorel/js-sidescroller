@@ -1,9 +1,9 @@
 import {
     DEFAULT_SCROLL_SPEED,
     DEFAULT_WEIGHT,
+    DEFENCE_DEBUFF,
     FALLING_WEIGHT,
     FLOATING_WEIGHT,
-    SLEEP_PENALTY,
 } from "./constants.js"
 import { Red_Hit_V1 } from "./particles.js"
 import { FloatingMessage } from "./UI.js"
@@ -466,7 +466,7 @@ export class Running extends State {
         )
             this.player.setState(states.DASH_ATTACK)
 
-        if (!keysPressed.right) this.player.setState(states.IDLE)
+        if (!keysPressed.right || lastKey === "PRESS Left") this.player.setState(states.IDLE)
 
         if (!this.player.isAtStartingPosition())
             this.player.x -= this.player.game.scrollSpeed * 0.5
@@ -492,9 +492,9 @@ export class Sleeping extends State {
         this.player.hurtbox.body.width = this.player.width - 50
         this.player.hurtbox.body.height = this.player.height - 55
         this.player.game.scrollSpeed = 0
-        this.bonusInterval = 1500
+        this.bonusInterval = 2500
         this.bonusTimer = 0
-        this.zInterval = 300
+        this.zInterval = 400
         this.zTimer = 0
     }
     handleInput({ keysPressed }, deltaTime) {
@@ -505,10 +505,11 @@ export class Sleeping extends State {
             this.player.game.UI.floatingMessages.push(
                 new FloatingMessage({
                     value: "Z",
-                    x: this.player.x + this.player.width - 30,
-                    y: this.player.y + this.player.height,
-                    targetX: this.player.x + (Math.random() * 60 + 30),
-                    targetY: this.player.y - 20,
+                    x: this.player.x + this.player.width - 10,
+                    y: this.player.y + this.player.height - 10,
+                    targetX: this.player.x + 150,
+                    targetY: this.player.y,
+                    sizeModifier: 3,
                 })
             )
             this.zTimer = 0
@@ -516,28 +517,28 @@ export class Sleeping extends State {
             this.zTimer += deltaTime
         }
 
-        if (
-            this.player.enemiesDefeated >= SLEEP_PENALTY &&
-            this.player.attack_bonus < this.player.max_attack_bonus
-        ) {
-            if (this.bonusTimer > this.bonusInterval) {
-                console.log(this.player.attack_bonus)
-                this.player.attack_bonus++
-                this.player.enemiesDefeated -= SLEEP_PENALTY
-                this.addAttackBonus = false
-                this.player.game.UI.floatingMessages.push(
-                    new FloatingMessage({
-                        value: "+attack UP",
-                        x: this.player.x,
-                        y: this.player.y,
-                        targetX: this.player.x,
-                        targetY: this.player.y - 150,
-                    })
-                )
-                this.bonusTimer = 0
-            } else {
-                this.bonusTimer += deltaTime
-            }
+        if (this.bonusTimer > this.bonusInterval) {
+            this.player.game.enemies.forEach(enemy => {
+                if (enemy.canBeDebuffed) {
+                    enemy.defence -= DEFENCE_DEBUFF
+                    enemy.canBeDebuffed = false
+                    enemy.hasBeenDebuffed = true
+                    enemy.isDebuffed = true
+                    this.player.game.UI.floatingMessages.push(
+                        new FloatingMessage({
+                            value: "- defence DOWN",
+                            x: enemy.x,
+                            y: enemy.y,
+                            targetX: enemy.x,
+                            targetY: enemy.y + 100,
+                        })
+                    )
+                }
+                console.log(enemy.defence)
+            })
+            this.bonusTimer = 0
+        } else {
+            this.bonusTimer += deltaTime
         }
     }
 }
