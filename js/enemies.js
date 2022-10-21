@@ -47,7 +47,7 @@ class Enemy {
         this.hasBeenDebuffed = false
         this.isDebuffed = false
         this.debuffTimer = 0
-        this.debuffInterval = 4500
+        this.debuffInterval = 6500
     }
     get enemyName() {
         return this.constructor.name
@@ -759,6 +759,23 @@ export class PumpKing extends Enemy {
     update(deltaTime) {
         if (!this.hasBeenDebuffed && this.x < this.game.width - this.width)
             this.canBeDebuffed = true
+        
+        if (this.isDebuffed) {
+            if (this.debuffTimer > this.debuffInterval) {
+                this.defence += DEFENCE_DEBUFF
+                this.game.UI.floatingMessages.push(
+                    new FloatingMessage({
+                        value: "+ defence RESTORED",
+                        x: this.x,
+                        y: this.y + 100,
+                        targetX: this.x,
+                        targetY: this.y,
+                    })
+                )
+                this.isDebuffed = false
+                this.game.sfx.defenceUpSFX.play()
+            } else this.debuffTimer += deltaTime
+        }
         if (
             this.frameTimer + deltaTime > this.frameInterval &&
             this.markedForRecoil

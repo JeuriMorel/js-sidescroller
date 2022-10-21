@@ -466,7 +466,8 @@ export class Running extends State {
         )
             this.player.setState(states.DASH_ATTACK)
 
-        if (!keysPressed.right || lastKey === "PRESS Left") this.player.setState(states.IDLE)
+        if (!keysPressed.right || lastKey === "PRESS Left")
+            this.player.setState(states.IDLE)
 
         if (!this.player.isAtStartingPosition())
             this.player.x -= this.player.game.scrollSpeed * 0.5
@@ -492,8 +493,8 @@ export class Sleeping extends State {
         this.player.hurtbox.body.width = this.player.width - 50
         this.player.hurtbox.body.height = this.player.height - 55
         this.player.game.scrollSpeed = 0
-        this.bonusInterval = 2500
-        this.bonusTimer = 0
+        this.tauntInterval = 1500
+        this.tauntTimer = 0
         this.zInterval = 400
         this.zTimer = 0
     }
@@ -517,7 +518,7 @@ export class Sleeping extends State {
             this.zTimer += deltaTime
         }
 
-        if (this.bonusTimer > this.bonusInterval) {
+        if (this.tauntTimer > this.tauntInterval) {
             this.player.game.enemies.forEach(enemy => {
                 if (enemy.canBeDebuffed) {
                     enemy.defence -= DEFENCE_DEBUFF
@@ -536,9 +537,9 @@ export class Sleeping extends State {
                     this.player.game.sfx.defenceDownSFX.play()
                 }
             })
-            this.bonusTimer = 0
+            this.tauntTimer = 0
         } else {
-            this.bonusTimer += deltaTime
+            this.tauntTimer += deltaTime
         }
     }
 }
