@@ -51,7 +51,6 @@ export class Attacking_Claw extends State {
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey }) {
-        if (lastKey == "PRESS Left") this.player.setState(states.ROLL_BACK)
         if (
             this.player.frame > 5 &&
             this.player.frame < 8 &&

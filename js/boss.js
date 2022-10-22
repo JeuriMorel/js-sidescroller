@@ -12,11 +12,13 @@ import {
 import {
     BOSS_DAMAGED,
     BOSS_GROWL,
+    DEFENCE_DEBUFF,
     SOUND_BOSS_JUMP,
     SOUND_BOSS_RETREAT,
     SOUND_TONGUE,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
+import { FloatingMessage } from "./UI.js"
 import { setSfxVolume } from "./utils.js"
 
 export class Armored_Frog {
@@ -29,6 +31,7 @@ export class Armored_Frog {
         this.fps = 20
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
+        this.defence = 10
         this.speed = 0
         this.deleteEnemy = false
         this.isDefeated = false
@@ -49,6 +52,12 @@ export class Armored_Frog {
         this.attackInterval = 6000
         this.attackTimer = 0
         this.idleXOffsetModifier = 0.25
+
+        this.canBeDebuffed = true
+        this.hasBeenDebuffed = false
+        this.isDebuffed = false
+        this.debuffTimer = 0
+        this.debuffInterval = 4500
 
         this.audio = {
             damaged: new Audio(BOSS_DAMAGED),
@@ -160,6 +169,24 @@ export class Armored_Frog {
         this.currentState.enter()
     }
     update(deltaTime) {
+        if (this.isDebuffed) {
+            if (this.debuffTimer > this.debuffInterval) {
+                this.defence += DEFENCE_DEBUFF
+                this.game.UI.floatingMessages.push(
+                    new FloatingMessage({
+                        value: "+ defence RESTORED",
+                        x: this.x,
+                        y: this.y + 100,
+                        targetX: this.x,
+                        targetY: this.y,
+                    })
+                )
+                this.isDebuffed = false
+                this.canBeDebuffed = true
+                this.debuffTimer = 0
+                this.game.sfx.defenceUpSFX.play()
+            } else this.debuffTimer += deltaTime
+        }
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0
             if (this.frame < this.maxFrame) this.frame++
@@ -328,7 +355,7 @@ export class Armored_Frog {
             if (this.currentState.state === "ATTACK") {
                 this.x += this.attackOffsetX
             }
-            this.healthPoints -= attackDamage
+            this.healthPoints -= attackDamage - this.defence
             if (this.healthPoints < 0) this.healthPoints = 0
             this.healthBar.updateBar(this.healthPoints)
             this.setState(

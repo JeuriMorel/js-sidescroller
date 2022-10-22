@@ -12,6 +12,7 @@ export class Phase_One extends Boss_Phase {
         this.boss.frameInterval = 1000 / this.boss.fps
         this.boss.attacks = ["TONGUE_ATTACK"]
         this.boss.sizeModifier = 0.6
+        this.boss.defence = 10
     }
 }
 export class Phase_Two extends Boss_Phase {
@@ -22,6 +23,7 @@ export class Phase_Two extends Boss_Phase {
         this.boss.frameInterval = 1000 / this.boss.fps
         this.boss.attackIntervals = [2000, 3000]
         this.boss.attacks = ["TONGUE_ATTACK", "JUMP_ATTACK"]
+        this.boss.defence = 12
     }
 }
 export class Phase_Three extends Boss_Phase {
@@ -31,5 +33,6 @@ export class Phase_Three extends Boss_Phase {
         this.boss.fps = 60
         this.boss.frameInterval = 1000 / this.boss.fps
         this.boss.attacks = ["TONGUE_ATTACK", "JUMP_ATTACK"]
+        this.boss.defence = 15
     }
 }
