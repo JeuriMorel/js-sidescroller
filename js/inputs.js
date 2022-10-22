@@ -1,3 +1,5 @@
+import { isPaused, togglePause } from "./app.js"
+
 export default class InputHandler {
     constructor(game) {
         this.lastKey = ""
@@ -12,6 +14,10 @@ export default class InputHandler {
         }
 
         window.addEventListener("keydown", e => {
+            if (e.key === " ") {
+                togglePause()
+                return
+            }
             if (this.game.isRecovering) return
             switch (e.key) {
                 case "ArrowLeft":

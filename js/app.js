@@ -9,6 +9,7 @@ import {
     MUSIC_BOSS_FIGHT,
     SOUND_DEFENCE_UP,
     SOUND_DEFENCE_DOWN,
+    BLUR_VALUE,
 } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
@@ -26,6 +27,12 @@ import {
     Wave_Two,
     Wave_Win,
 } from "./waves.js"
+
+export let isPaused = false
+export function togglePause() {
+    isPaused = !isPaused
+    if (!isPaused) animate(0)
+}
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -80,7 +87,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[6] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -174,6 +181,7 @@ window.addEventListener("load", function () {
         }
 
         draw(context) {
+            if (isPaused) context.filter = `blur(${BLUR_VALUE})`
             this.background.draw(context)
             this.player.draw(context)
             this.enemies.forEach(enemy => {
@@ -196,13 +204,14 @@ window.addEventListener("load", function () {
     const game = new Game(canvas.width, canvas.height)
     let lastTime = 0
 
-    function animate(timestamp) {
+    this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
         game.deltaTime = deltaTime
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         game.update(deltaTime, game.input)
         game.draw(ctx)
+        if (isPaused) return
         requestAnimationFrame(animate)
     }
 

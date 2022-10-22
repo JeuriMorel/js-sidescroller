@@ -38,6 +38,8 @@ export const MUSIC_BOSS_FIGHT = "./audio/GameMusic_ForestTheme_24.mp3"
 export const DEFAULT_WEIGHT = 0.75
 export const FALLING_WEIGHT = 2
 export const FLOATING_WEIGHT = 0.2
+export const BLUR_VALUE = '4px'
+export const RED_TEXT_COLOR = "#8B0909"
 
 export const FONT_FAMILY = "Chicle"
 export const DAMAGE_FONT_SIZE = 35
