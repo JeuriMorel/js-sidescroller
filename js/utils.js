@@ -119,8 +119,8 @@ function HSLToHex(h, s, l) {
 }
 
 
-export function setSfxVolume(audioObject){
+export function setSfxVolume(audioObject, volume = SFX_VOLUME){
     for (const sfx in audioObject) {
-        audioObject[sfx].volume = SFX_VOLUME
+        audioObject[sfx].volume = volume
     }
 }

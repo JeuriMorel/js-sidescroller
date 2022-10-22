@@ -94,9 +94,7 @@ class Wave {
     enter() {
         this.icons[this.waveIndex].isCurrentWave = true
         this.resetPlayerAttackSettings()
-
-        // if (this.game.forestTheme.ended && !this.game.mainTheme.currentTime)
-        //     this.game.mainTheme.play()
+        this.game.music.currentTheme.play()
     }
     exit() {
         this.icons[this.waveIndex].isCurrentWave = false
@@ -121,7 +119,6 @@ export class Wave_One extends Wave {
     }
     enter() {
         super.enter()
-        // this.game.forestTheme.play()
     }
 }
 export class Wave_Two extends Wave {
@@ -212,7 +209,7 @@ export class Wave_Eight extends Wave {
             ENEMY_TYPES.BEE,
             ENEMY_TYPES.GHOST,
         ]
-        this.enemiesToDefeat = 40
+        this.enemiesToDefeat = 10 //40
         this.maxEnemies = 4
         this.enemyFrequency = 500
         this.waveIndex = WAVES.EIGHT
@@ -233,13 +230,22 @@ export class Wave_Nine extends Wave {
         this.waveIndex = WAVES.NINE
         this.nextWave = WAVES.BOSS
     }
+
+    exit() {
+        this.game.music.currentTheme.pause()
+        this.game.music.currentTheme = this.game.music.themes.boss
+        this.icons[this.waveIndex].isCurrentWave = false
+        this.icons[this.waveIndex].waveCompleted = true
+        this.game.currentWave = this.game.waves[this.nextWave]
+        this.game.currentWave.enter()
+    }
 }
 export class Wave_Boss extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ARMORED_FROG]
-        this.enemiesToDefeat = 0 // 60
-        this.maxEnemies = 1 // 5
+        this.enemiesToDefeat = 0
+        this.maxEnemies = 1
         this.enemyFrequency = 500
         this.waveIndex = WAVES.BOSS
         this.nextWave = WAVES.WIN
@@ -247,8 +253,7 @@ export class Wave_Boss extends Wave {
     enter() {
         this.resetPlayerAttackSettings()
         this.game.enemies.forEach(enemy => (enemy.healthPoints = 0))
-        this.game.mainTheme.pause()
-        this.game.bossTheme.play()
+        this.game.music.currentTheme.play()
     }
     exit() {
         this.game.currentWave = this.game.waves[this.nextWave]

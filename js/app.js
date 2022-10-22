@@ -4,9 +4,6 @@ import {
     LAYER_HEIGHT,
     LAYER_WIDTH,
     DEFAULT_SCROLL_SPEED,
-    MUSIC_MAIN_THEME,
-    MUSIC_FOREST_PATH,
-    MUSIC_BOSS_FIGHT,
     SOUND_DEFENCE_UP,
     SOUND_DEFENCE_DOWN,
     BLUR_VALUE,
@@ -27,6 +24,7 @@ import {
     Wave_Two,
     Wave_Win,
 } from "./waves.js"
+import MusicHandler from "./music.js"
 
 export let isPaused = false
 export function togglePause() {
@@ -57,23 +55,12 @@ window.addEventListener("load", function () {
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
-            this.mainTheme = new Audio(MUSIC_MAIN_THEME)
-            this.mainTheme.loop = true
-            this.mainTheme.volume = 0.1
-            this.forestTheme = new Audio(MUSIC_FOREST_PATH)
-            this.bossTheme = new Audio(MUSIC_BOSS_FIGHT)
-
+            this.music = new MusicHandler(this)
             this.sfx = {
                 defenceUpSFX: new Audio(SOUND_DEFENCE_UP),
                 defenceDownSFX: new Audio(SOUND_DEFENCE_DOWN),
             }
-            this.bossTheme.volume = 0.1
-            this.bossTheme.loop = true
-            this.forestTheme.addEventListener("loadedmetadata", () => {
-                this.forestThemeFadeOutPoint = this.forestTheme.duration - 5
-            })
-            this.themeTimer = 0
-            this.themeInterval = 200
+
             this.waves = [
                 new Wave_One(this),
                 new Wave_Two(this),
@@ -87,7 +74,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[7] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -95,50 +82,9 @@ window.addEventListener("load", function () {
 
         update(deltaTime, input) {
             this.background.update()
+            this.music.update(deltaTime)
             if (!this.player.isGameOver) {
                 this.player.update(deltaTime, input)
-            }
-            //FADE OUT FOREST PATH THEME
-            if (
-                !this.forestTheme.paused &&
-                this.forestTheme.currentTime >= this.forestThemeFadeOutPoint &&
-                this.forestTheme.volume > 0.2 &&
-                !this.forestTheme.ended
-            ) {
-                if (this.themeTimer > this.themeInterval) {
-                    this.forestTheme.volume -= 0.1
-                    this.themeTimer = 0
-                } else this.themeTimer += deltaTime
-            }
-            //FADE IN MAIN THEME
-            if (
-                !this.mainTheme.paused &&
-                !this.mainTheme.ended &&
-                this.mainTheme.currentTime > 0 &&
-                this.mainTheme.volume < 1
-            ) {
-                if (this.themeTimer > this.themeInterval) {
-                    this.mainTheme.volume = Math.min(
-                        this.mainTheme.volume + 0.01,
-                        1
-                    )
-                    this.themeTimer = 0
-                } else this.themeTimer += deltaTime
-            }
-            //FADE IN BOSS THEME
-            if (
-                !this.bossTheme.paused &&
-                !this.bossTheme.ended &&
-                this.bossTheme.currentTime > 0 &&
-                this.bossTheme.volume < 1
-            ) {
-                if (this.themeTimer > this.themeInterval) {
-                    this.bossTheme.volume = Math.min(
-                        this.bossTheme.volume + 0.01,
-                        1
-                    )
-                    this.themeTimer = 0
-                } else this.themeTimer += deltaTime
             }
 
             if (this.scrollSpeed > DEFAULT_SCROLL_SPEED)

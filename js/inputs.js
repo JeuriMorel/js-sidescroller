@@ -1,4 +1,4 @@
-import { isPaused, togglePause } from "./app.js"
+import { togglePause } from "./app.js"
 
 export default class InputHandler {
     constructor(game) {
@@ -16,6 +16,7 @@ export default class InputHandler {
         window.addEventListener("keydown", e => {
             if (e.key === " ") {
                 togglePause()
+                this.game.music.toggleMusicPlayback()
                 return
             }
             if (this.game.isRecovering) return
