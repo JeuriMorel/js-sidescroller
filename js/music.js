@@ -4,6 +4,7 @@ import {
     MUSIC_FOREST_PATH,
     MUSIC_MAIN_THEME,
 } from "./constants.js"
+import { qs } from "./utils.js"
 
 const themes = {
     MAIN: 0,
@@ -15,9 +16,9 @@ export default class MusicHandler {
     constructor(game) {
         this.game = game
         this.themes = {
-            main: new Audio(MUSIC_MAIN_THEME),
-            forest: new Audio(MUSIC_FOREST_PATH),
-            boss: new Audio(MUSIC_BOSS_FIGHT),
+            main: qs("#main_theme"),
+            forest: qs("#forest_theme"),
+            boss: qs("#boss_theme"),
         }
         this.themeTimer = 0
         this.themeInterval = 200
@@ -27,8 +28,8 @@ export default class MusicHandler {
         this.themes.forest.addEventListener("ended", () => {
             this.currentTheme = this.themes.main
         })
-        this.themes.main.loop = true
-        this.themes.boss.loop = true
+        // this.themes.main.loop = true
+        // this.themes.boss.loop = true
         this.themes.main.volume = 0.1
         this.themes.boss.volume = 0.1
         this.currentTheme = this.themes.forest
