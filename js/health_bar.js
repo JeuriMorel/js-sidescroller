@@ -1,5 +1,6 @@
+import { BLACK_COLOR, DEFAULT_BAR_COLOR } from "./constants.js"
 import { DamageNumbers } from "./damageNumbers.js"
-import { getHealthBarColor } from "./utils.js"
+import { getHealthBarColor, valuesToHSL } from "./utils.js"
 
 export class HealthBar {
     constructor({
@@ -8,8 +9,8 @@ export class HealthBar {
         width,
         height,
         maxhealth,
-        borderColor = "black",
-        defaultbarColor = "#abff2e",
+        borderColor = BLACK_COLOR, //	hsl(0, 0%, 0%)
+        defaultbarColor = DEFAULT_BAR_COLOR,
         showDamage = true,
     }) {
         this.barOffset = 2
@@ -65,8 +66,8 @@ export class HealthBar {
     }
 
     draw(context) {
-        context.strokeStyle = this.borderColor
-        context.fillStyle = this.fillColor
+        context.strokeStyle = valuesToHSL(this.borderColor)
+        context.fillStyle = valuesToHSL(this.fillColor) 
         context.lineWidth = 2
 
         // const border = new Path2D()

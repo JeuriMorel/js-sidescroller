@@ -38,8 +38,37 @@ export const MUSIC_BOSS_FIGHT = "./audio/GameMusic_ForestTheme_24.mp3"
 export const DEFAULT_WEIGHT = 0.75
 export const FALLING_WEIGHT = 2
 export const FLOATING_WEIGHT = 0.2
-export const BLUR_VALUE = '4px'
-export const RED_TEXT_COLOR = "#8B0909"
+export const BLUR_VALUE = "4px"
+export const RED_TEXT_COLOR = {
+    hue: 0,
+    saturation: 88,
+    lightness: 29,
+} //	hsl(0, 88%, 29%) "#8B0909"
+export const BLACK_COLOR = {
+    hue: 0,
+    saturation: 0,
+    lightness: 0,
+}
+export const LIGHT_GRAY_COLOR = {
+    hue: 0,
+    saturation: 0,
+    lightness: 93,
+}
+export const DEFAULT_BAR_COLOR = {
+    hue: 84,
+    saturation: 100,
+    lightness: 59,
+}
+export const DEFAULT_BOSS_BAR_COLOR = {
+    hue: 50,
+    saturation: 82,
+    lightness: 73,
+}
+export const DEFAULT_BOSS_BORDER_COLOR = {
+    hue: 50,
+    saturation: 55,
+    lightness: 81,
+}
 
 export const FONT_FAMILY = "Chicle"
 export const DAMAGE_FONT_SIZE = 35

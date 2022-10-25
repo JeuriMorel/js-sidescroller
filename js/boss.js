@@ -12,6 +12,8 @@ import {
 import {
     BOSS_DAMAGED,
     BOSS_GROWL,
+    DEFAULT_BOSS_BAR_COLOR,
+    DEFAULT_BOSS_BORDER_COLOR,
     DEFENCE_DEBUFF,
     SOUND_BOSS_JUMP,
     SOUND_BOSS_RETREAT,
@@ -155,8 +157,8 @@ export class Armored_Frog {
             width: this.game.width - this.healthBarPadding * 2,
             height: 20,
             maxhealth: this.healthPoints,
-            defaultbarColor: "#e95e27",
-            borderColor: "#e9e0b3",
+            defaultbarColor: DEFAULT_BOSS_BAR_COLOR,
+            borderColor: DEFAULT_BOSS_BORDER_COLOR,
         })
     }
 

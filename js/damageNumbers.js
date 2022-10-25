@@ -1,4 +1,5 @@
-import { FONT_FAMILY, DAMAGE_FONT_SIZE } from "./constants.js"
+import { FONT_FAMILY, DAMAGE_FONT_SIZE, BLACK_COLOR } from "./constants.js"
+import { valuesToHSL } from "./utils.js"
 
 export class DamageNumbers{
     constructor({value, x, y}) {
@@ -24,12 +25,11 @@ export class DamageNumbers{
     }
     draw({context, color}) {
         context.font = `${DAMAGE_FONT_SIZE}px ${FONT_FAMILY}`
-        context.strokeStyle = "black"
+        context.strokeStyle = valuesToHSL(BLACK_COLOR) //	hsl(0, 0%, 0%)
         context.lineWidth = 8
         context.strokeText(this.value, this.x, this.y)
-        context.fillStyle = color
+        context.fillStyle = valuesToHSL(color)
         context.fillText(this.value, this.x, this.y)
-        
     }
 
 }

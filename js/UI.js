@@ -2,11 +2,13 @@ import { isPaused } from "./app.js"
 import {
     FLOATING_DEFAULT_FONT_SIZE,
     FONT_FAMILY,
+    LIGHT_GRAY_COLOR,
     MAX_LIVES,
     PROGRESS_ICON_X,
     RED_TEXT_COLOR,
 } from "./constants.js"
 import { Heart } from "./icon.js"
+import { valuesToHSL } from "./utils.js"
 
 export class UI {
     constructor(game) {
@@ -38,10 +40,10 @@ export class UI {
         let denominator = this.game.currentWave.enemiesToDefeat
         if (denominator) {
             context.font = `30px ${FONT_FAMILY}`
-            context.strokeStyle = RED_TEXT_COLOR
+            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
             context.lineWidth = 7
             context.textAlign = "left"
-            context.fillStyle = "#eeeeee"
+            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR) // 	hsl(0, 0%, 93%) "#eeeeee"
             context.strokeText(`${numerator} / ${denominator}`, 20, 80)
             context.fillText(`${numerator} / ${denominator}`, 20, 80)
         }
@@ -58,15 +60,23 @@ export class UI {
         })
 
         if (isPaused) {
-            context.filter = 'none'
+            context.filter = "none"
             context.font = `100px ${FONT_FAMILY}`
-            context.strokeStyle = RED_TEXT_COLOR
+            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
             context.lineWidth = 7
             context.textAlign = "center"
             context.textBaseline = "middle"
-            context.fillStyle = "#eeeeee"
-            context.strokeText("PAUSED", this.game.width * 0.5, this.game.height * 0.5)
-            context.fillText("PAUSED", this.game.width * 0.5, this.game.height * 0.5)
+            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR) // 0, 0%, 93%
+            context.strokeText(
+                "PAUSED",
+                this.game.width * 0.5,
+                this.game.height * 0.5
+            )
+            context.fillText(
+                "PAUSED",
+                this.game.width * 0.5,
+                this.game.height * 0.5
+            )
         }
     }
 }
