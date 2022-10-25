@@ -28,6 +28,17 @@ export default class MusicHandler {
         this.themes.forest.addEventListener("ended", () => {
             this.currentTheme = this.themes.main
         })
+        this.themes.main.addEventListener("timeupdate", () => {
+            const loopTimeStamp = 42
+            const buffer = 0.3
+            if (
+                this.themes.main.currentTime >
+                this.themes.main.duration - buffer
+            ) {
+                this.themes.main.currentTime = loopTimeStamp
+                this.themes.main.play()
+            }
+        })
         // this.themes.main.loop = true
         // this.themes.boss.loop = true
         this.themes.main.volume = 0.1
