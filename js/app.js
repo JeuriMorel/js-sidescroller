@@ -1,4 +1,4 @@
-import { qs, qsa, setSfxVolume } from "./utils.js"
+import { qs, setSfxVolume } from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -34,61 +34,9 @@ export function togglePause() {
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
-    const modalOpen = qs("[data-btn='modal-open']")
-    const modalSave = qs("[data-btn='modal-save']")
-    const modalCancel = qs("[data-btn='modal-cancel']")
-    const controlsForm = qs("[data-form='controls']")
-    const modal = qs("[data-modal]")
-    const controlsInputs = qsa("input", controlsForm)
     const ctx = canvas.getContext("2d")
     canvas.width = LAYER_WIDTH * 0.5
     canvas.height = LAYER_HEIGHT
-
-    modalOpen.addEventListener("click", () => {
-        modal.showModal()
-        populateForm()
-        if (!isPaused) togglePause()
-    })
-    controlsInputs.forEach(input => {
-        input.addEventListener("keydown", e => {
-            e.preventDefault()
-            let newValue = e.key === " " ? e.code : e.key
-            if (controlsInputs.map(input => input.value).includes(newValue))
-                return
-            input.value = newValue
-        })
-    })
-
-    controlsForm.addEventListener("submit", ({ target }) => {
-        const [left, right, up, down, jump, action, pause] = target
-
-        const keys = {
-            left: left.value,
-            right: right.value,
-            up: up.value,
-            down: down.value,
-            jump: jump.value,
-            action: action.value,
-            pause: pause.value,
-        }
-
-        game.input.keys = keys
-    })
-
-    function populateForm() {
-        controlsInputs.forEach(input => {
-            input.setAttribute("value", game.input.keys[input.id])
-        })
-    }
-
-    modalCancel.addEventListener("click", () => {
-        controlsForm.reset()
-        modal.close()
-        canvas.focus()
-    })
-    // modalSave.addEventListener("click", () => {
-    //     modal.close()
-    // })
 
     class Game {
         constructor(width, height) {

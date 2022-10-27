@@ -1,7 +1,11 @@
-import { togglePause } from "./app.js"
-import { qs } from "./utils.js"
+import { togglePause, isPaused } from "./app.js"
+import { qs, qsa } from "./utils.js"
 
-const modal = qs("[data-modal]")
+
+
+    // modalSave.addEventListener("click", () => {
+    //     modal.close()
+    // })
 
 export default class InputHandler {
     constructor(game) {
@@ -23,12 +27,56 @@ export default class InputHandler {
             down: "ArrowDown",
             jump: "d",
             action: "f",
-            pause: "Space"
+            pause: "Space",
         }
 
+        this.modal = qs("[data-modal='controls']")
+        this.modalOpen = qs("[data-btn='controls-modal-open']")
+        this.modalSave = qs("[data-btn='controls-modal-save']")
+        this.modalCancel = qs("[data-btn='controls-modal-cancel']")
+        this.controlsForm = qs("[data-form='controls']")
+        this.controlsInputs = qsa("input", this.controlsForm)
+
+        this.modalOpen.addEventListener("click", () => {
+            this.modal.showModal()
+            this.populateForm()
+            if (!isPaused) togglePause()
+        })
+
+        this.controlsInputs.forEach(input => {
+            input.addEventListener("keydown", e => {
+                e.preventDefault()
+                let newValue = e.key === " " ? e.code : e.key
+                if (this.controlsInputs.map(input => input.value).includes(newValue))
+                    return
+                input.value = newValue
+            })
+        })
+
+        this.controlsForm.addEventListener("submit", ({ target }) => {
+            const [left, right, up, down, jump, action, pause] = target
+
+            const updatedKeys = {
+                left: left.value,
+                right: right.value,
+                up: up.value,
+                down: down.value,
+                jump: jump.value,
+                action: action.value,
+                pause: pause.value,
+            }
+
+            this.keys = updatedKeys
+        })
+
+        this.modalCancel.addEventListener("click", () => {
+            this.controlsForm.reset()
+            this.modal.close()
+        })
+
         window.addEventListener("keydown", ({ code, key }) => {
-            const buttonPress = key === " " ? code : key 
-            if(modal.open) return
+            const buttonPress = key === " " ? code : key
+            if (this.modal.open) return
             if (buttonPress === this.keys.pause) {
                 togglePause()
                 this.game.music.toggleMusicPlayback()
@@ -64,7 +112,7 @@ export default class InputHandler {
         })
         window.addEventListener("keyup", ({ code, key }) => {
             const buttonRelease = key === " " ? code : key
-            if (modal.open) return
+            if (this.modal.open) return
             if (this.game.isRecovering) return
             switch (buttonRelease) {
                 case this.keys.left:
@@ -94,6 +142,11 @@ export default class InputHandler {
                     this.keysPressed.jump = false
                     break
             }
+        })
+    }
+    populateForm() {
+        this.controlsInputs.forEach(input => {
+            input.setAttribute("value", this.keys[input.id])
         })
     }
 }
