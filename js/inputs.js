@@ -1,4 +1,7 @@
 import { togglePause } from "./app.js"
+import { qs } from "./utils.js"
+
+const modal = qs("[data-modal]")
 
 export default class InputHandler {
     constructor(game) {
@@ -9,73 +12,84 @@ export default class InputHandler {
             down: false,
             left: false,
             up: false,
-            attack: false,
+            action: false,
             jump: false,
         }
 
-        window.addEventListener("keydown", e => {
-            if (e.key === " ") {
+        this.keys = {
+            left: "ArrowLeft",
+            right: "ArrowRight",
+            up: "ArrowUp",
+            down: "ArrowDown",
+            jump: "d",
+            action: "f",
+            pause: "Space"
+        }
+
+        window.addEventListener("keydown", ({ code, key }) => {
+            const buttonPress = key === " " ? code : key 
+            if(modal.open) return
+            if (buttonPress === this.keys.pause) {
                 togglePause()
                 this.game.music.toggleMusicPlayback()
                 return
             }
             if (this.game.isRecovering) return
-            switch (e.key) {
-                case "ArrowLeft":
+            switch (buttonPress) {
+                case this.keys.left:
                     this.lastKey = "PRESS Left"
                     this.keysPressed.left = true
                     break
-                case "ArrowUp":
+                case this.keys.up:
                     this.lastKey = "PRESS Up"
                     this.keysPressed.up = true
                     break
-                case "ArrowRight":
+                case this.keys.right:
                     this.lastKey = "PRESS Right"
                     this.keysPressed.right = true
                     break
-                case "ArrowDown":
+                case this.keys.down:
                     this.lastKey = "PRESS Down"
                     this.keysPressed.down = true
                     break
-                case "d":
+                case this.keys.action:
                     this.lastKey = "PRESS Attack"
-                    this.keysPressed.attack = true
+                    this.keysPressed.action = true
                     break
-                case "f":
+                case this.keys.jump:
                     this.lastKey = "PRESS Jump"
                     this.keysPressed.jump = true
                     break
             }
         })
-        window.addEventListener("keyup", e => {
+        window.addEventListener("keyup", ({ code, key }) => {
+            const buttonRelease = key === " " ? code : key
+            if (modal.open) return
             if (this.game.isRecovering) return
-            switch (e.key) {
-                case "ArrowLeft":
+            switch (buttonRelease) {
+                case this.keys.left:
                     this.lastKey = "RELEASE Left"
                     this.keysPressed.left = false
                     break
-                case "ArrowUp":
+                case this.keys.up:
                     this.lastKey = "RELEASE Up"
                     this.keysPressed.up = false
 
                     break
-                case "ArrowRight":
+                case this.keys.right:
                     this.lastKey = "RELEASE Right"
                     this.keysPressed.right = false
 
                     break
-                case "ArrowDown":
+                case this.keys.down:
                     this.lastKey = "RELEASE Down"
-                    this.lastTimeKeyPressed = Date.now()
                     this.keysPressed.down = false
-
                     break
-                case "d":
+                case this.keys.action:
                     this.lastKey = "RELEASE Attack"
-                    this.keysPressed.attack = false
-
+                    this.keysPressed.action = false
                     break
-                case "f":
+                case this.keys.jump:
                     this.lastKey = "RELEASE Jump"
                     this.keysPressed.jump = false
                     break

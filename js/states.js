@@ -201,7 +201,7 @@ export class Attacking_Dash extends State {
         this.player.hurtbox.body.height = this.player.height - 40
     }
     handleInput({ lastKey, keysPressed }) {
-        if (this.player.frame === 8 && keysPressed.attack) {
+        if (this.player.frame === 8 && keysPressed.action) {
             this.player.frame = 7
             if (this.player.dash_bonus < this.player.max_attack_bonus) {
                 this.player.dash_bonus++
@@ -496,9 +496,10 @@ export class Sleeping extends State {
         this.tauntTimer = 0
         this.zInterval = 400
         this.zTimer = 0
+        
     }
     handleInput({ keysPressed }, deltaTime) {
-        if (!keysPressed.attack) this.player.setState(states.RESTING)
+        if (!keysPressed.action) this.player.setState(states.RESTING)
         if (!keysPressed.down) this.player.setState(states.IDLE)
 
         if (this.zTimer > this.zInterval) {

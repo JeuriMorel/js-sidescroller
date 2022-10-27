@@ -15,10 +15,45 @@
         <script src="/js/app.js" type="module"></script>
     </head>
     <body>
+        <button class="modal-open" data-btn="modal-open">Controls</button>
+        <dialog class="modal" data-modal>
+            <form class="controls-form" method="dialog" data-form="controls">
+                <label for="left">Left</label>
+                <input type="text" id="left" />
+                <label for="right">right</label>
+                <input type="text" id="right" />
+                <label for="up">up</label>
+                <input type="text" id="up" />
+                <label for="down">down</label>
+                <input type="text" id="down" />
+                <label for="jump">jump</label>
+                <input type="text" id="jump" />
+                <label for="action">action</label>
+                <input type="text" id="action" />
+                <label for="pause">pause</label>
+                <input type="text" id="pause" />
+                <button class="modal-close" data-btn="modal-cancel" type="button">cancel</button>
+                <button class="modal-close" data-btn="modal-save" type="submit">Save Changes</button>
+            </form>
+        </dialog>
         <canvas id="canvas1"></canvas>
-        <audio src="./audio/forest_path.ogg" id="forest_theme" preload="auto"></audio>
-        <audio src="./audio/GameMusic_ForestTheme_24.mp3" id="boss_theme" loop="true" preload="auto"></audio>
-        <audio src="./audio/main_theme.ogg" id="main_theme" loop="true" preload="auto"></audio>
+        <audio
+            src="./audio/forest_path.ogg"
+            id="forest_theme"
+            preload="auto"
+        ></audio>
+        <audio
+            src="./audio/GameMusic_ForestTheme_24.mp3"
+            id="boss_theme"
+            loop="true"
+            preload="auto"
+        ></audio>
+        <audio
+            src="./audio/main_theme.ogg"
+            id="main_theme"
+            loop="true"
+            preload="auto"
+        ></audio>
         <img
             src="./images/kabuki_sprite_sheet.png"
             alt=""
@@ -181,7 +216,7 @@
             class="[ icon ] [ hidden ]"
             id="heart"
         />
-        
+
         <img
             src="./images/Armored Frog/walking-sheet.png"
             alt=""

@@ -22,11 +22,13 @@ export default class MusicHandler {
         }
         this.themeTimer = 0
         this.themeInterval = 200
-        this.themes.forest.addEventListener("loadedmetadata", () => {
-            this.forestThemeFadeOutPoint = this.themes.forest.duration - 5
-        })
+        this.forestThemeFadeOutPoint = this.themes.forest.duration - 5
+        // this.themes.forest.addEventListener("loadedmetadata", () => {
+        //     console.log(this.forestThemeFadeOutPoint)
+        // })
         this.themes.forest.addEventListener("ended", () => {
             this.currentTheme = this.themes.main
+            // this.currentTheme.play()
         })
         this.themes.main.addEventListener("timeupdate", () => {
             const loopTimeStamp = 42
@@ -39,8 +41,6 @@ export default class MusicHandler {
                 this.themes.main.play()
             }
         })
-        // this.themes.main.loop = true
-        // this.themes.boss.loop = true
         this.themes.main.volume = 0.1
         this.themes.boss.volume = 0.1
         this.currentTheme = this.themes.forest
@@ -62,6 +62,7 @@ export default class MusicHandler {
             if (this.themeTimer > this.themeInterval) {
                 this.themes.forest.volume -= 0.1
                 this.themeTimer = 0
+                console.log(this.themes.forest.volume)
             } else this.themeTimer += deltaTime
         }
         //FADE IN THEME
