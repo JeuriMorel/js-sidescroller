@@ -27,7 +27,7 @@ export default class InputHandler {
             down: "ArrowDown",
             jump: "d",
             action: "f",
-            pause: "Space",
+            pause: "Enter",
         }
 
         this.modal = qs("[data-modal='controls']")
@@ -36,6 +36,7 @@ export default class InputHandler {
         this.modalCancel = qs("[data-btn='controls-modal-cancel']")
         this.controlsForm = qs("[data-form='controls']")
         this.controlsInputs = qsa("input", this.controlsForm)
+        this.modalOpen.disabled = false
 
         this.modalOpen.addEventListener("click", () => {
             this.modal.showModal()
@@ -67,11 +68,13 @@ export default class InputHandler {
             }
 
             this.keys = updatedKeys
+            document.activeElement.blur()
         })
 
         this.modalCancel.addEventListener("click", () => {
             this.controlsForm.reset()
             this.modal.close()
+            document.activeElement.blur()
         })
 
         window.addEventListener("keydown", ({ code, key }) => {

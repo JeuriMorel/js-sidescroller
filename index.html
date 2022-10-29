@@ -15,7 +15,28 @@
         <script src="/js/app.js" type="module"></script>
     </head>
     <body>
-        <button class="modal-open" data-btn="controls-modal-open">Controls</button>
+        <h1 class="[ h1 ]">Kabuki</h1>
+        <menu class="[ menu ][][]">
+            <li>
+                <button
+                    type="button"
+                    class="[ ] [ ] [ btn ] modal-open"
+                    data-btn="controls-modal-open"
+                    disabled
+                >
+                    edit Controls
+                </button>
+            </li>
+            <li>
+                <button
+                    type="button"
+                    class="[ ] [ ] [ btn ] new-game"
+                    data-btn="new-game"
+                >
+                    New Game
+                </button>
+            </li>
+        </menu>
         <dialog class="modal" data-modal="controls">
             <form class="controls-form" method="dialog" data-form="controls">
                 <label for="left">Left</label>
@@ -32,26 +53,46 @@
                 <input type="text" id="action" />
                 <label for="pause">pause</label>
                 <input type="text" id="pause" />
-                <button class="modal-close" data-btn="controls-modal-cancel" type="button">cancel</button>
-                <button class="modal-close" data-btn="controls-modal-save" type="submit">Save Changes</button>
+                <button
+                    class="[ ] [ ] [ btn ] modal-close"
+                    data-btn="controls-modal-cancel"
+                    data-size="md"
+                    type="button"
+                >
+                    cancel
+                </button>
+                <button
+                    class="[ ] [ ] [ btn ] modal-close"
+                    data-btn="controls-modal-save"
+                    type="submit"
+                    data-size="md"
+                >
+                    Save Changes
+                </button>
             </form>
         </dialog>
-        <canvas id="canvas1"></canvas>
+        <canvas class="[ ] [ ] [ canvas ]" id="canvas1"></canvas>
         <audio
             src="./audio/forest_path.ogg"
             id="forest_theme"
             preload="auto"
         ></audio>
         <audio
+            src="./audio/creepy_theme.wav"
+            id="creepy_theme"
+            preload="auto"
+            loop
+        ></audio>
+        <audio
             src="./audio/GameMusic_ForestTheme_24.mp3"
             id="boss_theme"
-            loop="true"
+            loop
             preload="auto"
         ></audio>
         <audio
             src="./audio/main_theme.ogg"
             id="main_theme"
-            loop="true"
+            loop
             preload="auto"
         ></audio>
         <img

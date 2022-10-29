@@ -35,6 +35,7 @@ export function togglePause() {
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
     const ctx = canvas.getContext("2d")
+    const newGameBtn = qs('[data-btn="new-game"]')
     canvas.width = LAYER_WIDTH * 0.5
     canvas.height = LAYER_HEIGHT
 
@@ -145,10 +146,17 @@ window.addEventListener("load", function () {
             })
             this.enemyTimer += sticky
         }
+
+        endGame() {
+            this.music.currentTheme.pause()
+            this.music.currentTheme.currentTime = 0
+            isPaused = false
+        }
     }
 
-    const game = new Game(canvas.width, canvas.height)
-    let lastTime = 0
+    let game
+    let lastTime
+    let gameRequestId
 
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
@@ -158,8 +166,15 @@ window.addEventListener("load", function () {
         game.update(deltaTime, game.input)
         game.draw(ctx)
         if (isPaused) return
-        requestAnimationFrame(animate)
+        gameRequestId = requestAnimationFrame(animate)
     }
 
-    animate(0)
+    newGameBtn.addEventListener("click", () => {
+        if(game) game.endGame()
+        cancelAnimationFrame(gameRequestId)
+        lastTime = 0
+        game = new Game(canvas.width, canvas.height)
+        document.activeElement.blur()
+        animate(0)
+    })
 })

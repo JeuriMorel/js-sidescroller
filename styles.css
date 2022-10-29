@@ -10,29 +10,66 @@
     font: inherit;
 }
 
+:root {
+    --clr-neutral-100: hsl(0, 0%, 0%);
+    --clr-neutral-200: hsl(0, 0%, 19%);
+    --clr-neutral-300: hsl(0, 0%, 27%);
+    --clr-neutral-400: hsl(0, 0%, 40%);
+    --clr-neutral-500: hsl(0, 0%, 53%);
+    --clr-neutral-600: hsl(0, 0%, 63%);
+    --clr-neutral-700: hsl(0, 0%, 75%);
+    --clr-neutral-800: hsl(0, 0%, 82%);
+    --clr-neutral-900: hsl(0, 0%, 93%);
+}
+
 body {
     font-family: "Chicle", cursive;
     padding: 2rem;
+    text-transform: capitalize;
+    min-height: 100vh;
+    position: relative;
 }
 
-canvas {
+.h1 {
+    width: max-content;
+    height: max-content;
+    position: absolute;
+    font-size: min(5em, 15vw);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    rotate: -5deg;
+    text-shadow: -2px 3px hsl(0, 88%, 29%);
+}
+.h1::before {
+    content: "Super";
+    position: relative;
+    top: -0.5em;
+}
+.h1::after {
+    content: "Cat";
+    position: relative;
+    bottom: -0.5em;
+}
+
+.canvas {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* max-height: 100%;
-    max-width: 100%; */
-    border: 5px solid black;
+    max-height: 100%;
+    max-width: 100%;
+    /* border: 5px solid var(--clr-neutral-100); */
+    /* box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.3); */
     /* height: 100%;
     aspect-ratio: 833 / 500; */
 }
 
 :modal {
     font-size: 2rem;
-    text-transform: capitalize;
     position: absolute;
     margin: auto;
-    border: 1px solid black;
+    border: 1px solid var(--clr-neutral-100);
     border-radius: 5px;
 }
 
@@ -42,6 +79,7 @@ canvas {
 .controls-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr; */
     gap: 1rem;
     padding: 1rem;
 }
@@ -49,30 +87,56 @@ canvas {
     padding-left: 0.5em;
 }
 
-button {
+.menu {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.btn {
     font: inherit;
-    font-size: 2em;
+    font-size: min(2em, 5vw);
     padding: 0.5em 1em;
     text-transform: inherit;
     cursor: pointer;
-    color: #eeeeee;
+    color: var(--clr-neutral-900);
     position: relative;
     user-select: none;
     letter-spacing: 1px;
     border-radius: 12px;
-    border: 3px outset #888;
+    border: 3px outset var(--clr-neutral-500);
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.4);
-    background: linear-gradient(160deg, #666, #444);
+    background: linear-gradient(
+        160deg,
+        var(--clr-neutral-400),
+        var(--clr-neutral-300)
+    );
     text-shadow: 0px 0px 4px rgba(0, 0, 0, 1);
 }
 
-button:active {
+.btn[data-size="md"] {
+    font-size: min(1.5em, 5vw);
+}
+
+.btn:disabled {
+    background: linear-gradient(
+        160deg,
+        var(--clr-neutral-800),
+        var(--clr-neutral-600)
+    );
+    border: 1px solid var(--clr-neutral-500);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn:where(:not(:disabled)):active {
     top: 2px;
     box-shadow: 0 0 2px rgb(0, 0, 0, 0.8);
 }
 
-.bg-layer,
-.player,
+/* .bg-layer,
+.player, */
 .hidden {
     display: none;
 }
