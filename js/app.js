@@ -151,15 +151,18 @@ window.addEventListener("load", function () {
             this.music.currentTheme.pause()
             this.music.currentTheme.currentTime = 0
             isPaused = false
+            cancelAnimationFrame(gameRequestId)
         }
     }
 
     let game
-    let lastTime
+    let lastTime = 0
     let gameRequestId
 
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
+        if (deltaTime === 0)
+            console.log(`something went wrong: \n ${timestamp} \n ${lastTime}`)
         lastTime = timestamp
         game.deltaTime = deltaTime
         ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -170,9 +173,7 @@ window.addEventListener("load", function () {
     }
 
     newGameBtn.addEventListener("click", () => {
-        if(game) game.endGame()
-        cancelAnimationFrame(gameRequestId)
-        lastTime = 0
+        if (game) game.endGame()
         game = new Game(canvas.width, canvas.height)
         document.activeElement.blur()
         animate(0)

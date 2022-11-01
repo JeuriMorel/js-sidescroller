@@ -135,6 +135,12 @@ body {
     box-shadow: 0 0 2px rgb(0, 0, 0, 0.8);
 }
 
+.btn:hover,
+.btn:focus-visible {
+    outline-offset: 5px;
+    outline: 3px solid black;
+}
+
 /* .bg-layer,
 .player, */
 .hidden {
