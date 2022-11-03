@@ -7,27 +7,39 @@ export default class MusicHandler {
         this.themes = {
             main: qs("#main_theme"),
             forest: qs("#forest_theme"),
-            creepy: qs("#creepy_theme"), 
+            creepy: qs("#creepy_theme"),
             boss: qs("#boss_theme"),
         }
         this.themeTimer = 0
         this.themeInterval = 200
         this.forestThemeFadeOutPoint = this.themes.forest.duration - 5
+        this.themes.forest.dataset.fadeOut = this.themes.forest.duration - 5
+        this.mainThemeFadeOutPoint = this.themes.main.duration - 5
+        this.themes.main.dataset.fadeOut = this.themes.main.duration - 5
         this.themes.forest.addEventListener("ended", () => {
+            this.currentTheme = this.themes.main
+            this.currentTheme.play()
+        })
+        this.themes.main.addEventListener("ended", () => {
             this.currentTheme = this.themes.creepy
             this.currentTheme.play()
         })
-        // this.themes.main.addEventListener("timeupdate", () => {
-        //     const loopTimeStamp = 42
-        //     const buffer = 0.3
-        //     if (
-        //         this.themes.main.currentTime >
-        //         this.themes.main.duration - buffer
-        //     ) {
-        //         this.themes.main.currentTime = loopTimeStamp
-        //         this.themes.main.play()
-        //     }
-        // })
+        this.timeUpdateController = new AbortController()
+        this.themes.main.addEventListener(
+            "timeupdate",
+            () => {
+                const loopTimeStamp = 42
+                const buffer = 0.3
+                if (
+                    this.themes.main.currentTime >
+                    this.themes.main.duration - buffer
+                ) {
+                    this.themes.main.currentTime = loopTimeStamp
+                    this.themes.main.play()
+                }
+            },
+            { signal: this.timeUpdateController.signal }
+        )
         this.themes.main.volume = 0.1
         this.themes.boss.volume = 0.1
         this.themes.creepy.volume = 0.1
@@ -39,12 +51,26 @@ export default class MusicHandler {
         if (isPaused) this.currentTheme.pause()
         else this.currentTheme.play()
     }
+    fadeOutTheme(theme) {
+        if (
+            !theme.paused &&
+            theme.volume > 0.2 &&
+            theme.currentTime >= theme.dataset.fadeOut &&
+            !theme.ended
+        ) {
+            if (this.themeTimer > this.themeInterval) {
+                theme.volume -= 0.1
+                this.themeTimer = 0
+            } else this.themeTimer += deltaTime
+        }
+    }
 
     update(deltaTime) {
         //FADE OUT FOREST PATH THEME
         if (
             !this.themes.forest.paused &&
-            this.themes.forest.currentTime >= this.forestThemeFadeOutPoint &&
+            this.themes.forest.currentTime >=
+                this.themes.forest.dataset.fadeOut &&
             this.themes.forest.volume > 0.2 &&
             !this.themes.forest.ended
         ) {

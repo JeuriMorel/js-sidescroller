@@ -163,8 +163,6 @@ window.addEventListener("load", function () {
 
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
-        // if (timestamp == lastTime)
-        //     console.log(`something went wrong: \n ${lastTime}`)
         lastTime = timestamp
         game.deltaTime = deltaTime
         ctx.clearRect(0, 0, canvas.width, canvas.height)

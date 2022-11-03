@@ -79,8 +79,7 @@ export default class InputHandler {
             document.activeElement.blur()
         })
 
-        this.keydownController = new AbortController()
-        this.keyupController = new AbortController()
+        this.keypressController = new AbortController()
 
         window.addEventListener(
             "keydown",
@@ -91,6 +90,9 @@ export default class InputHandler {
                     togglePause()
                     this.game.music.toggleMusicPlayback()
                     return
+                }
+                if (buttonPress === 'y') {
+                    console.log(this.game.music.currentTheme)
                 }
                 if (this.game.isRecovering || isPaused) return
                 switch (buttonPress) {
@@ -120,7 +122,7 @@ export default class InputHandler {
                         break
                 }
             },
-            { signal: this.keydownController.signal }
+            { signal: this.keypressController.signal }
         )
 
         window.addEventListener(
@@ -158,12 +160,11 @@ export default class InputHandler {
                         break
                 }
             },
-            { signal: this.keyupController.signal }
+            { signal: this.keypressController.signal }
         )
     }
     removeEventListeners() {
-        this.keydownController.abort()
-        this.keyupController.abort()
+        this.keypressController.abort()
     }
     populateForm() {
         this.controlsInputs.forEach(input => {
