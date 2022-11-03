@@ -151,6 +151,8 @@ window.addEventListener("load", function () {
             this.music.currentTheme.pause()
             this.music.currentTheme.currentTime = 0
             isPaused = false
+            lastTime = 0
+            this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
         }
     }
@@ -161,15 +163,15 @@ window.addEventListener("load", function () {
 
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
-        if (deltaTime === 0)
-            console.log(`something went wrong: \n ${timestamp} \n ${lastTime}`)
+        // if (timestamp == lastTime)
+        //     console.log(`something went wrong: \n ${lastTime}`)
         lastTime = timestamp
         game.deltaTime = deltaTime
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         game.update(deltaTime, game.input)
         game.draw(ctx)
-        if (isPaused) return
-        gameRequestId = requestAnimationFrame(animate)
+        if (isPaused) cancelAnimationFrame(gameRequestId)
+        else gameRequestId = requestAnimationFrame(animate)
     }
 
     newGameBtn.addEventListener("click", () => {
@@ -179,3 +181,4 @@ window.addEventListener("load", function () {
         animate(0)
     })
 })
+
