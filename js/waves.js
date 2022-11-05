@@ -117,9 +117,7 @@ export class Wave_One extends Wave {
         this.waveIndex = WAVES.ONE
         this.nextWave = WAVES.TWO
     }
-    enter() {
-        super.enter()
-    }
+    
 }
 export class Wave_Two extends Wave {
     constructor(game) {
@@ -178,6 +176,10 @@ export class Wave_Five extends Wave {
         let enemyRetrievalFunction = ENEMIES_FETCH_ARRAY[ENEMY_TYPES.PUMPKIN]
         this.game.enemies.push(enemyRetrievalFunction(this.game))
     }
+    enter() {
+        super.enter()
+        this.game.music.currentTheme.loop = false
+    }
 }
 export class Wave_Six extends Wave {
     constructor(game) {
@@ -215,6 +217,7 @@ export class Wave_Eight extends Wave {
         this.waveIndex = WAVES.EIGHT
         this.nextWave = WAVES.NINE
     }
+    
 }
 export class Wave_Nine extends Wave {
     constructor(game) {

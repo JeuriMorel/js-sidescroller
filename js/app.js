@@ -162,10 +162,9 @@ window.addEventListener("load", function () {
     let gameRequestId
 
     const GameButtonText = {
-        NEW: 'New Game',
-        QUIT: 'Quit Game'
+        NEW: "New Game",
+        QUIT: "Quit Game",
     }
-
 
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
@@ -182,7 +181,7 @@ window.addEventListener("load", function () {
         game ? confirmGameEnd() : startNewGame()
     })
 
-    function confirmGameEnd() { 
+    function confirmGameEnd() {
         isPaused = true
         if (confirm("are you sure you want to quit.")) quitGame()
     }
@@ -200,4 +199,3 @@ window.addEventListener("load", function () {
         animate(0)
     }
 })
-
