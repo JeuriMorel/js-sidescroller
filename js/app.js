@@ -161,6 +161,12 @@ window.addEventListener("load", function () {
     let lastTime = 0
     let gameRequestId
 
+    const GameButtonText = {
+        NEW: 'New Game',
+        QUIT: 'Quit Game'
+    }
+
+
     this.animate = function animate(timestamp) {
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
@@ -173,10 +179,25 @@ window.addEventListener("load", function () {
     }
 
     newGameBtn.addEventListener("click", () => {
-        if (game) game.endGame()
+        game ? confirmGameEnd() : startNewGame()
+    })
+
+    function confirmGameEnd() { 
+        isPaused = true
+        if (confirm("are you sure you want to quit.")) quitGame()
+    }
+
+    function quitGame() {
+        game.endGame()
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        newGameBtn.textContent = GameButtonText.NEW
+    }
+
+    function startNewGame() {
         game = new Game(canvas.width, canvas.height)
+        newGameBtn.textContent = GameButtonText.QUIT
         document.activeElement.blur()
         animate(0)
-    })
+    }
 })
 
