@@ -129,7 +129,7 @@ export default class InputHandler {
             "keyup",
             ({ code, key }) => {
                 const buttonRelease = key === " " ? code : key
-                if (this.modal.open || this.game.isRecovering || isPaused)
+                if (this.modal.open || isPaused)
                     return
                 switch (buttonRelease) {
                     case this.keys.left:

@@ -41,6 +41,7 @@ window.addEventListener("load", function () {
 
     class Game {
         constructor(width, height) {
+            this.isOn = true
             this.width = width
             this.height = height
             this.groundMargin = 60
@@ -75,7 +76,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[5] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -151,6 +152,7 @@ window.addEventListener("load", function () {
             this.music.currentTheme.pause()
             this.music.currentTheme.currentTime = 0
             isPaused = false
+            this.isOn = false
             lastTime = 0
             this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
@@ -178,7 +180,7 @@ window.addEventListener("load", function () {
     }
 
     newGameBtn.addEventListener("click", () => {
-        game ? confirmGameEnd() : startNewGame()
+        game?.isOn ? confirmGameEnd() : startNewGame()
     })
 
     function confirmGameEnd() {
@@ -198,4 +200,10 @@ window.addEventListener("load", function () {
         document.activeElement.blur()
         animate(0)
     }
+
+    // window.addEventListener('keydown', e => {
+    //     if (e.key === 'i') {
+    //         console.table(game.input.keysPressed)
+    //     }
+    // })
 })
