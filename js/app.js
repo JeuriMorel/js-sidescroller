@@ -185,7 +185,7 @@ window.addEventListener("load", function () {
 
     function confirmGameEnd() {
         isPaused = true
-        if (confirm("are you sure you want to quit.")) quitGame()
+        if (confirm("Are you sure you want to quit the game?")) quitGame()
     }
 
     function quitGame() {
@@ -201,9 +201,9 @@ window.addEventListener("load", function () {
         animate(0)
     }
 
-    // window.addEventListener('keydown', e => {
-    //     if (e.key === 'i') {
-    //         console.table(game.input.keysPressed)
-    //     }
-    // })
+    window.addEventListener('keydown', e => {
+        if (e.key === 'i') {
+            console.table(game.input.keysPressed)
+        }
+    })
 })
