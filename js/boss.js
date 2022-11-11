@@ -54,7 +54,7 @@ export class Armored_Frog {
         this.attackInterval = 6000
         this.attackTimer = 0
         this.idleXOffsetModifier = 0.25
-
+        this.sizeModifier = 0.6
         this.canBeDebuffed = true
         this.hasBeenDebuffed = false
         this.isDebuffed = false
@@ -250,8 +250,10 @@ export class Armored_Frog {
             !this.isDefeated &&
             this.currentState != STATES.ATTACK &&
             this.game.player.x > this.x + this.width
-        )
-            this.setState(STATES.JUMP_FORWARD)
+        ) {
+            // this.setState(STATES.JUMP_FORWARD)
+            console.log("jumping away")
+        }
     }
     isOnGround() {
         return (
@@ -262,17 +264,17 @@ export class Armored_Frog {
         )
     }
     draw(context) {
-        // if (this.hitbox.body.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.body.x,
-        //         this.hitbox.body.y,
-        //         this.hitbox.body.width,
-        //         this.hitbox.body.height
-        //     )
-        //     context.stroke()
-        // }
+        if (this.hitbox.body.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.body.x,
+                this.hitbox.body.y,
+                this.hitbox.body.width,
+                this.hitbox.body.height
+            )
+            context.stroke()
+        }
         this.healthBar.draw(context)
         context.drawImage(
             this.image,
@@ -285,54 +287,54 @@ export class Armored_Frog {
             this.width,
             this.height
         )
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hurtbox.tongue.isActive) {
-        //     context.strokeStyle = "red"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.tongue.x,
-        //         this.hurtbox.tongue.y,
-        //         this.hurtbox.tongue.width,
-        //         this.hurtbox.tongue.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hitbox.tongue.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.tongue.x,
-        //         this.hitbox.tongue.y,
-        //         this.hitbox.tongue.width,
-        //         this.hitbox.tongue.height
-        //     )
-        //     context.stroke()
-        // }
-        // context.strokeStyle = "yellow"
-        // context.beginPath()
-        // context.rect(this.x, this.y, this.width, this.height)
-        // context.stroke()
-        // if (this.hitbox.claws.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.claws.x,
-        //         this.hitbox.claws.y,
-        //         this.hitbox.claws.width,
-        //         this.hitbox.claws.height
-        //     )
-        //     context.stroke()
-        // }
+        if (this.hurtbox.body.isActive) {
+            context.strokeStyle = "black"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.body.x,
+                this.hurtbox.body.y,
+                this.hurtbox.body.width,
+                this.hurtbox.body.height
+            )
+            context.stroke()
+        }
+        if (this.hurtbox.tongue.isActive) {
+            context.strokeStyle = "red"
+            context.beginPath()
+            context.rect(
+                this.hurtbox.tongue.x,
+                this.hurtbox.tongue.y,
+                this.hurtbox.tongue.width,
+                this.hurtbox.tongue.height
+            )
+            context.stroke()
+        }
+        if (this.hitbox.tongue.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.tongue.x,
+                this.hitbox.tongue.y,
+                this.hitbox.tongue.width,
+                this.hitbox.tongue.height
+            )
+            context.stroke()
+        }
+        context.strokeStyle = "yellow"
+        context.beginPath()
+        context.rect(this.x, this.y, this.width, this.height)
+        context.stroke()
+        if (this.hitbox.claws.isActive) {
+            context.strokeStyle = "#ff0000"
+            context.beginPath()
+            context.rect(
+                this.hitbox.claws.x,
+                this.hitbox.claws.y,
+                this.hitbox.claws.width,
+                this.hitbox.claws.height
+            )
+            context.stroke()
+        }
     }
     attack() {
         let attackToPerform =
@@ -352,11 +354,15 @@ export class Armored_Frog {
         this.hitbox.claws.x = this.x + this.hitbox.claws.xOffset
         this.hitbox.claws.y = this.y + this.hitbox.claws.yOffset
     }
+    exitTongueAttack() {
+        this.hurtbox.tongue.isActive = false
+        this.hitbox.tongue.isActive = false
+        this.x += this.attackOffsetX
+        console.log('exiting attack')
+    }
     resolveCollision({ target, attackDamage }) {
         if (target === "Attacked: ENEMY") {
-            if (this.currentState.state === "ATTACK") {
-                this.x += this.attackOffsetX
-            }
+            if (this.currentState.state === "ATTACK") this.exitTongueAttack()
             this.healthPoints -= attackDamage - this.defence
             if (this.healthPoints < 0) this.healthPoints = 0
             this.healthBar.updateBar(this.healthPoints)
@@ -378,7 +384,7 @@ export class Armored_Frog {
         }
 
         if (target === "Attacked: PLAYER") {
-            if (this.currentState === "ATTACK") this.x += this.attackOffsetX
+            if (this.currentState.state === "ATTACK") this.exitTongueAttack()
             this.setState(STATES.JUMP_FORWARD)
         }
     }

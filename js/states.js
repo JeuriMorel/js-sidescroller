@@ -324,19 +324,11 @@ export class Resting extends State {
         this.player.game.scrollSpeed = 0
     }
     handleInput({ lastKey, keysPressed }) {
-        if (keysPressed.down) {
-            if (lastKey === "PRESS Right")
-                this.player.setState(states.ROLL_ACROSS)
-            else if (lastKey === "PRESS Left")
-                this.player.setState(states.ROLL_BACK)
-            else if (lastKey === "PRESS Attack")
-                this.player.setState(states.SLEEPING)
-        } else if (
-            lastKey === "PRESS Up" ||
-            lastKey == "RELEASE Down" ||
-            lastKey === "PRESS Right" ||
-            lastKey === "PRESS Left"
-        )
+        if (keysPressed.down && keysPressed.action)
+            this.player.setState(states.SLEEPING)
+        else if (keysPressed.right) this.player.setState(states.ROLL_ACROSS)
+        else if (keysPressed.left) this.player.setState(states.ROLL_BACK)
+        else if (lastKey === "PRESS Up" || lastKey === "RELEASE Down" || lastKey === "RELEASE Up")
             this.player.setState(states.IDLE)
     }
 }
@@ -496,7 +488,6 @@ export class Sleeping extends State {
         this.tauntTimer = 0
         this.zInterval = 400
         this.zTimer = 0
-        
     }
     handleInput({ keysPressed }, deltaTime) {
         if (!keysPressed.action) this.player.setState(states.RESTING)

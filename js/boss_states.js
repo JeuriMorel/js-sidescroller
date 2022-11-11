@@ -11,6 +11,16 @@ export const STATES = {
     DEFEATED: 6,
 }
 
+const images = {
+    ATTACK: qs("#attack"),
+    RETREAT: qs("#retreat"),
+    IDLE: qs("#idle"),
+    JUMP_DOWN: qs("#jump_down"),
+    JUMP_FORWARD: qs("#jump_up"),
+    GOT_HIT: qs("#got_hit"),
+    DEFEATED: qs("#defeated"),
+}
+
 class Boss_State {
     constructor(state) {
         this.state = state
@@ -29,16 +39,16 @@ export class Attack extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 30
-        this.boss.image = qs("#attack")
+        this.boss.image = images.ATTACK
         this.boss.horizontalSpeed = 0
         this.boss.x -= this.boss.attackOffsetX
         this.boss.hurtbox.body.xOffset += this.boss.attackOffsetX
         this.boss.hitbox.body.xOffset += this.boss.attackOffsetX
         this.boss.hurtbox.tongue.xOffset += this.boss.attackOffsetX
-        this.boss.hurtbox.tongue.isActive = true
         this.boss.hitbox.tongue.xOffset += this.boss.attackOffsetX
-        this.boss.hitbox.tongue.isActive = true
         this.boss.hitbox.claws.xOffset += this.boss.attackOffsetX
+        this.boss.hurtbox.tongue.isActive = true
+        this.boss.hitbox.tongue.isActive = true
         this.boss.hitbox.claws.isActive = true
     }
     update() {
@@ -94,9 +104,7 @@ export class Attack extends Boss_State {
         }
 
         if (this.boss.frame === this.boss.maxFrame) {
-            this.boss.hurtbox.tongue.isActive = false
-            this.boss.hitbox.tongue.isActive = false
-            this.boss.x += this.boss.attackOffsetX
+            this.boss.exitTongueAttack()
             this.boss.setState(STATES.IDLE)
         }
     }
@@ -114,14 +122,12 @@ export class Retreat extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 22
-        this.boss.image = qs("#retreat")
+        this.boss.image = images.RETREAT
         this.boss.resetBoxes()
         this.boss.audio.retreat.play()
-        
-
     }
     update() {
-        this.boss.x += (this.boss.game.scrollSpeed + this.boss.horizontalSpeed)
+        this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
         this.boss.game.particles.push(
             new Boom({
                 game: this.boss.game,
@@ -147,13 +153,14 @@ export class Idle extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 30
-        this.boss.image = qs("#idle")
+        this.boss.image = images.IDLE
         this.boss.horizontalSpeed = 0
         this.boss.resetBoxes()
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
-        if (this.boss.x <= this.boss.game.width * 0.5) this.boss.setState(STATES.RETREAT)
+        // if (this.boss.x <= this.boss.game.width * 0.5)
+        //     this.boss.setState(STATES.RETREAT)
     }
 }
 export class Jump_Down extends Boss_State {
@@ -168,7 +175,7 @@ export class Jump_Down extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 20
-        this.boss.image = qs("#jump_down")
+        this.boss.image = images.JUMP_DOWN
         this.boss.hitbox.claws.width =
             this.boss.width * 0.6 * this.boss.sizeModifier
         this.boss.hitbox.claws.yOffset =
@@ -190,10 +197,12 @@ export class Jump_Forward extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 20
-        this.boss.image = qs("#jump_up")
+        this.boss.image = images.JUMP_FORWARD
         this.boss.velocityY -= 55
         this.boss.jumpTarget =
-            this.boss.game.player.x < this.boss.x && this.boss.game.player.currentState !== this.boss.game.player.states[3]
+            this.boss.game.player.x < this.boss.x &&
+            this.boss.game.player.currentState !==
+                this.boss.game.player.states[3]
                 ? this.boss.game.player.x
                 : this.boss.game.width - this.boss.width
         this.boss.hitbox.claws.width *= 1.5
@@ -225,7 +234,7 @@ export class Got_Hit extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 16
-        this.boss.image = qs("#got_hit")
+        this.boss.image = images.GOT_HIT
         this.boss.hurtbox.body.isActive = false
         this.boss.hurtbox.tongue.isActive = false
         this.boss.hitbox.tongue.isActive = false
@@ -257,7 +266,7 @@ export class Defeated extends Boss_State {
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 50
-        this.boss.image = qs("#defeated")
+        this.boss.image = images.DEFEATED
         this.boss.hurtbox.body.isActive = false
         this.boss.hurtbox.tongue.isActive = false
         this.boss.hitbox.body.isActive = false

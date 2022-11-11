@@ -76,7 +76,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[5] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[9] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -201,9 +201,9 @@ window.addEventListener("load", function () {
         animate(0)
     }
 
-    window.addEventListener('keydown', e => {
-        if (e.key === 'i') {
-            console.table(game.input.keysPressed)
-        }
-    })
+    // window.addEventListener('keydown', e => {
+    //     if (e.key === 'i') {
+    //         console.table(game.input.keysPressed)
+    //     }
+    // })
 })
