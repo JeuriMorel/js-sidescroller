@@ -171,6 +171,22 @@ export class Armored_Frog {
         this.currentState.enter()
     }
     update(deltaTime) {
+        //vertical
+        this.y += this.velocityY
+        if (
+            this.y >
+            this.game.height -
+                this.height * this.spriteGroundOffsetModifier -
+                this.game.groundMargin
+        )
+            this.y =
+                this.game.height -
+                this.height * this.spriteGroundOffsetModifier -
+                this.game.groundMargin
+
+        if (!this.isOnGround()) this.velocityY += this.weight
+        else this.velocityY = 0
+
         if (this.isDebuffed) {
             if (this.debuffTimer > this.debuffInterval) {
                 this.defence += DEFENCE_DEBUFF
@@ -224,22 +240,6 @@ export class Armored_Frog {
             this.hurtbox.tongue.isActive = true
         }
 
-        //vertical
-        this.y += this.velocityY
-        if (
-            this.y >
-            this.game.height -
-                this.height * this.spriteGroundOffsetModifier -
-                this.game.groundMargin
-        )
-            this.y =
-                this.game.height -
-                this.height * this.spriteGroundOffsetModifier -
-                this.game.groundMargin
-
-        if (!this.isOnGround()) this.velocityY += this.weight
-        else this.velocityY = 0
-
         // //horizontal jumping arc
         if (this.jumpTarget) this.jumpTarget -= this.game.scrollSpeed
         if (!this.isOnGround() && this.jumpTarget)
@@ -248,11 +248,10 @@ export class Armored_Frog {
         if (
             this.isOnGround() &&
             !this.isDefeated &&
-            this.currentState != STATES.ATTACK &&
+            this.currentState.state != "ATTACK" &&
             this.game.player.x > this.x + this.width
         ) {
-            // this.setState(STATES.JUMP_FORWARD)
-            console.log("jumping away")
+            this.setState(STATES.JUMP_FORWARD)
         }
     }
     isOnGround() {
@@ -339,8 +338,9 @@ export class Armored_Frog {
     attack() {
         let attackToPerform =
             this.attacks[Math.floor(Math.random() * this.attacks.length)]
-        if (attackToPerform === "TONGUE_ATTACK") this.setState(1)
-        if (attackToPerform === "JUMP_ATTACK") this.setState(4)
+        if (attackToPerform === "TONGUE_ATTACK") this.setState(STATES.ATTACK)
+        if (attackToPerform === "JUMP_ATTACK")
+            this.setState(STATES.JUMP_FORWARD)
     }
     updateHitboxes() {
         this.hurtbox.body.x = this.x + this.hurtbox.body.xOffset
@@ -358,7 +358,6 @@ export class Armored_Frog {
         this.hurtbox.tongue.isActive = false
         this.hitbox.tongue.isActive = false
         this.x += this.attackOffsetX
-        console.log('exiting attack')
     }
     resolveCollision({ target, attackDamage }) {
         if (target === "Attacked: ENEMY") {

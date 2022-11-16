@@ -34,6 +34,7 @@ export class Attack extends Boss_State {
     }
     enter() {
         this.boss.frame = 0
+        this.boss.resetBoxes()
         this.boss.spriteWidth = 609
         this.boss.spriteHeight = 393
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
@@ -50,9 +51,11 @@ export class Attack extends Boss_State {
         this.boss.hurtbox.tongue.isActive = true
         this.boss.hitbox.tongue.isActive = true
         this.boss.hitbox.claws.isActive = true
+        
+        
     }
     update() {
-        this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
+        this.boss.x -= this.boss.game.scrollSpeed
         if (this.boss.frame === 14) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
@@ -149,7 +152,7 @@ export class Idle extends Boss_State {
     enter() {
         this.boss.frame = 0
         this.boss.spriteWidth = 446
-        this.boss.spriteHeight = 395
+        this.boss.spriteHeight = 393
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 30
@@ -158,9 +161,10 @@ export class Idle extends Boss_State {
         this.boss.resetBoxes()
     }
     update() {
-        this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
-        // if (this.boss.x <= this.boss.game.width * 0.5)
-        //     this.boss.setState(STATES.RETREAT)
+        this.boss.x -= this.boss.game.scrollSpeed
+        if (this.boss.x <= this.boss.game.width * 0.5) {
+            this.boss.setState(STATES.RETREAT)
+        }
     }
 }
 export class Jump_Down extends Boss_State {
@@ -230,7 +234,7 @@ export class Got_Hit extends Boss_State {
         this.boss.frame = 0
         this.boss.horizontalSpeed = 35
         this.boss.spriteWidth = 494
-        this.boss.spriteHeight = 396
+        this.boss.spriteHeight = 393
         this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
         this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
         this.boss.maxFrame = 16
