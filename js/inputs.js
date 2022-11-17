@@ -92,7 +92,7 @@ export default class InputHandler {
                     return
                 }
                 if (buttonPress === 'y') {
-                    console.log(this.game.music.currentTheme)
+                    console.log(this.game.recoveryTime)
                 }
                 if (this.game.isRecovering || isPaused) return
                 switch (buttonPress) {

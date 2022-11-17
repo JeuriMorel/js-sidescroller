@@ -79,6 +79,8 @@ export class Pumpkin_Explode extends Pumpkin_State {
         this.self.resetBoxes()
     }
     update() {
+        if (this.self.y < this.self.game.height - this.self.height - this.self.game.groundMargin)
+            this.self.y = this.self.game.height - this.self.height - this.self.game.groundMargin
         if (this.self.frame === this.self.maxFrame) {
             this.self.deleteEnemy = true
         }

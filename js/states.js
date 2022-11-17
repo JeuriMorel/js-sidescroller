@@ -72,8 +72,7 @@ export class Attacking_Claw extends State {
         }
         if (!this.player.isWhiffing && lastKey == "PRESS Left") {
             this.player.setState(states.ROLL_BACK)
-        }
-        if (!this.player.isWhiffing && lastKey == "PRESS Right") {
+        } else if (!this.player.isWhiffing && lastKey == "PRESS Right") {
             this.player.setState(states.ROLL_ACROSS)
         }
         // if (!this.player.isWhiffing && lastKey == "PRESS Attack") {
@@ -205,24 +204,27 @@ export class Attacking_Dash extends State {
             this.player.frame = 7
             if (this.player.dash_bonus < this.player.max_attack_bonus) {
                 this.player.dash_bonus++
-                this.player.game.recoveryTime += 50
+                this.player.game.recoveryTime += 75
             }
         } else if (lastKey === "PRESS Left")
             this.player.setState(states.ROLL_BACK)
+
         if (this.player.frame > 10) {
             this.player.x += 25
             if (this.player.game.scrollSpeed < DEFAULT_SCROLL_SPEED)
                 this.player.game.scrollSpeed += 1
         }
 
-        if (this.player.frame >= 9) {
+        if (this.player.frame == 10) {
             this.player.hurtbox.head.isActive = false
             this.player.hurtbox.body.isActive = false
+        }
+        if (this.player.frame == 12) {
+            this.player.game.isRecovering = true
         }
 
         if (this.player.frame == this.player.maxFrame) {
             this.player.game.recoveryTime += 300
-            this.player.game.isRecovering = true
             this.player.dash_bonus = 0
             this.player.setState(states.IDLE)
         }
@@ -328,7 +330,11 @@ export class Resting extends State {
             this.player.setState(states.SLEEPING)
         else if (keysPressed.right) this.player.setState(states.ROLL_ACROSS)
         else if (keysPressed.left) this.player.setState(states.ROLL_BACK)
-        else if (lastKey === "PRESS Up" || lastKey === "RELEASE Down" || lastKey === "RELEASE Up")
+        else if (
+            lastKey === "PRESS Up" ||
+            lastKey === "RELEASE Down" ||
+            lastKey === "RELEASE Up"
+        )
             this.player.setState(states.IDLE)
     }
 }

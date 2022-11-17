@@ -76,7 +76,7 @@ window.addEventListener("load", function () {
                 new Wave_Boss(this),
                 new Wave_Win(this),
             ]
-            this.currentWave = this.waves[9] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[4] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -143,6 +143,7 @@ window.addEventListener("load", function () {
             const sticky = this.deltaTime * -3 * stickyMultiplier
             if (this.player.frameTimer >= 0) this.player.frameTimer += sticky
             this.enemies.forEach(enemy => {
+                if (enemy.state?.state === "EXPLODE") return
                 if (enemy.frameTimer >= 0) enemy.frameTimer += sticky
             })
             this.enemyTimer += sticky
