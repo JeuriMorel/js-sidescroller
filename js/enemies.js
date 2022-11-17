@@ -42,7 +42,7 @@ class Enemy {
             Down_Roll: 20,
             Bite: 20,
         }
-        
+
         this.canBeDebuffed = false
         this.hasBeenDebuffed = false
         this.isDebuffed = false
@@ -108,28 +108,7 @@ class Enemy {
     }
     draw(context) {
         if (this.healthBar) this.healthBar.draw(context)
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hitbox.body.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.body.x,
-        //         this.hitbox.body.y,
-        //         this.hitbox.body.width,
-        //         this.hitbox.body.height
-        //     )
-        //     context.stroke()
-        // }
+
         if (this.invulnerabilityTime > 0) {
             context.save()
             context.globalAlpha = Math.random() * 0.5 + 0.4
@@ -759,7 +738,7 @@ export class PumpKing extends Enemy {
     update(deltaTime) {
         if (!this.hasBeenDebuffed && this.x < this.game.width - this.width)
             this.canBeDebuffed = true
-        
+
         if (this.isDebuffed) {
             if (this.debuffTimer > this.debuffInterval) {
                 this.defence += DEFENCE_DEBUFF

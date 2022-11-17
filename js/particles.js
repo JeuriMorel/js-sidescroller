@@ -1,10 +1,6 @@
 import { qs } from "./utils.js"
 import {
     SFX_VOLUME,
-    SOUND_CRACKS_1,
-    SOUND_CRACKS_2,
-    SOUND_GHOST_DIE,
-    SOUND_SNARE,
 } from "./constants.js"
 
 class Particles {

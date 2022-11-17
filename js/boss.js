@@ -34,7 +34,7 @@ export class Armored_Frog {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.defence = 10
-        this.speed = 0
+        // this.speed = 0
         this.deleteEnemy = false
         this.isDefeated = false
         this.invulnerabilityTime = 0
@@ -81,7 +81,7 @@ export class Armored_Frog {
             new Defeated(this),
         ]
 
-        this.currentState = this.states[2]
+        this.currentState = this.states[STATES.IDLE]
         this.currentState.enter()
 
         this.x = this.game.width - this.width
@@ -263,17 +263,6 @@ export class Armored_Frog {
         )
     }
     draw(context) {
-        if (this.hitbox.body.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.body.x,
-                this.hitbox.body.y,
-                this.hitbox.body.width,
-                this.hitbox.body.height
-            )
-            context.stroke()
-        }
         this.healthBar.draw(context)
         context.drawImage(
             this.image,
@@ -286,54 +275,6 @@ export class Armored_Frog {
             this.width,
             this.height
         )
-        if (this.hurtbox.body.isActive) {
-            context.strokeStyle = "black"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.body.x,
-                this.hurtbox.body.y,
-                this.hurtbox.body.width,
-                this.hurtbox.body.height
-            )
-            context.stroke()
-        }
-        if (this.hurtbox.tongue.isActive) {
-            context.strokeStyle = "red"
-            context.beginPath()
-            context.rect(
-                this.hurtbox.tongue.x,
-                this.hurtbox.tongue.y,
-                this.hurtbox.tongue.width,
-                this.hurtbox.tongue.height
-            )
-            context.stroke()
-        }
-        if (this.hitbox.tongue.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.tongue.x,
-                this.hitbox.tongue.y,
-                this.hitbox.tongue.width,
-                this.hitbox.tongue.height
-            )
-            context.stroke()
-        }
-        context.strokeStyle = "yellow"
-        context.beginPath()
-        context.rect(this.x, this.y, this.width, this.height)
-        context.stroke()
-        if (this.hitbox.claws.isActive) {
-            context.strokeStyle = "#ff0000"
-            context.beginPath()
-            context.rect(
-                this.hitbox.claws.x,
-                this.hitbox.claws.y,
-                this.hitbox.claws.width,
-                this.hitbox.claws.height
-            )
-            context.stroke()
-        }
     }
     attack() {
         let attackToPerform =
