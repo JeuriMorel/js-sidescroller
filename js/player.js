@@ -8,6 +8,7 @@ import {
     SOUND_DASH,
     SOUND_DODGE,
     SOUND_GET_HIT,
+    SOUND_LAND,
     SOUND_SHATTER,
     SOUND_SLASH,
     SOUND_SNARE,
@@ -104,6 +105,7 @@ export class Player {
             down_roll: new Audio(SOUND_SNARE),
             get_hit: new Audio(SOUND_GET_HIT),
             bounce: new Audio(SOUND_BOUNCE),
+            land: new Audio(SOUND_LAND)
         }
 
         setSfxVolume(this.audio)
@@ -209,38 +211,6 @@ export class Player {
             this.checkHitCollision()
     }
     draw(context) {
-        // if (this.hurtbox.body.isActive) {
-        //     context.strokeStyle = "black"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.body.x,
-        //         this.hurtbox.body.y,
-        //         this.hurtbox.body.width,
-        //         this.hurtbox.body.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hurtbox.head.isActive) {
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hurtbox.head.x,
-        //         this.hurtbox.head.y,
-        //         this.hurtbox.head.width,
-        //         this.hurtbox.head.height
-        //     )
-        //     context.stroke()
-        // }
-        // if (this.hitbox.isActive) {
-        //     context.strokeStyle = "#ff0000"
-        //     context.beginPath()
-        //     context.rect(
-        //         this.hitbox.x,
-        //         this.hitbox.y,
-        //         this.hitbox.width,
-        //         this.hitbox.height
-        //     )
-        //     context.stroke()
-        // }
 
         context.drawImage(
             this.image,
@@ -420,6 +390,7 @@ export class Player {
             this.setState(states.JUMPING)
             if (this.attack_bonus > 5 && Math.random() > 0.5)
                 this.audio.bounce.play()
+            else this.audio.land.play()
         }
     }
 
@@ -478,13 +449,3 @@ export class Player {
         return this.x <= STARTING_X
     }
 }
-
-// playerIsDodging(enemyHitbox) {
-//     return (
-//         enemyHitbox.isActive &&
-//         enemyHitbox.x <= this.x + this.width &&
-//         enemyHitbox.x + enemyHitbox.width >= this.x &&
-//         enemyHitbox.y <= this.y + this.height &&
-//         enemyHitbox.y + enemyHitbox.height >= this.y
-//     )
-// }

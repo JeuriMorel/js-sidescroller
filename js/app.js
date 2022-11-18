@@ -202,9 +202,10 @@ window.addEventListener("load", function () {
         animate(0)
     }
 
-    // window.addEventListener('keydown', e => {
-    //     if (e.key === 'i') {
-    //         console.table(game.input.keysPressed)
-    //     }
-    // })
+    window.addEventListener("keydown", e => {
+        if (e.key === "i") {
+            game.player.audio.land.play()
+            console.log("land")
+        }
+    })
 })

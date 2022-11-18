@@ -30,6 +30,7 @@ export const SOUND_DODGE = "./audio/dodge.wav"
 export const SOUND_CLAW_STRIKE = "./audio/gash.wav"
 export const SOUND_GET_HIT = "./audio/cat_mewpurr.wav"
 export const SOUND_BOUNCE = "./audio/Meow.wav"
+export const SOUND_LAND = "./audio/land.mp3"
 export const SOUND_DEFENCE_DOWN = "./audio/defenceDown.wav"
 export const SOUND_DEFENCE_UP = "./audio/defenceUp.wav"
 export const MUSIC_MAIN_THEME = "./audio/main_theme.mp3"
@@ -76,7 +77,7 @@ export const PROGRESS_ICON_X = 35
 export const FLOATING_DEFAULT_FONT_SIZE = 28
 
 export const MAX_LIVES = 9
-export const SFX_VOLUME = 0.6
+export const SFX_VOLUME = 0.8
 
 export const INVULNERABILITY_TIME = 400
 export const DEFENCE_DEBUFF = 4

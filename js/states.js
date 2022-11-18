@@ -114,7 +114,10 @@ export class Falling extends State {
             !keysPressed.left
         )
             this.player.game.scrollSpeed = 0
-        if (this.player.isOnGround()) this.player.setState(states.IDLE)
+        if (this.player.isOnGround()) {
+            this.player.setState(states.IDLE)
+            this.player.audio.land.play()
+        }
         if (lastKey === "PRESS Attack") this.player.setState(states.ROLL_DOWN)
         else if (lastKey === "PRESS Left")
             this.player.x -= this.player.game.scrollSpeed + 2
