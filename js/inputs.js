@@ -1,5 +1,5 @@
 import { togglePause, isPaused } from "./app.js"
-import { qs, qsa } from "./utils.js"
+import { capFirstLetter, qs, qsa } from "./utils.js"
 
 // modalSave.addEventListener("click", () => {
 //     modal.close()
@@ -79,7 +79,46 @@ export default class InputHandler {
             document.activeElement.blur()
         })
 
+        //mobile controller
+
         this.keypressController = new AbortController()
+
+        this.controllerBtns = qsa("[data-controls]")
+
+        this.controllerBtns?.forEach(btn => {
+            btn.addEventListener(
+                "touchstart",
+                e => {
+                    if(e.cancelable) e.preventDefault()
+                    let key =
+                        e.targetTouches[0].target.closest("button").dataset
+                            .controls
+
+                    if (this.modal.open) return
+                    if (key === "pause") {
+                        togglePause()
+                        this.game.music.toggleMusicPlayback()
+                        return
+                    }
+
+                    if (this.game.isRecovering || isPaused) return
+                    this.setKeyPress(key)
+                },
+                { signal: this.keypressController.signal }
+            )
+            btn.addEventListener(
+                "touchend",
+                e => {
+                    if (e.cancelable) e.preventDefault()
+                    let key =
+                        e.changedTouches[0].target.closest("button").dataset
+                            .controls
+
+                    this.setKeyRelease(key)
+                },
+                { signal: this.keypressController.signal }
+            )
+        })
 
         window.addEventListener(
             "keydown",
@@ -91,36 +130,9 @@ export default class InputHandler {
                     this.game.music.toggleMusicPlayback()
                     return
                 }
-                if (buttonPress === 'y') {
-                    console.log(this.game.recoveryTime)
-                }
+
                 if (this.game.isRecovering || isPaused) return
-                switch (buttonPress) {
-                    case this.keys.left:
-                        this.lastKey = "PRESS Left"
-                        this.keysPressed.left = true
-                        break
-                    case this.keys.up:
-                        this.lastKey = "PRESS Up"
-                        this.keysPressed.up = true
-                        break
-                    case this.keys.right:
-                        this.lastKey = "PRESS Right"
-                        this.keysPressed.right = true
-                        break
-                    case this.keys.down:
-                        this.lastKey = "PRESS Down"
-                        this.keysPressed.down = true
-                        break
-                    case this.keys.action:
-                        this.lastKey = "PRESS Attack"
-                        this.keysPressed.action = true
-                        break
-                    case this.keys.jump:
-                        this.lastKey = "PRESS Jump"
-                        this.keysPressed.jump = true
-                        break
-                }
+                this.setKeyPress(this.getButtonKeyCode(buttonPress))
             },
             { signal: this.keypressController.signal }
         )
@@ -129,40 +141,39 @@ export default class InputHandler {
             "keyup",
             ({ code, key }) => {
                 const buttonRelease = key === " " ? code : key
-                if (this.modal.open)
-                    return
-                switch (buttonRelease) {
-                    case this.keys.left:
-                        this.lastKey = "RELEASE Left"
-                        this.keysPressed.left = false
-                        break
-                    case this.keys.up:
-                        this.lastKey = "RELEASE Up"
-                        this.keysPressed.up = false
-
-                        break
-                    case this.keys.right:
-                        this.lastKey = "RELEASE Right"
-                        this.keysPressed.right = false
-
-                        break
-                    case this.keys.down:
-                        this.lastKey = "RELEASE Down"
-                        this.keysPressed.down = false
-                        break
-                    case this.keys.action:
-                        this.lastKey = "RELEASE Attack"
-                        this.keysPressed.action = false
-                        break
-                    case this.keys.jump:
-                        this.lastKey = "RELEASE Jump"
-                        this.keysPressed.jump = false
-                        break
-                }
+                if (this.modal.open) return
+                this.setKeyRelease(this.getButtonKeyCode(buttonRelease))
             },
             { signal: this.keypressController.signal }
         )
     }
+
+    getButtonKeyCode(buttonPress) {
+        switch (buttonPress) {
+            case this.keys.left:
+                return "left"
+            case this.keys.up:
+                return "up"
+            case this.keys.right:
+                return "right"
+            case this.keys.down:
+                return "down"
+            case this.keys.action:
+                return "action"
+            case this.keys.jump:
+                return "jump"
+        }
+    }
+
+    setKeyPress(key) {
+        this.keysPressed[key] = true
+        this.lastKey = `PRESS ${capFirstLetter(key)}`
+    }
+    setKeyRelease(key) {
+        this.keysPressed[key] = false
+        this.lastKey = `RELEASE ${capFirstLetter(key)}`
+    }
+
     removeEventListeners() {
         this.keypressController.abort()
     }

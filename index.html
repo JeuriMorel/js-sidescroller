@@ -11,6 +11,7 @@
             href="https://fonts.googleapis.com/css2?family=Chicle&display=swap"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="styles.css" />
         <script src="/js/app.js" type="module"></script>
     </head>
@@ -71,7 +72,19 @@
                 </button>
             </form>
         </dialog>
-        <canvas class="[ ] [ ] [ canvas ]" id="canvas1"></canvas>
+        <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
+        <div class="mobile-controller">
+            <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="directions">
+                <li data-direction="left"><button class="[ ] [ ] [ controls-btn ]" data-controls="left">&#8678;</button></li>
+                <li data-direction="up"><button class="[ ] [ ] [ controls-btn ]" data-controls="up">&#8679;</button></li>
+                <li data-direction="right"><button class="[ ] [ ] [ controls-btn ]" data-controls="right">&#8680;</button></li>
+                <li data-direction="down"><button class="[ ] [ ] [ controls-btn ]" data-controls="down">&#8681;</button></li>
+            </menu>
+            <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="actions">
+                <li data-action="jump"><button class="[ ] [ ] [ controls-btn ]" data-controls="jump">➟</button></li>
+                <li data-action="action"><button class="[ ] [ ] [ controls-btn ]" data-controls="action"><i class="fa-solid fa-hand-fist"></i></button></li>
+            </menu>
+        </div>
         <audio
             src="./audio/forest_path.mp3"
             id="forest_theme"

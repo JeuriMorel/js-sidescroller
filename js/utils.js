@@ -39,3 +39,7 @@ export function setSfxVolume(audioObject, volume = SFX_VOLUME) {
         audioObject[sfx].volume = volume
     }
 }
+
+export function capFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}

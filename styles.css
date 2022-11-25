@@ -24,16 +24,18 @@
 
 body {
     font-family: "Chicle", cursive;
-    padding: 2rem;
+    /* padding: 2rem; */
     text-transform: capitalize;
     min-height: 100vh;
     position: relative;
+    background-color: black;
 }
 
 .h1 {
     width: max-content;
     height: max-content;
     position: absolute;
+    color: var(--clr-neutral-700);
     font-size: min(5em, 15vw);
     top: 50%;
     left: 50%;
@@ -92,6 +94,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1em;
+    z-index: 2;
+    position: relative;
+    padding: 1rem;
 }
 
 .btn {
@@ -145,4 +150,67 @@ body {
 .player, */
 .hidden {
     display: none;
+}
+
+.mobile-controller {
+    display: flex;
+    position: absolute;
+    inset: auto 0 0 0;
+    justify-content: space-between;
+}
+
+.mobile-controller menu {
+    list-style-type: none;
+    display: grid;
+}
+.mobile-controller menu[data-keys="directions"] {
+    gap: 0.5em;
+    grid-template-areas:
+        ". . up up . ."
+        "left left up up right right"
+        "left left down down right right"
+        ". . down down . .";
+}
+.mobile-controller menu[data-keys="actions"] {
+    padding: 1em;
+    grid-template-areas:
+        ". . action action"
+        ". . action action"
+        "jump jump . ."
+        "jump jump . .";
+}
+.mobile-controller menu[data-keys="actions"] button {
+    border-radius: 50%;
+    padding: 1em;
+}
+
+.controls-btn {
+    padding: 1em;
+    border-radius: 0.5em;
+    background-color: rgb(157, 157, 157, 0.4);
+}
+
+[data-direction="left"] {
+    grid-area: left;
+}
+[data-direction="up"] {
+    grid-area: up;
+}
+[data-direction="right"] {
+    grid-area: right;
+}
+[data-direction="down"] {
+    grid-area: down;
+}
+[data-action="jump"] {
+    grid-area: jump;
+}
+[data-action="action"] {
+    grid-area: action;
+}
+
+@media screen and (min-width: 500px) {
+    .mobile-controller {
+        display: none;
+    }
 }
