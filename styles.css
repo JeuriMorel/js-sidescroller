@@ -171,7 +171,7 @@ button {
     position: absolute;
     inset: auto 0 0 0;
     justify-content: space-between;
-    margin-inline: 5vw;
+    margin-inline: 2.5vw;
 }
 
 .mobile-controller menu {
@@ -193,7 +193,7 @@ button {
         "jump jump . .";
 }
 .mobile-controller menu[data-keys="actions"] button {
-    border-radius: 50%;
+    border-radius: 0.75em;
 }
 .mobile-controller menu[data-keys="actions"] button[data-controls="jump"] {
     rotate: -90deg;
@@ -204,7 +204,7 @@ button {
     min-width: var(--btn-width);
     font-size: var(--btn-font-size);
     font-weight: bold;
-    border-radius: 0.25em;
+    border-radius: 1em;
     background-color: rgb(80, 80, 80, 0.8);
     aspect-ratio: 1;
     user-select: none;
@@ -232,6 +232,22 @@ button {
 }
 [data-action="action"] {
     grid-area: action;
+}
+[data-controls="left"] {
+    border-top-right-radius: var(--btn-width);
+    border-bottom-right-radius: var(--btn-width);
+}
+[data-controls="right"] {
+    border-top-left-radius: var(--btn-width);
+    border-bottom-left-radius: var(--btn-width);
+}
+[data-controls="up"] {
+    border-bottom-right-radius: var(--btn-width);
+    border-bottom-left-radius: var(--btn-width);
+}
+[data-controls="down"] {
+    border-top-right-radius: var(--btn-width);
+    border-top-left-radius: var(--btn-width);
 }
 
 @media (hover: none), (pointer: none) {
