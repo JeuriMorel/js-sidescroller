@@ -201,21 +201,4 @@ window.addEventListener("load", function () {
         document.activeElement.blur()
         animate(0)
     }
-
-
-    // const controllerBtns = qsa("[data-controls]")
-
-    // controllerBtns.forEach(btn => {
-    //     btn.addEventListener('touchstart', e => {
-    //         e.preventDefault()
-    //         let key = e.targetTouches[0].target.closest("button")
-    //         console.log("start", key.dataset.controls)
-    //     })
-    //     btn.addEventListener('touchend', e => {
-    //         e.preventDefault()
-    //         let key = e.changedTouches[0].target.closest('button')
-    //         console.log("end", key.dataset.controls)
-            
-    //     })
-    // })
 })

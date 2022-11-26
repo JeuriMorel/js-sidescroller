@@ -9,6 +9,9 @@ export default class InputHandler {
     constructor(game) {
         this.lastKey = ""
         this.game = game
+        this.canvas = qs("canvas")
+        this.lastTap
+        this.keypressController = new AbortController()
         this.keysPressed = {
             right: false,
             down: false,
@@ -79,9 +82,22 @@ export default class InputHandler {
             document.activeElement.blur()
         })
 
-        //mobile controller
+        this.canvas.addEventListener(
+            "touchstart",
+            () => {
+                let timeTap = new Date().getTime()
+                let timeSinceLastTap = timeTap - this.lastTap
 
-        this.keypressController = new AbortController()
+                if (timeSinceLastTap < 600) {
+                    togglePause()
+                    this.game.music.toggleMusicPlayback()
+                }
+                this.lastTap = timeTap
+            },
+            { signal: this.keypressController.signal }
+        )
+
+        //mobile controller
 
         this.controllerBtns = qsa("[data-controls]")
 
@@ -89,7 +105,7 @@ export default class InputHandler {
             btn.addEventListener(
                 "touchstart",
                 e => {
-                    if(e.cancelable) e.preventDefault()
+                    if (e.cancelable) e.preventDefault()
                     let key =
                         e.targetTouches[0].target.closest("button").dataset
                             .controls

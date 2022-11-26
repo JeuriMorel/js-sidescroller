@@ -97,6 +97,11 @@ body {
     z-index: 2;
     position: relative;
     padding: 1rem;
+    pointer-events: none;
+}
+
+button {
+    pointer-events: all;
 }
 
 .btn {
@@ -157,6 +162,7 @@ body {
     position: absolute;
     inset: auto 0 0 0;
     justify-content: space-between;
+    margin-inline: 5vw;
 }
 
 .mobile-controller menu {
@@ -181,13 +187,19 @@ body {
 }
 .mobile-controller menu[data-keys="actions"] button {
     border-radius: 50%;
-    padding: 1em;
+}
+.mobile-controller menu[data-keys="actions"] button[data-controls="jump"] {
+    rotate: -90deg;
 }
 
 .controls-btn {
-    padding: 1em;
-    border-radius: 0.5em;
+    display: block;
+    width: fit-content;
+    padding: 0.25em;
+    border-radius: 0.25em;
     background-color: rgb(157, 157, 157, 0.4);
+    aspect-ratio: 1;
+    user-select: none;
 }
 
 [data-direction="left"] {
