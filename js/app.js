@@ -31,6 +31,10 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
+const is_touch_device = "ontouchstart" in document.documentElement
+if (is_touch_device) {
+    qs('body').classList.add('is_touch_device')
+}
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")

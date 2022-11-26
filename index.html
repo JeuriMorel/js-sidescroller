@@ -21,6 +21,15 @@
             <li>
                 <button
                     type="button"
+                    class="[ ] [ ] [ btn ] new-game"
+                    data-btn="new-game"
+                >
+                    New Game
+                </button>
+            </li>
+            <li>
+                <button
+                    type="button"
                     class="[ ] [ ] [ btn ] modal-open"
                     data-btn="controls-modal-open"
                     disabled
@@ -28,15 +37,7 @@
                     edit Controls
                 </button>
             </li>
-            <li>
-                <button
-                    type="button"
-                    class="[ ] [ ] [ btn ] new-game"
-                    data-btn="new-game"
-                >
-                    New Game
-                </button>
-            </li>
+            
         </menu>
         <dialog class="modal" data-modal="controls">
             <form class="controls-form" method="dialog" data-form="controls">
@@ -75,14 +76,14 @@
         <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
         <div class="mobile-controller">
             <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="directions">
-                <li data-direction="left"><button class="[ ] [ ] [ controls-btn ]" data-controls="left">&#8678;</button></li>
-                <li data-direction="up"><button class="[ ] [ ] [ controls-btn ]" data-controls="up">&#8679;</button></li>
-                <li data-direction="right"><button class="[ ] [ ] [ controls-btn ]" data-controls="right">&#8680;</button></li>
-                <li data-direction="down"><button class="[ ] [ ] [ controls-btn ]" data-controls="down">&#8681;</button></li>
+                <li data-direction="left"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="left">&#8678;</button></li>
+                <li data-direction="up"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="up">&#8679;</button></li>
+                <li data-direction="right"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="right">&#8680;</button></li>
+                <li data-direction="down"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="down">&#8681;</button></li>
             </menu>
             <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="actions">
-                <li data-action="jump"><button class="[ ] [ ] [ controls-btn ]" data-controls="jump">➟</button></li>
-                <li data-action="action"><button class="[ ] [ ] [ controls-btn ]" data-controls="action"><i class="fa-solid fa-hand-fist"></i></button></li>
+                <li data-action="jump"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="jump">➟</button></li>
+                <li data-action="action"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="action"><i class="fa-solid fa-hand-fist"></i></button></li>
             </menu>
         </div>
         <audio
