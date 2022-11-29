@@ -31,10 +31,36 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
+const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
 if (is_touch_device) {
-    qs('body').classList.add('is_touch_device')
+    body.classList.add('is_touch_device')
+    const fullScreenToggleBtn = qs('[data-btn="full-screen"]')
+
+    fullScreenToggleBtn.addEventListener('click', toggleFullScreen)
 }
+
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        body.requestFullscreen()
+            .then(() =>
+                qs('[data-btn="full-screen"]').children[0].setAttribute(
+                    "data-icon",
+                    "compress"
+                )
+            )
+            .catch(error =>
+                alert(`Error, can't enable full-screen mode: ${error.message}`)
+            )
+    } else {
+        document.exitFullscreen()
+        qs('[data-btn="full-screen"]').children[0].setAttribute(
+            "data-icon",
+            "expand"
+        )
+    } 
+}
+
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")

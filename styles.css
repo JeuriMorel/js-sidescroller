@@ -33,6 +33,16 @@ body {
     background-color: black;
 }
 
+.icon::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
 .h1 {
     width: max-content;
     height: max-content;
@@ -95,7 +105,7 @@ body {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.1em;
     z-index: 2;
     position: relative;
     padding: 1rem;
@@ -202,17 +212,19 @@ button {
 }
 
 .controls-btn {
+    --shrink-offset: 0px;
     --color-dark: rgb(20, 20, 20, 0.8);
     --color-light: rgb(180, 180, 180, 0.8);
-    --h1: 2px;
-    --v1: 2px;
-    --h2: 0;
-    --v2: 0;
-    --blur1: 0.3em;
-    --blur2: 0.3em;
+    --color-light-pressed: rgb(160, 160, 160, 0.8);
+    --h1: calc(4px - var(--shrink-offset));
+    --v1: calc(4px - var(--shrink-offset));
+    --h2: calc(-2px + var(--shrink-offset));
+    --v2: calc(-2px + var(--shrink-offset));
+    --blur1: calc(7px - var(--shrink-offset));
+    --blur2: calc(7px - var(--shrink-offset));
+    --border-spread: 0px;
     display: inline-block;
     position: relative;
-    text-align: center;
     line-height: var(--btn-font-size);
     text-align: center;
     min-width: var(--btn-width);
@@ -231,20 +243,34 @@ button {
     aspect-ratio: 1;
     user-select: none;
     color: white;
-    color: var(--color-light);
+
     padding: 0.5em;
-    box-shadow: var(--h1) var(--v1) var(--blur1) var(--color-dark),
+    box-shadow: 0 0 0 var(--border-spread) black,
+        var(--h1) var(--v1) var(--blur1) var(--color-dark),
         var(--h2) var(--v2) var(--blur2) var(--color-light);
 }
 
 .controls-btn:active,
 .controls-btn[data-active] {
+    --shrink-offset: 1px;
+    --border-spread: 1px;
     scale: 0.95;
     border-style: inset;
+    background-image: linear-gradient(
+        to bottom right,
+        rgb(20, 20, 20, 0.2) 0%,
+        rgb(80, 80, 80, 0.1) 25%,
+        rgb(80, 80, 80, 0.5) 80%,
+        rgb(80, 80, 80, 0.6) 100%
+    );
+    color: var(--color-light);
 }
 
 [data-btn="controls-modal-open"] {
     display: inline-block;
+}
+[data-btn="full-screen"] {
+    display: none;
 }
 
 [data-direction="left"] {
@@ -291,9 +317,32 @@ button {
     padding: 0.75em;
 }
 
+[data-icon="expand"]::before {
+    content: "\f065";
+}
+[data-icon="compress"]::before {
+    content: "\f066";
+}
+
 @media (hover: none), (pointer: none) {
     .is_touch_device .mobile-controller {
         display: flex;
+    }
+    .is_touch_device [data-btn="full-screen"] {
+        --clr-neutral-300: hsl(0, 0%, 27%, 0.5);
+        --clr-neutral-400: hsl(0, 0%, 40%, 0.5);
+        color: var(--clr-neutral-500);
+        padding: 0.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1;
+        border-width: 1px;
+        position: absolute;
+        left: 0.4em;
+        top: 0.4em;
+        width: var(--btn-width);
+        line-height: 1;
     }
     .is_touch_device [data-btn="controls-modal-open"] {
         display: none;

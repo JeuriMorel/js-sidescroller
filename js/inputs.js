@@ -97,8 +97,6 @@ export default class InputHandler {
             { signal: this.keypressController.signal }
         )
 
-        //mobile controller
-
         this.controllerBtns = qsa("[data-controls]")
 
         this.controllerBtns?.forEach(btn => {
@@ -124,15 +122,46 @@ export default class InputHandler {
                 { signal: this.keypressController.signal }
             )
             btn.addEventListener(
+                "touchmove",
+                e => {
+                    if (e.cancelable) e.preventDefault()
+                    if (this.modal.open) return
+                    let targetKey =
+                        e.targetTouches[0].target.closest("button")
+                    let currentElement = document
+                        .elementFromPoint(
+                            e.touches[0].pageX,
+                            e.touches[0].pageY
+                        )
+                        .closest("button")
+
+                    
+
+                    if (currentElement != targetKey && targetKey.hasAttribute("data-active")) {
+                        this.setKeyRelease(targetKey.dataset.controls)
+                        btn.removeAttribute("data-active")
+                    }
+                    
+                    if (this.game.isRecovering || isPaused) return
+                    if (currentElement && !currentElement.hasAttribute('data-active')) {
+                        this.setKeyPress(currentElement.dataset.controls)
+                        currentElement.setAttribute("data-active", "")
+                    }
+
+                },
+                { signal: this.keypressController.signal }
+            )
+            btn.addEventListener(
                 "touchend",
                 e => {
                     if (e.cancelable) e.preventDefault()
                     let key =
-                        e.changedTouches[0].target.closest("button").dataset
-                            .controls
+                        e.changedTouches[0].target.closest("button")
 
-                    this.setKeyRelease(key)
-                    btn.removeAttribute("data-active")
+                    if (key.hasAttribute('data-active')) {
+                        this.setKeyRelease(key.dataset.controls)
+                        btn.removeAttribute("data-active")
+                    }
                 },
                 { signal: this.keypressController.signal }
             )
