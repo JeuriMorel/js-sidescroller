@@ -191,33 +191,56 @@ button {
         ". . action action"
         "jump jump action action"
         "jump jump . .";
+    gap: 0.4em;
 }
 .mobile-controller menu[data-keys="actions"] button {
     border-radius: 0.75em;
 }
-.mobile-controller menu[data-keys="actions"] button[data-controls="jump"] {
+.mobile-controller menu[data-keys="actions"] button[data-controls="jump"] span {
+    display: block;
     rotate: -90deg;
 }
 
 .controls-btn {
+    --color-dark: rgb(20, 20, 20, 0.8);
+    --color-light: rgb(180, 180, 180, 0.8);
+    --h1: 2px;
+    --v1: 2px;
+    --h2: 0;
+    --v2: 0;
+    --blur1: 0.3em;
+    --blur2: 0.3em;
     display: inline-block;
+    position: relative;
     text-align: center;
     line-height: var(--btn-font-size);
     text-align: center;
     min-width: var(--btn-width);
     font-size: var(--btn-font-size);
-    font-weight: bold;
     border-radius: 1em;
-    background-color: rgb(40, 40, 40, 0.8);
-    background-image: linear-gradient(var(--direction), transparent 0%,rgb(80, 80, 80, 0.2) 25%, rgb(80, 80, 80, 0.8) 80%, rgb(80, 80, 80, 0.9) 100%);
+    background-color: var(--color-dark);
+    border-color: var(--color-light);
+    border-width: 1px;
+    background-image: linear-gradient(
+        to bottom right,
+        rgb(20, 20, 20, 0.2) 0%,
+        rgb(80, 80, 80, 0.1) 25%,
+        rgb(80, 80, 80, 0.67) 80%,
+        rgb(80, 80, 80, 0.7) 100%
+    );
     aspect-ratio: 1;
     user-select: none;
     color: white;
+    color: var(--color-light);
     padding: 0.5em;
+    box-shadow: var(--h1) var(--v1) var(--blur1) var(--color-dark),
+        var(--h2) var(--v2) var(--blur2) var(--color-light);
 }
 
-.controls-btn:active{
-    scale: 0.9
+.controls-btn:active,
+.controls-btn[data-active] {
+    scale: 0.95;
+    border-style: inset;
 }
 
 [data-btn="controls-modal-open"] {
@@ -243,31 +266,28 @@ button {
     grid-area: action;
 }
 [data-controls="left"] {
-    --direction: to right;
     border-top-right-radius: var(--btn-width);
     border-bottom-right-radius: var(--btn-width);
 }
 [data-controls="right"] {
-    --direction: to left;
+    /* --direction: to left; */
     border-top-left-radius: var(--btn-width);
     border-bottom-left-radius: var(--btn-width);
 }
 [data-controls="up"] {
-    --direction: to bottom;
+    /* --direction: to bottom; */
     border-bottom-right-radius: var(--btn-width);
     border-bottom-left-radius: var(--btn-width);
 }
 [data-controls="down"] {
-    --direction: to top;
+    /* --direction: to top; */
     border-top-right-radius: var(--btn-width);
     border-top-left-radius: var(--btn-width);
 }
 [data-controls="jump"] {
-    --direction: to right;
     padding: 0.75em;
 }
 [data-controls="action"] {
-    --direction: to top left;
     padding: 0.75em;
 }
 

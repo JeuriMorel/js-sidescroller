@@ -119,6 +119,7 @@ export default class InputHandler {
 
                     if (this.game.isRecovering || isPaused) return
                     this.setKeyPress(key)
+                    btn.setAttribute("data-active", "")
                 },
                 { signal: this.keypressController.signal }
             )
@@ -131,6 +132,7 @@ export default class InputHandler {
                             .controls
 
                     this.setKeyRelease(key)
+                    btn.removeAttribute("data-active")
                 },
                 { signal: this.keypressController.signal }
             )
