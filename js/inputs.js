@@ -31,6 +31,8 @@ export default class InputHandler {
             pause: "p",
         }
 
+        this.mobileTouches = {}
+
         this.modal = qs("[data-modal='controls']")
         this.modalOpen = qs("[data-btn='controls-modal-open']")
         this.modalSave = qs("[data-btn='controls-modal-save']")
@@ -108,6 +110,8 @@ export default class InputHandler {
                         e.targetTouches[0].target.closest("button").dataset
                             .controls
 
+                    this.mobileTouches[key] = [key]
+
                     if (this.modal.open) return
                     if (key === "pause") {
                         togglePause()
@@ -126,28 +130,54 @@ export default class InputHandler {
                 e => {
                     if (e.cancelable) e.preventDefault()
                     if (this.modal.open) return
-                    let targetKey =
-                        e.targetTouches[0].target.closest("button")
+                    let targetKey = e.targetTouches[0].target.closest("button")
                     let currentElement = document
                         .elementFromPoint(
                             e.touches[0].pageX,
                             e.touches[0].pageY
-                        )
-                        .closest("button")
+                        )?.closest("button")
 
-                    
-
-                    if (currentElement != targetKey && targetKey.hasAttribute("data-active")) {
+                    if (
+                        currentElement != targetKey &&
+                        targetKey.hasAttribute("data-active")
+                    ) {
                         this.setKeyRelease(targetKey.dataset.controls)
+                        this.mobileTouches[targetKey.dataset.controls] =
+                            this.mobileTouches[
+                                targetKey.dataset.controls
+                            ].filter(key => key != targetKey.dataset.controls)
+
                         btn.removeAttribute("data-active")
+
+                        
                     }
-                    
+
+                    if (
+                        !currentElement &&
+                        this.mobileTouches[targetKey.dataset.controls].length
+                    ) {
+                        this.mobileTouches[targetKey.dataset.controls].forEach(
+                            btnKey => {
+                                let button = qs(`[data-controls=${btnKey}]`)
+                                this.setKeyRelease(btnKey)
+                                button.removeAttribute("data-active")
+                            }
+                        )
+                        this.mobileTouches[targetKey.dataset.controls] = []
+                    }
+
                     if (this.game.isRecovering || isPaused) return
-                    if (currentElement && !currentElement.hasAttribute('data-active')) {
+                    if (
+                        currentElement &&
+                        currentElement.hasAttribute("data-controls") &&
+                        !currentElement.hasAttribute("data-active")
+                    ) {
                         this.setKeyPress(currentElement.dataset.controls)
+                        this.mobileTouches[targetKey.dataset.controls].push(
+                            currentElement.dataset.controls
+                        )
                         currentElement.setAttribute("data-active", "")
                     }
-
                 },
                 { signal: this.keypressController.signal }
             )
@@ -155,13 +185,22 @@ export default class InputHandler {
                 "touchend",
                 e => {
                     if (e.cancelable) e.preventDefault()
-                    let key =
-                        e.changedTouches[0].target.closest("button")
+                    let key = e.changedTouches[0].target.closest("button")
 
-                    if (key.hasAttribute('data-active')) {
+                    let targetKey = e.target
+
+                    if (key.hasAttribute("data-active")) {
                         this.setKeyRelease(key.dataset.controls)
                         btn.removeAttribute("data-active")
                     }
+
+                    this.mobileTouches[targetKey.dataset.controls]?.forEach(
+                        btnKey => {
+                            let button = qs(`[data-controls=${btnKey}]`)
+                            this.setKeyRelease(btnKey)
+                            button.removeAttribute("data-active")
+                        }
+                    )
                 },
                 { signal: this.keypressController.signal }
             )
