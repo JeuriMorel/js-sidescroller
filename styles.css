@@ -48,7 +48,7 @@ body {
     height: max-content;
     position: absolute;
     color: var(--clr-neutral-700);
-    font-size: min(5em, 15vw);
+    font-size: min(5rem, 15vw);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -196,12 +196,12 @@ button {
         "left left down down right right";
 }
 .mobile-controller menu[data-keys="actions"] {
-    padding: 1em 0.5em 1em;
+    padding: 1rem 0.5rem 1rem;
     grid-template-areas:
         ". . action action"
         "jump jump action action"
         "jump jump . .";
-    gap: 0.4em;
+    gap: 0.4rem;
 }
 .mobile-controller menu[data-keys="actions"] button {
     border-radius: 0.75em;
