@@ -31,6 +31,9 @@ export default class InputHandler {
             pause: "p",
         }
 
+        this.timeStampOfLastDownRelease
+        this.canRoll = false
+
         this.mobileTouches = {}
 
         this.modal = qs("[data-modal='controls']")
@@ -122,7 +125,7 @@ export default class InputHandler {
                     // }
 
                     // if (this.game.isRecovering || isPaused) return
-                    this.setKeyPress(key, btn)
+                    this.setKeyPress(key, e.timeStamp, btn)
                 },
                 { signal: this.keypressController.signal }
             )
@@ -136,34 +139,36 @@ export default class InputHandler {
                         e.targetTouches[0].target.closest("button")
                     let targetButtonKey = targetButton.dataset.controls
                     let touchesArray = this.mobileTouches[targetButtonKey]
-                    let currentElement = document
-                        .elementFromPoint(
-                            e.touches[0].pageX,
-                            e.touches[0].pageY
-                        )
-                        ?.closest("button")
+                    let currentElement = document.elementFromPoint(
+                        e.touches[0].pageX,
+                        e.touches[0].pageY
+                    )
+                    // ?.closest("button")
 
                     if (
                         currentElement != targetButton &&
                         targetButton.hasAttribute("data-active")
                     ) {
-                        this.setKeyRelease(targetButtonKey, targetButton)
+                        this.setKeyRelease(
+                            targetButtonKey,
+                            e.timeStamp,
+                            targetButton
+                        )
                         this.removeKeyFromTouchesArray(
                             touchesArray,
                             targetButtonKey
                         )
-                        // touchesArray =
-                        //     touchesArray.filter(
-                        //         key => key != targetButtonKey
-                        //     )
                     }
 
                     if (!currentElement && touchesArray.length) {
+                        console.log(touchesArray)
                         touchesArray.forEach(btnKey => {
                             let button = qs(`[data-controls=${btnKey}]`)
-                            this.setKeyRelease(btnKey, button)
+                            this.setKeyRelease(btnKey, e.timeStamp, button)
+                            // this.removeKeyFromTouchesArray(touchesArray, btnKey)
                         })
                         touchesArray = []
+                        return
                     }
 
                     // if (this.game.isRecovering) return
@@ -174,9 +179,15 @@ export default class InputHandler {
                     ) {
                         this.setKeyPress(
                             currentElement.dataset.controls,
+                            e.timeStamp,
                             currentElement
                         )
-                        touchesArray.push(currentElement.dataset.controls)
+                        if (
+                            !touchesArray.includes(
+                                currentElement.dataset.controls
+                            )
+                        )
+                            touchesArray.push(currentElement.dataset.controls)
                     }
                 },
                 { signal: this.keypressController.signal }
@@ -191,7 +202,11 @@ export default class InputHandler {
                     let touchesArray = this.mobileTouches[targetKey]
 
                     if (changedKey.hasAttribute("data-active")) {
-                        this.setKeyRelease(changedKey.dataset.controls, btn)
+                        this.setKeyRelease(
+                            changedKey.dataset.controls,
+                            e.timeStamp,
+                            btn
+                        )
                         this.removeKeyFromTouchesArray(
                             touchesArray,
                             changedKey.dataset.controls
@@ -200,7 +215,8 @@ export default class InputHandler {
 
                     touchesArray?.forEach(btnKey => {
                         let button = qs(`[data-controls=${btnKey}]`)
-                        this.setKeyRelease(btnKey, button)
+                        this.setKeyRelease(btnKey, e.timeStamp, button)
+                        this.removeKeyFromTouchesArray(touchesArray, btnKey)
                     })
                     touchesArray = []
                 },
@@ -210,7 +226,7 @@ export default class InputHandler {
 
         window.addEventListener(
             "keydown",
-            ({ code, key }) => {
+            ({ code, key, timeStamp }) => {
                 const buttonPress = key === " " ? code : key
                 if (this.modal.open) return
                 if (buttonPress === this.keys.pause) {
@@ -220,17 +236,20 @@ export default class InputHandler {
                 }
 
                 if (this.game.isRecovering || isPaused) return
-                this.setKeyPress(this.getButtonKeyCode(buttonPress))
+                this.setKeyPress(this.getButtonKeyCode(buttonPress), timeStamp)
             },
             { signal: this.keypressController.signal }
         )
 
         window.addEventListener(
             "keyup",
-            ({ code, key }) => {
+            ({ code, key, timeStamp }) => {
                 const buttonRelease = key === " " ? code : key
                 if (this.modal.open) return
-                this.setKeyRelease(this.getButtonKeyCode(buttonRelease))
+                this.setKeyRelease(
+                    this.getButtonKeyCode(buttonRelease),
+                    timeStamp
+                )
             },
             { signal: this.keypressController.signal }
         )
@@ -253,19 +272,32 @@ export default class InputHandler {
         }
     }
 
-    setKeyPress(key, btn = null) {
+    setKeyPress(key, timeStamp, btn = null) {
         if (btn) btn.setAttribute("data-active", "")
+        if (
+            (this.lastKey =
+                "RELEASE Down" &&
+                (key === "right" || key === "left") &&
+                timeStamp - this.timeStampOfLastDownRelease < 50)
+        )
+            this.canRoll = true
         this.keysPressed[key] = true
         this.lastKey = `PRESS ${capFirstLetter(key)}`
     }
-    setKeyRelease(key, btn = null) {
-        if (btn) btn.removeAttribute("data-active")
+    setKeyRelease(key, timeStamp, btn = null) {
+        if (btn) {
+            btn.removeAttribute("data-active")
+        }
+        if (key === "down") {
+            this.timeStampOfLastDownRelease = timeStamp
+        }
         this.keysPressed[key] = false
         this.lastKey = `RELEASE ${capFirstLetter(key)}`
     }
 
     removeKeyFromTouchesArray(touchesArray, targetKey) {
         touchesArray = touchesArray?.filter(key => key != targetKey)
+        // console.log(touchesArray, targetKey)
     }
 
     removeEventListeners() {

@@ -253,14 +253,23 @@ export class Idle extends State {
         this.player.hurtbox.body.width = this.player.width - 65
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey, keysPressed }) {
+    handleInput({ lastKey, keysPressed, canRoll }) {
         if (this.player.isAtStartingPosition()) {
             this.player.game.scrollSpeed = 0
         } else {
             this.player.game.scrollSpeed = DEFAULT_SCROLL_SPEED
             this.player.x -= this.player.game.scrollSpeed
         }
-        if (lastKey === "PRESS Action") this.player.setState(states.CLAW_ATTACK)
+
+        if (canRoll) {
+            this.player.game.input.canRoll = false
+            if (lastKey === "PRESS Right")
+                this.player.setState(states.ROLL_ACROSS)
+            else if (lastKey === "PRESS Left")
+                this.player.setState(states.ROLL_BACK)
+            
+        } else if (lastKey === "PRESS Action")
+            this.player.setState(states.CLAW_ATTACK)
         else if (lastKey === "PRESS Up" || lastKey === "PRESS Jump")
             this.player.setState(states.JUMPING)
         else if (lastKey === "PRESS Down") this.player.setState(states.RESTING)
