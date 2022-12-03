@@ -99,7 +99,7 @@ export default class InputHandler {
                 }
                 this.lastTap = timeTap
             },
-            { signal: this.keypressController.signal }
+            { signal: this.keypressController.signal, passive: true }
         )
 
         this.controllerBtns = qsa("[data-controls]")
@@ -107,19 +107,20 @@ export default class InputHandler {
         this.controllerBtns?.forEach(btn => {
             btn.addEventListener(
                 "touchstart",
-                ({ cancelable, targetTouches, timeStamp }) => {
-                    if (cancelable) e.preventDefault()
+                e => {
+                    if (e.cancelable) e.preventDefault()
                     if (this.modal.open || this.game.isRecovering || isPaused)
                         return
 
                     let key =
-                        targetTouches[0].target.closest("button").dataset
+                        e.targetTouches[0].target.closest("button").dataset
                             .controls
 
                     this.mobileTouches[key] = [key]
-                    this.setKeyPress(key, timeStamp, btn)
+                    this.setKeyPress(key, e.timeStamp, btn)
+                    console.log(key)
                 },
-                { signal: this.keypressController.signal }
+                { signal: this.keypressController.signal, passive: true }
             )
             btn.addEventListener(
                 "touchmove",
@@ -182,7 +183,7 @@ export default class InputHandler {
                             touchesArray.push(currentElement.dataset.controls)
                     }
                 },
-                { signal: this.keypressController.signal }
+                { signal: this.keypressController.signal, passive: true }
             )
             btn.addEventListener(
                 "touchend",

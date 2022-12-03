@@ -331,7 +331,7 @@ button {
     .is_touch_device [data-btn="full-screen"] {
         --clr-neutral-300: hsl(0, 0%, 27%, 0.5);
         --clr-neutral-400: hsl(0, 0%, 40%, 0.5);
-        color: var(--clr-neutral-500);
+        color: var(--clr-neutral-900);
         padding: 0.2em;
         display: flex;
         align-items: center;
