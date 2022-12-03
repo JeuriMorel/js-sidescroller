@@ -1,5 +1,5 @@
 import { togglePause, isPaused } from "./app.js"
-import { capFirstLetter, qs, qsa } from "./utils.js"
+import { qs, qsa } from "./utils.js"
 
 // modalSave.addEventListener("click", () => {
 //     modal.close()
@@ -107,25 +107,17 @@ export default class InputHandler {
         this.controllerBtns?.forEach(btn => {
             btn.addEventListener(
                 "touchstart",
-                e => {
-                    if (e.cancelable) e.preventDefault()
+                ({ cancelable, targetTouches, timeStamp }) => {
+                    if (cancelable) e.preventDefault()
                     if (this.modal.open || this.game.isRecovering || isPaused)
                         return
 
                     let key =
-                        e.targetTouches[0].target.closest("button").dataset
+                        targetTouches[0].target.closest("button").dataset
                             .controls
 
                     this.mobileTouches[key] = [key]
-
-                    // if (key === "pause") {
-                    //     togglePause()
-                    //     this.game.music.toggleMusicPlayback()
-                    //     return
-                    // }
-
-                    // if (this.game.isRecovering || isPaused) return
-                    this.setKeyPress(key, e.timeStamp, btn)
+                    this.setKeyPress(key, timeStamp, btn)
                 },
                 { signal: this.keypressController.signal }
             )
@@ -158,10 +150,10 @@ export default class InputHandler {
                             touchesArray,
                             targetButtonKey
                         )
+                        return
                     }
 
                     if (!currentElement && touchesArray.length) {
-                        console.log(touchesArray)
                         touchesArray.forEach(btnKey => {
                             let button = qs(`[data-controls=${btnKey}]`)
                             this.setKeyRelease(btnKey, e.timeStamp, button)
@@ -173,8 +165,8 @@ export default class InputHandler {
 
                     // if (this.game.isRecovering) return
                     if (
-                        currentElement &&
-                        currentElement.hasAttribute("data-controls") &&
+                        // currentElement &&
+                        currentElement?.hasAttribute("data-controls") &&
                         !currentElement.hasAttribute("data-active")
                     ) {
                         this.setKeyPress(
@@ -276,13 +268,13 @@ export default class InputHandler {
         if (btn) btn.setAttribute("data-active", "")
         if (
             (this.lastKey =
-                "RELEASE Down" &&
+                "RELEASE down" &&
                 (key === "right" || key === "left") &&
                 timeStamp - this.timeStampOfLastDownRelease < 50)
         )
             this.canRoll = true
         this.keysPressed[key] = true
-        this.lastKey = `PRESS ${capFirstLetter(key)}`
+        this.lastKey = `PRESS ${key}`
     }
     setKeyRelease(key, timeStamp, btn = null) {
         if (btn) {
@@ -292,7 +284,7 @@ export default class InputHandler {
             this.timeStampOfLastDownRelease = timeStamp
         }
         this.keysPressed[key] = false
-        this.lastKey = `RELEASE ${capFirstLetter(key)}`
+        this.lastKey = `RELEASE ${key}`
     }
 
     removeKeyFromTouchesArray(touchesArray, targetKey) {
