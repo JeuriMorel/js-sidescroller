@@ -105,7 +105,7 @@ export class Player {
             down_roll: new Audio(SOUND_SNARE),
             get_hit: new Audio(SOUND_GET_HIT),
             bounce: new Audio(SOUND_BOUNCE),
-            land: new Audio(SOUND_LAND)
+            land: new Audio(SOUND_LAND),
         }
 
         setSfxVolume(this.audio)
@@ -211,7 +211,6 @@ export class Player {
             this.checkHitCollision()
     }
     draw(context) {
-
         context.drawImage(
             this.image,
             this.animationSheet * this.width,

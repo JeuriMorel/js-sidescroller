@@ -18,6 +18,7 @@ import {
     SOUND_BOSS_JUMP,
     SOUND_BOSS_RETREAT,
     SOUND_TONGUE,
+    INVULNERABILITY_TIME,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
 import { FloatingMessage } from "./UI.js"
@@ -217,19 +218,23 @@ export class Armored_Frog {
 
         //Attack
         if (
-            this.attackTimer > this.attackInterval &&
-            this.isOnGround() &&
-            !this.isDefeated &&
-            !this.game.player.isDashAttacking()
+            this.currentState !== this.states[STATES.ATTACK] &&
+            this.isOnGround()
         ) {
-            this.attackTimer = 0
-            this.attackInterval =
-                this.attackIntervals[
-                    Math.floor(Math.random() * this.attackIntervals.length)
-                ]
-            this.attack()
-        } else {
-            this.attackTimer += deltaTime
+            if (
+                this.attackTimer > this.attackInterval &&
+                !this.isDefeated &&
+                !this.game.player.isDashAttacking()
+            ) {
+                this.attackTimer = 0
+                this.attackInterval =
+                    this.attackIntervals[
+                        Math.floor(Math.random() * this.attackIntervals.length)
+                    ]
+                this.attack()
+            } else {
+                this.attackTimer += deltaTime
+            }
         }
 
         this.currentState.update()
@@ -309,8 +314,16 @@ export class Armored_Frog {
             this.setState(
                 this.healthPoints <= 0 ? STATES.DEFEATED : STATES.GOT_HIT
             )
+            this.setPhase()
         }
 
+        if (target === "Attacked: PLAYER") {
+            if (this.currentState.state === "ATTACK") this.exitTongueAttack()
+            this.invulnerabilityTime = INVULNERABILITY_TIME
+            // this.setState(STATES.JUMP_FORWARD)
+        }
+    }
+    setPhase() {
         if (
             this.phase.phase === "Phase_One" &&
             this.healthPoints <= this.phase2Threshold
@@ -321,11 +334,6 @@ export class Armored_Frog {
             this.healthPoints <= this.phase3Threshold
         ) {
             this.phase = new Phase_Three(this)
-        }
-
-        if (target === "Attacked: PLAYER") {
-            if (this.currentState.state === "ATTACK") this.exitTongueAttack()
-            this.setState(STATES.JUMP_FORWARD)
         }
     }
 

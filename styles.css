@@ -24,11 +24,15 @@
     --btn-font-size: 24px;
 }
 
+body, html{
+    height: 100%;
+}
+
 body {
     font-family: "Chicle", cursive;
     /* padding: 2rem; */
     text-transform: capitalize;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     position: relative;
     background-color: black;
 }

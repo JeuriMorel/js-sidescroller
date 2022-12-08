@@ -127,6 +127,7 @@ window.addEventListener("load", function () {
                 this.recoveryTime = 0
                 this.isRecovering = false
             }
+            
             this.enemies.forEach(enemy => {
                 enemy.update(deltaTime)
             })

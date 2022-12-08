@@ -70,8 +70,7 @@ export class Attack extends Boss_State {
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX -
                 75
-        }
-        if (this.boss.frame === 15) {
+        }else if (this.boss.frame === 15) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -84,8 +83,7 @@ export class Attack extends Boss_State {
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX -
                 145
-        }
-        if (this.boss.frame === 17) {
+        } else if (this.boss.frame === 17) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -97,8 +95,7 @@ export class Attack extends Boss_State {
                     this.boss.idleXOffsetModifier *
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX
-        }
-        if (this.boss.frame === 18) {
+        }else if (this.boss.frame === 18) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -131,15 +128,6 @@ export class Retreat extends Boss_State {
     }
     update() {
         this.boss.x += this.boss.game.scrollSpeed + this.boss.horizontalSpeed
-        this.boss.game.particles.push(
-            new Boom({
-                game: this.boss.game,
-                x: this.boss.x + this.boss.width * Math.random() * 0.5 + 0.5,
-                y: this.boss.game.height - this.boss.game.groundMargin,
-                sizeModifier: Math.random() * 0.2 + 0.1,
-                src: null,
-            })
-        )
         if (this.boss.x >= this.boss.game.width - this.boss.width)
             this.boss.setState(STATES.IDLE)
     }
@@ -297,3 +285,4 @@ export class Defeated extends Boss_State {
         }
     }
 }
+
