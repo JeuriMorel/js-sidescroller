@@ -47,7 +47,7 @@ export class Armored_Frog {
         this.height = 0
         this.horizontalSpeed = 0
         this.spriteGroundOffsetModifier = 0.9
-        this.attackIntervals = [4000, 3000, 5000]
+        this.attackIntervals = [1000, 2000, 2500]
         this.attackOffsetX = 95
         this.got_hitOffsetX = 48
         this.hitOffsetX = 0
@@ -307,7 +307,7 @@ export class Armored_Frog {
     resolveCollision({ target, attackDamage }) {
         if (target === "Attacked: ENEMY") {
             if (this.currentState.state === "ATTACK") this.exitTongueAttack()
-            this.healthPoints -= attackDamage - this.defence
+            this.healthPoints -= Math.max(attackDamage - this.defence, 0)
             if (this.healthPoints < 0) this.healthPoints = 0
             this.healthBar.updateBar(this.healthPoints)
             this.setState(
@@ -319,7 +319,6 @@ export class Armored_Frog {
         if (target === "Attacked: PLAYER") {
             if (this.currentState.state === "ATTACK") this.exitTongueAttack()
             this.invulnerabilityTime = INVULNERABILITY_TIME
-            // this.setState(STATES.JUMP_FORWARD)
         }
     }
     setPhase() {
