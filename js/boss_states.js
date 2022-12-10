@@ -31,14 +31,18 @@ export class Attack extends Boss_State {
     constructor(boss) {
         super("ATTACK")
         this.boss = boss
+        this.spriteWidth = 609
+        this.spriteHeight = 393
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
         this.boss.resetBoxes()
-        this.boss.spriteWidth = 609
-        this.boss.spriteHeight = 393
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 30
         this.boss.image = images.ATTACK
         this.boss.horizontalSpeed = 0
@@ -51,8 +55,6 @@ export class Attack extends Boss_State {
         this.boss.hurtbox.tongue.isActive = true
         this.boss.hitbox.tongue.isActive = true
         this.boss.hitbox.claws.isActive = true
-        
-        
     }
     update() {
         this.boss.x -= this.boss.game.scrollSpeed
@@ -70,7 +72,7 @@ export class Attack extends Boss_State {
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX -
                 75
-        }else if (this.boss.frame === 15) {
+        } else if (this.boss.frame === 15) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -95,7 +97,7 @@ export class Attack extends Boss_State {
                     this.boss.idleXOffsetModifier *
                     this.boss.sizeModifier +
                 this.boss.attackOffsetX
-        }else if (this.boss.frame === 18) {
+        } else if (this.boss.frame === 18) {
             this.boss.hurtbox.tongue.xOffset =
                 this.boss.width *
                     this.boss.idleXOffsetModifier *
@@ -113,14 +115,18 @@ export class Retreat extends Boss_State {
     constructor(boss) {
         super("RETREAT")
         this.boss = boss
+        this.spriteWidth = 467
+        this.spriteHeight = 393
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
         this.boss.horizontalSpeed = 3
-        this.boss.spriteWidth = 467
-        this.boss.spriteHeight = 393
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 22
         this.boss.image = images.RETREAT
         this.boss.resetBoxes()
@@ -136,13 +142,17 @@ export class Idle extends Boss_State {
     constructor(boss) {
         super("IDLE")
         this.boss = boss
+        this.spriteWidth = 446
+        this.spriteHeight = 393
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
-        this.boss.spriteWidth = 446
-        this.boss.spriteHeight = 393
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 30
         this.boss.image = images.IDLE
         this.boss.horizontalSpeed = 0
@@ -150,7 +160,7 @@ export class Idle extends Boss_State {
     }
     update() {
         this.boss.x -= this.boss.game.scrollSpeed
-        if (this.boss.x <= this.boss.game.width * 0.5) {
+        if (this.boss.x <= this.boss.game.width * 0.4) {
             this.boss.setState(STATES.RETREAT)
         }
     }
@@ -159,13 +169,17 @@ export class Jump_Down extends Boss_State {
     constructor(boss) {
         super("JUMP_DOWN")
         this.boss = boss
+        this.spriteWidth = 647
+        this.spriteHeight = 432
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
-        this.boss.spriteWidth = 647
-        this.boss.spriteHeight = 432
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 20
         this.boss.image = images.JUMP_DOWN
         this.boss.hitbox.claws.width =
@@ -181,13 +195,18 @@ export class Jump_Forward extends Boss_State {
     constructor(boss) {
         super("JUMP_FORWARD")
         this.boss = boss
+        this.spriteWidth = 707
+        this.spriteHeight = 491
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
-        this.boss.spriteWidth = 707
-        this.boss.spriteHeight = 491
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 20
         this.boss.image = images.JUMP_FORWARD
         this.boss.velocityY -= 55
@@ -217,14 +236,18 @@ export class Got_Hit extends Boss_State {
     constructor(boss) {
         super("GOT_HIT")
         this.boss = boss
+        this.spriteWidth = 494
+        this.spriteHeight = 393
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
         this.boss.horizontalSpeed = 35
-        this.boss.spriteWidth = 494
-        this.boss.spriteHeight = 393
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 16
         this.boss.image = images.GOT_HIT
         this.boss.hurtbox.body.isActive = false
@@ -249,14 +272,18 @@ export class Defeated extends Boss_State {
     constructor(boss) {
         super("DEFEATED")
         this.boss = boss
+        this.spriteWidth = 522
+        this.spriteHeight = 475
+        this.width = this.spriteWidth * this.boss.sizeModifier
+        this.height = this.spriteHeight * this.boss.sizeModifier
     }
     enter() {
         this.boss.frame = 0
         this.boss.horizontalSpeed = 0
-        this.boss.spriteWidth = 522
-        this.boss.spriteHeight = 475
-        this.boss.width = this.boss.spriteWidth * this.boss.sizeModifier
-        this.boss.height = this.boss.spriteHeight * this.boss.sizeModifier
+        this.boss.spriteWidth = this.spriteWidth
+        this.boss.spriteHeight = this.spriteHeight
+        this.boss.width = this.width
+        this.boss.height = this.height
         this.boss.maxFrame = 50
         this.boss.image = images.DEFEATED
         this.boss.hurtbox.body.isActive = false
@@ -285,4 +312,3 @@ export class Defeated extends Boss_State {
         }
     }
 }
-

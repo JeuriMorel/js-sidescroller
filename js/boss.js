@@ -35,7 +35,6 @@ export class Armored_Frog {
         this.frameInterval = 1000 / this.fps
         this.frameTimer = 0
         this.defence = 10
-        // this.speed = 0
         this.deleteEnemy = false
         this.isDefeated = false
         this.invulnerabilityTime = 0
