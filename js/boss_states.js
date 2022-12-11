@@ -58,52 +58,57 @@ export class Attack extends Boss_State {
     }
     update() {
         this.boss.x -= this.boss.game.scrollSpeed
-        if (this.boss.frame === 14) {
-            this.boss.hurtbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX -
-                75
-            this.boss.audio.tongue.play()
-            this.boss.hitbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX -
-                75
-        } else if (this.boss.frame === 15) {
-            this.boss.hurtbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX -
-                145
-            this.boss.hitbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX -
-                145
-        } else if (this.boss.frame === 17) {
-            this.boss.hurtbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX -
-                80
-            this.boss.hitbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX
-        } else if (this.boss.frame === 18) {
-            this.boss.hurtbox.tongue.xOffset =
-                this.boss.width *
-                    this.boss.idleXOffsetModifier *
-                    this.boss.sizeModifier +
-                this.boss.attackOffsetX
+
+        if (this.boss.isFirstRefreshOnCurrentFrame()) {
+            if (this.boss.frame === 14) {
+                this.boss.hurtbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX -
+                    75
+                this.boss.audio.tongue.play()
+                this.boss.hitbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX -
+                    75
+            } else if (this.boss.frame === 15) {
+                this.boss.hurtbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX -
+                    145
+                this.boss.hitbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX -
+                    145
+            } else if (this.boss.frame === 17) {
+                this.boss.hurtbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX -
+                    80
+                this.boss.hitbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX
+            } else if (this.boss.frame === 18) {
+                this.boss.hurtbox.tongue.xOffset =
+                    this.boss.width *
+                        this.boss.idleXOffsetModifier *
+                        this.boss.sizeModifier +
+                    this.boss.attackOffsetX
+            }
         }
+
+        this.boss.lastFinishedFrame = this.boss.frame
 
         if (this.boss.frame === this.boss.maxFrame) {
             this.boss.exitTongueAttack()
@@ -173,6 +178,10 @@ export class Jump_Down extends Boss_State {
         this.spriteHeight = 432
         this.width = this.spriteWidth * this.boss.sizeModifier
         this.height = this.spriteHeight * this.boss.sizeModifier
+        this.claws = {
+            width: this.boss.width * 0.6 * this.boss.sizeModifier,
+            yOffset: this.boss.height * 1.75 * this.boss.sizeModifier,
+        }
     }
     enter() {
         this.boss.frame = 0
@@ -182,10 +191,8 @@ export class Jump_Down extends Boss_State {
         this.boss.height = this.height
         this.boss.maxFrame = 20
         this.boss.image = images.JUMP_DOWN
-        this.boss.hitbox.claws.width =
-            this.boss.width * 0.6 * this.boss.sizeModifier
-        this.boss.hitbox.claws.yOffset =
-            this.boss.height * 1.75 * this.boss.sizeModifier
+        this.boss.hitbox.claws.width = this.claws.width
+        this.boss.hitbox.claws.yOffset = this.claws.yOffset
     }
     update() {
         if (this.boss.isOnGround()) this.boss.setState(STATES.IDLE)

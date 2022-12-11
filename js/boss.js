@@ -30,6 +30,7 @@ export class Armored_Frog {
         this.healthPoints = 100
         this.animationSheet = 0
         this.frame = 0
+        this.lastFinishedFrame = null
         this.maxFrame = 11
         this.fps = 20
         this.frameInterval = 1000 / this.fps
@@ -356,5 +357,9 @@ export class Armored_Frog {
             this.hitbox.claws.width = this.width * 1.4 * this.sizeModifier
             this.hitbox.claws.yOffset = this.height * 1.4 * this.sizeModifier
         }
+    }
+
+    isFirstRefreshOnCurrentFrame() {
+        return this.frame !== this.lastFinishedFrame
     }
 }
