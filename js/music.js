@@ -7,7 +7,6 @@ export default class MusicHandler {
         this.themes = {
             main: qs("#main_theme"),
             forest: qs("#forest_theme"),
-            creepy: qs("#creepy_theme"),
             boss: qs("#boss_theme"),
         }
         this.themeTimer = 0
@@ -17,10 +16,6 @@ export default class MusicHandler {
         this.mainThemeFadeOutPoint = this.themes.main.duration - 5
         this.themes.main.dataset.fadeOut = this.themes.main.duration - 5
         this.themes.forest.addEventListener("ended", () => {
-            this.currentTheme = this.themes.creepy
-            this.currentTheme.play()
-        })
-        this.themes.creepy.addEventListener("ended", () => {
             this.currentTheme = this.themes.main
             this.currentTheme.play()
         })
@@ -40,7 +35,6 @@ export default class MusicHandler {
         )
         this.themes.main.volume = 0.1
         this.themes.boss.volume = 0.1
-        this.themes.creepy.volume = 0.1
         this.themes.forest.volume = 1
         this.currentTheme = this.themes.forest
     }

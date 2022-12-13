@@ -11,7 +11,13 @@
             href="https://fonts.googleapis.com/css2?family=Chicle&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+            integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
         <link rel="stylesheet" href="styles.css" />
         <script src="/js/app.js" type="module"></script>
     </head>
@@ -19,13 +25,13 @@
         <h1 class="[ h1 ]">Kabuki</h1>
 
         <button
-                    type="button"
-                    class="[ ] [ ] [ btn ] full-screen"
-                    data-btn="full-screen"
-                >
-                    <span class=" [] [ icon ] []" data-icon="expand"></span>
-                </button>
-        
+            type="button"
+            class="[ ] [ ] [ btn ] full-screen"
+            data-btn="full-screen"
+        >
+            <span class="[] [ icon ] []" data-icon="expand"></span>
+        </button>
+
         <menu class="[ menu ][][]">
             <li>
                 <button
@@ -46,7 +52,15 @@
                     edit Controls
                 </button>
             </li>
-            
+            <li>
+                <button
+                    type="button"
+                    class="[ ] [ ] [ btn ] modal-open"
+                    data-btn="credits-open"
+                >
+                    Credits
+                </button>
+            </li>
         </menu>
         <dialog class="modal" data-modal="controls">
             <form class="controls-form" method="dialog" data-form="controls">
@@ -82,17 +96,187 @@
                 </button>
             </form>
         </dialog>
+        <dialog class="modal" data-modal="credits">
+            <h2>Credits and attributions</h2>
+            <button
+                class="[ ] [ ] [ btn ] modal-close"
+                data-btn="credits-close"
+                
+            >
+                &times;
+            </button>
+            <menu class="[ menu ] [] []" data-list="credits">
+                <li>
+                    <p>Game design inspired by tutorials by:</p>
+                    <a
+                        href="https://www.youtube.com/@Frankslaboratory"
+                        target="_blank"
+                        >Frank's Laboratory</a
+                    >
+                </li>
+                <li>
+                    <p>Sprites and background:</p>
+                    <a href="https://bevouliin.com/" target="_blank"
+                        >Bevouiliin</a
+                    >
+                </li>
+                <li>
+                    <p>heart icons:</p>
+                    <a
+                        href="https://opengameart.org/users/knik1985"
+                        target="_blank"
+                        >knik1985</a
+                    >
+                </li>
+                <li>
+                    <p>hit animations:</p>
+                    <a
+                        href="https://www.facebook.com/sinestesiastudio"
+                        target="_blank"
+                        >Sinestesia</a
+                    >
+                </li>
+                <li>
+                    <h3>sound effects:</h3>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/spring-spring"
+                                target="_blank"
+                                >Spring Spring</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/spookymodem"
+                                target="_blank"
+                                >spookymodem</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/artisticdude"
+                                target="_blank"
+                                >artisticdude
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/ogrebane"
+                                target="_blank"
+                                >ogrebane
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/ignasd"
+                                target="_blank"
+                                >IgnasD</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="http://opengameart.org/users/varkalandar"
+                                target="_blank"
+                                >Hansjörg Malthaner</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/kerzoven"
+                                target="_blank"
+                                >Kerzoven</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/qubodup"
+                                target="_blank"
+                                >qubodup</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>music:</h3>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/centurionofwar"
+                                target="_blank"
+                                >Centurion_of_war</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/cynicmusic"
+                                target="_blank"
+                                >The Cynic Project / Alex Smith</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+            </menu>
+        </dialog>
         <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
         <div class="mobile-controller">
-            <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="directions">
-                <li data-direction="left"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="left">&#8678;</button></li>
-                <li data-direction="up"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="up">&#8679;</button></li>
-                <li data-direction="right"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="right">&#8680;</button></li>
-                <li data-direction="down"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="down">&#8681;</button></li>
+            <menu class="[ mobile-controls ] [ ] [ ]" data-keys="directions">
+                <li data-direction="left">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="left"
+                    >
+                        &#8678;
+                    </button>
+                </li>
+                <li data-direction="up">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="up"
+                    >
+                        &#8679;
+                    </button>
+                </li>
+                <li data-direction="right">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="right"
+                    >
+                        &#8680;
+                    </button>
+                </li>
+                <li data-direction="down">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="down"
+                    >
+                        &#8681;
+                    </button>
+                </li>
             </menu>
-            <menu class=" [ mobile-controls ] [ ] [ ] " data-keys="actions">
-                <li data-action="jump"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="jump"><span>➟</span> </button></li>
-                <li data-action="action"><button type="button" class="[ ] [ ] [ controls-btn ]" data-controls="action"><i class="fa-solid fa-hand-fist"></i></button></li>
+            <menu class="[ mobile-controls ] [ ] [ ]" data-keys="actions">
+                <li data-action="jump">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="jump"
+                    >
+                        <span>➟</span>
+                    </button>
+                </li>
+                <li data-action="action">
+                    <button
+                        type="button"
+                        class="[ ] [ ] [ controls-btn ]"
+                        data-controls="action"
+                    >
+                        <i class="fa-solid fa-hand-fist"></i>
+                    </button>
+                </li>
             </menu>
         </div>
         <audio

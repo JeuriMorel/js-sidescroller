@@ -20,11 +20,15 @@
     --clr-neutral-700: hsl(0, 0%, 75%);
     --clr-neutral-800: hsl(0, 0%, 82%);
     --clr-neutral-900: hsl(0, 0%, 93%);
+    --clr-accent-400: hsl(0, 88%, 29%);
+    --clr-accent-500: hsl(0, 88%, 49%);
+    --clr-accent-600: hsl(0, 58%, 59%);
     --btn-width: 44px;
     --btn-font-size: 24px;
 }
 
-body, html{
+body,
+html {
     height: 100%;
 }
 
@@ -37,7 +41,8 @@ body {
     background-color: black;
 }
 
-.icon::before {
+.icon::before,
+a::after {
     display: inline-block;
     font-style: normal;
     font-variant: normal;
@@ -57,7 +62,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     rotate: -5deg;
-    text-shadow: -2px 3px hsl(0, 88%, 29%);
+    text-shadow: -2px 3px var(--clr-accent-400);
 }
 .h1::before {
     content: "Super";
@@ -68,6 +73,10 @@ body {
     content: "Cat";
     position: relative;
     bottom: -0.5em;
+}
+
+h2 {
+    display: inline;
 }
 
 .canvas {
@@ -89,6 +98,10 @@ body {
     margin: auto;
     border: 1px solid var(--clr-neutral-100);
     border-radius: 5px;
+}
+
+[data-modal="credits"] {
+    padding: 1rem;
 }
 
 ::backdrop {
@@ -117,6 +130,35 @@ body {
     pointer-events: none;
     margin-left: auto;
     align-items: flex-end;
+}
+
+.menu[data-list="credits"] {
+    padding: 0;
+}
+
+.menu[data-list="credits"] li {
+    width: 100%;
+    pointer-events: all;
+}
+
+a {
+    margin-left: 1rem;
+    color: var(--clr-accent-500);
+    text-underline-offset: 0.5rem;
+    transition: color 100ms ease-in;
+    text-shadow: -1px 2px var(--clr-neutral-200);
+    letter-spacing: 2px;
+}
+a:where(:hover, :focus) {
+    text-decoration: none;
+    color: var(--clr-accent-400);
+}
+
+a::after {
+    content: "\f35d";
+    font-size: 0.5em;
+    margin-left: 0.5rem;
+    color: var(--clr-neutral-600);
 }
 
 /* .menu > * {
@@ -276,6 +318,10 @@ button {
 [data-btn="full-screen"] {
     display: none;
 }
+[data-btn="credits-close"] {
+    margin-left: auto;
+    display: inline-block;
+}
 
 [data-direction="left"] {
     grid-area: left;
@@ -326,6 +372,13 @@ button {
 }
 [data-icon="compress"]::before {
     content: "\f066";
+}
+
+@media screen and (min-width: 500px) {
+    .menu[data-list="credits"] li {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 @media (hover: none), (pointer: none) {

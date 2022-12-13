@@ -61,6 +61,18 @@ function toggleFullScreen() {
     } 
 }
 
+const creditsModal = qs("[data-modal='credits']")
+const creditsOpenBtn = qs('[data-btn="credits-open"]')
+const creditsCloseBtn = qs('[data-btn="credits-close"]')
+
+creditsOpenBtn.addEventListener('click', () => {
+    creditsModal.showModal()
+    if (!isPaused) togglePause()
+})
+creditsCloseBtn.addEventListener('click', () => {
+    creditsModal.close()
+})
+
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
