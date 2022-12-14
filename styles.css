@@ -76,7 +76,9 @@ a::after {
 }
 
 h2 {
-    display: inline;
+    /* display: inline; */
+    margin-bottom: 2rem;
+    font-size: 2em;
 }
 
 .canvas {
@@ -320,7 +322,7 @@ button {
 }
 [data-btn="credits-close"] {
     margin-left: auto;
-    display: inline-block;
+    display: block;
 }
 
 [data-direction="left"] {
