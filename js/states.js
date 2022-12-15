@@ -96,11 +96,6 @@ export class Attacking_Claw extends State {
         } else if (!this.player.isWhiffing && lastKey == inputType.PRESS.right) {
             this.player.setState(states.ROLL_ACROSS)
         }
-        // if (!this.player.isWhiffing && lastKey == "PRESS Action") {
-        //     this.player.frame = 6
-        //     this.player.x += 5
-        //     this.player.isWhiffing = true
-        // }
     }
 }
 export class Falling extends State {
@@ -195,7 +190,7 @@ export class Get_Hit extends State {
         this.player.audio.get_hit.play()
         this.player.attack_bonus = this.player.min_attack_bonus
     }
-    handleInput({ lastKey }) {
+    handleInput() {
         this.player.x -= 15
         if (this.player.frame == this.player.maxFrame) {
             if (this.player.isOnGround()) this.player.setState(states.IDLE)

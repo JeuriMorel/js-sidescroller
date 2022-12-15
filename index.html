@@ -39,7 +39,7 @@
                     class="[ ] [ ] [ btn ] new-game"
                     data-btn="new-game"
                 >
-                    New Game
+                    new game
                 </button>
             </li>
             <li>
@@ -49,7 +49,7 @@
                     data-btn="controls-modal-open"
                     disabled
                 >
-                    edit Controls
+                    edit controls
                 </button>
             </li>
             <li>
@@ -58,7 +58,16 @@
                     class="[ ] [ ] [ btn ] modal-open"
                     data-btn="credits-open"
                 >
-                    Credits
+                    credits
+                </button>
+            </li>
+            <li>
+                <button
+                    type="button"
+                    class="[ ] [ ] [ btn ] modal-open"
+                    data-btn="how-to-play-open"
+                >
+                    How to play
                 </button>
             </li>
         </menu>
@@ -218,6 +227,25 @@
                 </li>
             </menu>
         </dialog>
+        <dialog class="modal" data-modal="how-to-play">
+            <button
+                class="[ ] [ ] [ btn ] modal-close"
+                data-btn="how-to-play-close"
+            >
+                &times;
+            </button>
+            <h2>how-to-play</h2>
+
+            <menu class="[ menu ] [] []" data-list="how-to-play">
+                <li>
+                    
+                </li>
+                <li>
+                    
+                </li>
+                
+            </menu>
+        </dialog>
         <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
         <div class="mobile-controller">
             <menu class="[ mobile-controls ] [ ] [ ]" data-keys="directions">
@@ -284,12 +312,7 @@
             id="forest_theme"
             preload="auto"
         ></audio>
-        <audio
-            src="./audio/creepy_theme.wav"
-            id="creepy_theme"
-            preload="auto"
-            loop
-        ></audio>
+        
         <audio
             src="./audio/GameMusic_ForestTheme_24.mp3"
             id="boss_theme"

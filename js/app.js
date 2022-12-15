@@ -64,6 +64,9 @@ function toggleFullScreen() {
 const creditsModal = qs("[data-modal='credits']")
 const creditsOpenBtn = qs('[data-btn="credits-open"]')
 const creditsCloseBtn = qs('[data-btn="credits-close"]')
+const howToPlayModal = qs("[data-modal='how-to-play']")
+const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
+const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
 
 creditsOpenBtn.addEventListener('click', () => {
     creditsModal.showModal()
@@ -71,6 +74,13 @@ creditsOpenBtn.addEventListener('click', () => {
 })
 creditsCloseBtn.addEventListener('click', () => {
     creditsModal.close()
+})
+howToPlayOpenBtn.addEventListener('click', () => {
+    howToPlayModal.showModal()
+    if (!isPaused) togglePause()
+})
+howToPlayCloseBtn.addEventListener("click", () => {
+    howToPlayModal.close()
 })
 
 
