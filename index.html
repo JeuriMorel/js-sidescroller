@@ -43,32 +43,39 @@
                 </button>
             </li>
             <li>
-                <button
-                    type="button"
-                    class="[ ] [ ] [ btn ] modal-open"
-                    data-btn="controls-modal-open"
-                    disabled
-                >
-                    edit controls
-                </button>
-            </li>
-            <li>
-                <button
-                    type="button"
-                    class="[ ] [ ] [ btn ] modal-open"
-                    data-btn="credits-open"
-                >
-                    credits
-                </button>
-            </li>
-            <li>
-                <button
-                    type="button"
-                    class="[ ] [ ] [ btn ] modal-open"
-                    data-btn="how-to-play-open"
-                >
-                    How to play
-                </button>
+                <details>
+                    <summary class="[ ] [ ] [ btn ]">options</summary>
+                    <menu class="[ menu ][][]">
+                        <li>
+                            <button
+                                type="button"
+                                class="[ ] [ ] [ btn ] modal-open"
+                                data-btn="controls-modal-open"
+                                disabled
+                            >
+                                edit controls
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                class="[ ] [ ] [ btn ] modal-open"
+                                data-btn="credits-open"
+                            >
+                                credits
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                class="[ ] [ ] [ btn ] modal-open"
+                                data-btn="how-to-play-open"
+                            >
+                                How to play
+                            </button>
+                        </li>
+                    </menu>
+                </details>
             </li>
         </menu>
         <dialog class="modal" data-modal="controls">
@@ -237,13 +244,8 @@
             <h2>how-to-play</h2>
 
             <menu class="[ menu ] [] []" data-list="how-to-play">
-                <li>
-                    
-                </li>
-                <li>
-                    
-                </li>
-                
+                <li></li>
+                <li></li>
             </menu>
         </dialog>
         <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
@@ -312,7 +314,7 @@
             id="forest_theme"
             preload="auto"
         ></audio>
-        
+
         <audio
             src="./audio/GameMusic_ForestTheme_24.mp3"
             id="boss_theme"

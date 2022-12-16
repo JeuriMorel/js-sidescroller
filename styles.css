@@ -124,7 +124,7 @@ h2 {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 0.1em;
+    gap: 0.5em;
     z-index: 2;
     position: relative;
     padding: 1rem;
@@ -167,9 +167,9 @@ a::after {
 
 } */
 
-button {
+/* button {
     pointer-events: all;
-}
+} */
 
 .btn {
     font: inherit;
@@ -190,6 +190,7 @@ button {
         var(--clr-neutral-300)
     );
     text-shadow: 0px 0px 4px rgba(0, 0, 0, 1);
+    pointer-events: all;
 }
 
 .btn[data-size="md"] {
@@ -374,6 +375,14 @@ button {
 }
 [data-icon="compress"]::before {
     content: "\f066";
+}
+
+summary {
+    text-align: right;
+}
+
+details[open] summary {
+    background: var(--clr-neutral-500);
 }
 
 @media screen and (min-width: 500px) {
