@@ -76,9 +76,11 @@ a::after {
 }
 
 h2 {
-    /* display: inline; */
     margin-bottom: 2rem;
     font-size: 2em;
+}
+h3 {
+    font-size: 1.5em;
 }
 
 .canvas {
@@ -100,9 +102,10 @@ h2 {
     margin: auto;
     border: 1px solid var(--clr-neutral-100);
     border-radius: 5px;
+    max-width: 46rem;
 }
 
-[data-modal="credits"] {
+[data-modal="credits"], [data-modal="how-to-play"] {
     padding: 1rem;
 }
 
@@ -142,13 +145,40 @@ h2 {
     width: 100%;
     pointer-events: all;
 }
+.menu[data-list="how-to-play"] {
+    align-items: flex-start;
+    max-width: 80%;
+    margin: 0;
+}
+
+ul{
+    list-style-type: none;
+    margin-left: 1rem;
+}
+ul li {
+    margin-bottom: 1rem;
+}
+ul span:not(.emphasize){
+    color: var(--clr-accent-400);
+    text-shadow: -2px 2px var(--clr-neutral-700);
+    margin-inline: 0.5ch;
+}
+
+.uppercase{
+    text-transform: uppercase;
+}
+
+.emphasize{
+    font-size: max(0.75em, 16px);
+    font-style: italic;
+}
 
 a {
     margin-left: 1rem;
     color: var(--clr-accent-500);
     text-underline-offset: 0.5rem;
     transition: color 100ms ease-in;
-    text-shadow: -1px 2px var(--clr-neutral-200);
+    text-shadow: -1px 2px var(--clr-neutral-700);
     letter-spacing: 2px;
 }
 a:where(:hover, :focus) {
@@ -315,16 +345,21 @@ a::after {
     color: var(--color-light);
 }
 
+.btn-close-modal {
+    margin-left: auto;
+    display: block;
+}
+
 [data-btn="controls-modal-open"] {
     display: inline-block;
 }
 [data-btn="full-screen"] {
     display: none;
 }
-[data-btn="credits-close"] {
+/* [data-btn="credits-close"] {
     margin-left: auto;
     display: block;
-}
+} */
 
 [data-direction="left"] {
     grid-area: left;
