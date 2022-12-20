@@ -25,6 +25,7 @@ import {
     Wave_Win,
 } from "./waves.js"
 import MusicHandler from "./music.js"
+import { Accordian } from "./accordian.js"
 
 export let isPaused = false
 export function togglePause() {
@@ -82,6 +83,9 @@ howToPlayOpenBtn.addEventListener('click', () => {
 howToPlayCloseBtn.addEventListener("click", () => {
     howToPlayModal.close()
 })
+
+const details = qs('details')
+new Accordian(details)
 
 
 window.addEventListener("load", function () {
