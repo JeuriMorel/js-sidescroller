@@ -78,6 +78,37 @@ export class UI {
                 this.game.height * 0.5
             )
         }
+        if (this.game.currentWave.waveIndex === 10) {
+            context.filter = "none"
+            context.font = `44px ${FONT_FAMILY}`
+            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
+            context.lineWidth = 7
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR)
+            context.strokeText(
+                `CONGRATULATIONS`,
+                this.game.width * 0.5,
+                this.game.height * 0.4
+            )
+            context.fillText(
+                `CONGRATULATIONS`,
+                this.game.width * 0.5,
+                this.game.height * 0.4
+            )
+            context.font = `32px ${FONT_FAMILY}`
+
+            context.strokeText(
+                `LIVES REMAINING: ${this.progressIcons.length}`,
+                this.game.width * 0.5,
+                this.game.height * 0.5
+            )
+            context.fillText(
+                `LIVES REMAINING: ${this.progressIcons.length}`,
+                this.game.width * 0.5,
+                this.game.height * 0.5
+            )
+        }
     }
 }
 

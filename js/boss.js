@@ -27,7 +27,7 @@ import { setSfxVolume } from "./utils.js"
 export class Armored_Frog {
     constructor(game) {
         this.game = game
-        this.healthPoints = 100
+        this.healthPoints = 20 //100
         this.animationSheet = 0
         this.frame = 0
         this.lastFinishedFrame = null

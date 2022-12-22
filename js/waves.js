@@ -1,5 +1,6 @@
 import { Armored_Frog } from "./boss.js"
 import { AngryEgg, Bee, Crawler, Ghost, PumpKing } from "./enemies.js"
+import { states } from "./states.js"
 
 const ENEMY_TYPES = {
     ANGRY_EGG: 0,
@@ -267,14 +268,16 @@ export class Wave_Win extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = []
-        this.enemiesToDefeat = 0 // 60
-        this.maxEnemies = 0 // 5
+        this.enemiesToDefeat = 0
+        this.maxEnemies = 0 
         this.enemyFrequency = 0
         this.waveIndex = WAVES.WIN
         this.nextWave = null
     }
     enter() {
         this.resetPlayerAttackSettings()
+        this.game.player.setState(states.ENDING_RESTING)
+        console.log(this.game.formattedTime)
     }
     exit() {}
 }

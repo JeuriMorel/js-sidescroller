@@ -301,6 +301,8 @@ export class Defeated extends Boss_State {
         this.boss.isDefeated = true
         this.boss.game.music.currentTheme.pause()
         this.boss.audio.growl.play()
+        this.boss.game.player.fps = 15
+        this.boss.game.player.frameInterval = 1000 / this.boss.game.player.fps
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed

@@ -32,6 +32,8 @@ import {
     Roll_Back,
     Running,
     Sleeping,
+    Ending_Resting,
+    Ending_Sleeping,
     states,
 } from "./states.js"
 import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2 } from "./particles.js"
@@ -130,6 +132,8 @@ export class Player {
             new Roll_Back(this),
             new Running(this),
             new Sleeping(this),
+            new Ending_Resting(this),
+            new Ending_Sleeping(this)
         ]
         this.currentState = this.states[states.IDLE]
         this.currentState.enter()

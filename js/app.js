@@ -1,4 +1,4 @@
-import { qs,qsa, setSfxVolume } from "./utils.js"
+import { qs, qsa, setSfxVolume } from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -35,10 +35,10 @@ export function togglePause() {
 const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
 if (is_touch_device) {
-    body.classList.add('is_touch_device')
+    body.classList.add("is_touch_device")
     const fullScreenToggleBtn = qs('[data-btn="full-screen"]')
 
-    fullScreenToggleBtn.addEventListener('click', toggleFullScreen)
+    fullScreenToggleBtn.addEventListener("click", toggleFullScreen)
 }
 
 function toggleFullScreen() {
@@ -59,7 +59,7 @@ function toggleFullScreen() {
             "data-icon",
             "expand"
         )
-    } 
+    }
 }
 
 const creditsModal = qs("[data-modal='credits']")
@@ -69,14 +69,14 @@ const howToPlayModal = qs("[data-modal='how-to-play']")
 const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
 const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
 
-creditsOpenBtn.addEventListener('click', () => {
+creditsOpenBtn.addEventListener("click", () => {
     creditsModal.showModal()
     if (!isPaused) togglePause()
 })
-creditsCloseBtn.addEventListener('click', () => {
+creditsCloseBtn.addEventListener("click", () => {
     creditsModal.close()
 })
-howToPlayOpenBtn.addEventListener('click', () => {
+howToPlayOpenBtn.addEventListener("click", () => {
     howToPlayModal.showModal()
     if (!isPaused) togglePause()
 })
@@ -84,9 +84,8 @@ howToPlayCloseBtn.addEventListener("click", () => {
     howToPlayModal.close()
 })
 
-const details = qs('details')
+const details = qs("details")
 new Accordian(details)
-
 
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
@@ -136,6 +135,17 @@ window.addEventListener("load", function () {
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
+
+            this.totalTimePlaying = 0
+        }
+
+        get formattedTime() {
+            let time = new Date(Math.floor(this.totalTimePlaying))
+            let minutes = time.getMinutes()
+            let seconds = time.getSeconds()
+            return `${
+                minutes > 0 ? minutes : ""
+            } ${minutes ? "minute" + (minutes > 1 ? "s" : "") : ""} ${seconds} seconds`
         }
 
         update(deltaTime, input) {
@@ -153,7 +163,7 @@ window.addEventListener("load", function () {
                 this.recoveryTime = 0
                 this.isRecovering = false
             }
-            
+
             this.enemies.forEach(enemy => {
                 enemy.update(deltaTime)
             })
@@ -183,6 +193,9 @@ window.addEventListener("load", function () {
             )
             this.particles.forEach(particle => particle.update(deltaTime))
             this.UI.update(deltaTime)
+            if (this.currentWave.waveIndex != 10 && !isPaused) {
+                this.totalTimePlaying += deltaTime
+            }
         }
 
         draw(context) {
@@ -230,6 +243,7 @@ window.addEventListener("load", function () {
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
         game.deltaTime = deltaTime
+
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         game.update(deltaTime, game.input)
         game.draw(ctx)

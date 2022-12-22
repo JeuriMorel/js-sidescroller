@@ -23,6 +23,8 @@ export const states = {
     ROLL_BACK: 11,
     RUNNING: 12,
     SLEEPING: 13,
+    ENDING_RESTING: 14,
+    ENDING_SLEEPING: 15
 }
 
 class State {
@@ -569,6 +571,80 @@ export class Sleeping extends State {
             this.tauntTimer = 0
         } else {
             this.tauntTimer += deltaTime
+        }
+    }
+}
+export class Ending_Resting extends State {
+    constructor(player) {
+        super("ENDING_RESTING")
+        this.player = player
+    }
+    enter() {
+        this.player.animationSheet = 7
+        this.player.frame = 0
+        this.player.maxFrame = 13
+        this.sleepInterval = 2000
+        this.sleepTimer = 0
+        // this.player.hurtbox.head.isActive = true
+        // this.player.hurtbox.body.isActive = true
+        // this.player.hurtbox.head.xOffset = 30
+        // this.player.hurtbox.head.yOffset = 20
+        // this.player.hurtbox.body.xOffset = 25
+        // this.player.hurtbox.body.yOffset = 40
+        // this.player.hurtbox.head.width = this.player.width - 65
+        // this.player.hurtbox.head.height = this.player.height - 40
+        // this.player.hurtbox.body.width = this.player.width - 60
+        // this.player.hurtbox.body.height = this.player.height - 40
+
+        this.player.game.scrollSpeed = 0
+    }
+    handleInput(_, deltaTime) {
+        if (this.sleepTimer > this.sleepInterval) {
+            this.player.setState(states.ENDING_SLEEPING)
+        } else {
+            this.sleepTimer += deltaTime
+        }
+    }
+}
+export class Ending_Sleeping extends State {
+    constructor(player) {
+        super("ENDING_SLEEPING")
+        this.player = player
+    }
+    enter() {
+        this.player.animationSheet = 10
+        this.player.frame = 0
+        this.player.maxFrame = 19
+        // this.player.hurtbox.head.isActive = true
+        // this.player.hurtbox.body.isActive = true
+        // this.player.hurtbox.head.xOffset = 55
+        // this.player.hurtbox.head.yOffset = 45
+        // this.player.hurtbox.body.xOffset = 25
+        // this.player.hurtbox.body.yOffset = 55
+        // this.player.hurtbox.head.width = this.player.width - 70
+        // this.player.hurtbox.head.height = this.player.height - 50
+        // this.player.hurtbox.body.width = this.player.width - 50
+        // this.player.hurtbox.body.height = this.player.height - 55
+        this.player.game.scrollSpeed = 0
+        this.zInterval = 600
+        this.zTimer = 0
+    }
+    handleInput(_, deltaTime) {
+
+        if (this.zTimer > this.zInterval) {
+            this.player.game.UI.floatingMessages.push(
+                new FloatingMessage({
+                    value: "Z",
+                    x: this.player.x + this.player.width - 10,
+                    y: this.player.y + this.player.height - 10,
+                    targetX: this.player.x + 150,
+                    targetY: this.player.y,
+                    sizeModifier: 5,
+                })
+            )
+            this.zTimer = 0
+        } else {
+            this.zTimer += deltaTime
         }
     }
 }
