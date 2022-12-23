@@ -108,6 +108,16 @@ export class UI {
                 this.game.width * 0.5,
                 this.game.height * 0.5
             )
+            context.strokeText(
+                `Completed in: ${this.game.currentWave.totalTime}`,
+                this.game.width * 0.5,
+                this.game.height * 0.6
+            )
+            context.fillText(
+                `Completed in: ${this.game.currentWave.totalTime}`,
+                this.game.width * 0.5,
+                this.game.height * 0.6
+            )
         }
     }
 }

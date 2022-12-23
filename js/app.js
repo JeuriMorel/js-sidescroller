@@ -143,9 +143,10 @@ window.addEventListener("load", function () {
             let time = new Date(Math.floor(this.totalTimePlaying))
             let minutes = time.getMinutes()
             let seconds = time.getSeconds()
+
             return `${
                 minutes > 0 ? minutes : ""
-            } ${minutes ? "minute" + (minutes > 1 ? "s" : "") : ""} ${seconds} seconds`
+            } ${minutes ? "minute" + (minutes > 1 ? "s" : "") : ""} ${seconds} ${"second" + (seconds > 1 ? "s" : "")}`
         }
 
         update(deltaTime, input) {

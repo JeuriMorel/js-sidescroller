@@ -275,9 +275,9 @@ export class Wave_Win extends Wave {
         this.nextWave = null
     }
     enter() {
+        this.totalTime = this.game.formattedTime
         this.resetPlayerAttackSettings()
         this.game.player.setState(states.ENDING_RESTING)
-        console.log(this.game.formattedTime)
     }
     exit() {}
 }
