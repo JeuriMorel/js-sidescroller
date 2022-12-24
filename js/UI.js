@@ -86,39 +86,24 @@ export class UI {
             context.textAlign = "center"
             context.textBaseline = "middle"
             context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR)
-            context.strokeText(
-                `CONGRATULATIONS`,
-                this.game.width * 0.5,
-                this.game.height * 0.4
-            )
-            context.fillText(
-                `CONGRATULATIONS`,
-                this.game.width * 0.5,
-                this.game.height * 0.4
-            )
+            this.drawText(context, "CONGRATULATIONS", this.game.height * 0.4)
             context.font = `32px ${FONT_FAMILY}`
-
-            context.strokeText(
+            this.drawText(
+                context,
                 `LIVES REMAINING: ${this.progressIcons.length}`,
-                this.game.width * 0.5,
                 this.game.height * 0.5
             )
-            context.fillText(
-                `LIVES REMAINING: ${this.progressIcons.length}`,
-                this.game.width * 0.5,
-                this.game.height * 0.5
-            )
-            context.strokeText(
+            this.drawText(
+                context,
                 `Completed in: ${this.game.currentWave.totalTime}`,
-                this.game.width * 0.5,
-                this.game.height * 0.6
-            )
-            context.fillText(
-                `Completed in: ${this.game.currentWave.totalTime}`,
-                this.game.width * 0.5,
                 this.game.height * 0.6
             )
         }
+    }
+
+    drawText(context, text, y, x = this.game.width * 0.5) {
+        context.strokeText(text, x, y)
+        context.fillText(text, x, y)
     }
 }
 
