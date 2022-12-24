@@ -17,6 +17,8 @@ export class UI {
         this.floatingMessages = []
         this.numerator = 0
         this.denominator = 0
+        this.redTextHSL = valuesToHSL(RED_TEXT_COLOR)
+        this.lightGrayTextHSL = valuesToHSL(LIGHT_GRAY_COLOR)
 
         for (let i = 0; i < MAX_LIVES; i++) {
             this.progressIcons.push(
@@ -40,10 +42,10 @@ export class UI {
         let denominator = this.game.currentWave.enemiesToDefeat
         if (denominator) {
             context.font = `30px ${FONT_FAMILY}`
-            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
+            context.strokeStyle = this.redTextHSL
             context.lineWidth = 7
             context.textAlign = "left"
-            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR) // 	hsl(0, 0%, 93%) "#eeeeee"
+            context.fillStyle = this.lightGrayTextHSL
             context.strokeText(`${numerator} / ${denominator}`, 20, 80)
             context.fillText(`${numerator} / ${denominator}`, 20, 80)
         }
@@ -62,46 +64,52 @@ export class UI {
         if (isPaused) {
             context.filter = "none"
             context.font = `100px ${FONT_FAMILY}`
-            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
+            context.strokeStyle = this.redTextHSL
             context.lineWidth = 7
             context.textAlign = "center"
             context.textBaseline = "middle"
-            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR) // 0, 0%, 93%
-            context.strokeText(
-                "PAUSED",
-                this.game.width * 0.5,
-                this.game.height * 0.5
-            )
-            context.fillText(
-                "PAUSED",
-                this.game.width * 0.5,
-                this.game.height * 0.5
-            )
+            context.fillStyle = this.lightGrayTextHSL
+            // context.strokeText(
+            //     "PAUSED",
+            //     this.game.width * 0.5,
+            //     this.game.height * 0.5
+            // )
+            // context.fillText(
+            //     "PAUSED",
+            //     this.game.width * 0.5,
+            //     this.game.height * 0.5
+            // )
+            this.drawText(context, "PAUSED")
         }
         if (this.game.currentWave.waveIndex === 10) {
             context.filter = "none"
             context.font = `44px ${FONT_FAMILY}`
-            context.strokeStyle = valuesToHSL(RED_TEXT_COLOR)
+            context.strokeStyle = this.redTextHSL
             context.lineWidth = 7
             context.textAlign = "center"
             context.textBaseline = "middle"
-            context.fillStyle = valuesToHSL(LIGHT_GRAY_COLOR)
-            this.drawText(context, "CONGRATULATIONS", this.game.height * 0.4)
+            context.fillStyle = this.lightGrayTextHSL
+            this.drawText(context, "CONGRATULATIONS", {
+                y: this.game.height * 0.4,
+            })
             context.font = `32px ${FONT_FAMILY}`
             this.drawText(
                 context,
-                `LIVES REMAINING: ${this.progressIcons.length}`,
-                this.game.height * 0.5
+                `LIVES REMAINING: ${this.progressIcons.length}`
             )
             this.drawText(
                 context,
                 `Completed in: ${this.game.currentWave.totalTime}`,
-                this.game.height * 0.6
+                { y: this.game.height * 0.6 }
             )
         }
     }
 
-    drawText(context, text, y, x = this.game.width * 0.5) {
+    drawText(
+        context,
+        text,
+        { x = this.game.width * 0.5, y = this.game.height * 0.5 } = {}
+    ) {
         context.strokeText(text, x, y)
         context.fillText(text, x, y)
     }
