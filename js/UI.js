@@ -69,16 +69,6 @@ export class UI {
             context.textAlign = "center"
             context.textBaseline = "middle"
             context.fillStyle = this.lightGrayTextHSL
-            // context.strokeText(
-            //     "PAUSED",
-            //     this.game.width * 0.5,
-            //     this.game.height * 0.5
-            // )
-            // context.fillText(
-            //     "PAUSED",
-            //     this.game.width * 0.5,
-            //     this.game.height * 0.5
-            // )
             this.drawText(context, "PAUSED")
         }
         if (this.game.currentWave.waveIndex === 10) {
@@ -90,7 +80,7 @@ export class UI {
             context.textBaseline = "middle"
             context.fillStyle = this.lightGrayTextHSL
             this.drawText(context, "CONGRATULATIONS", {
-                y: this.game.height * 0.4,
+                y: this.game.height * 0.5 - 64,
             })
             context.font = `32px ${FONT_FAMILY}`
             this.drawText(
@@ -100,7 +90,7 @@ export class UI {
             this.drawText(
                 context,
                 `Completed in: ${this.game.currentWave.totalTime}`,
-                { y: this.game.height * 0.6 }
+                { y: this.game.height * 0.5 + 52 }
             )
         }
     }

@@ -9,7 +9,7 @@ export class HealthBar {
         width,
         height,
         maxhealth,
-        borderColor = BLACK_COLOR, //	hsl(0, 0%, 0%)
+        borderColor = BLACK_COLOR,
         defaultbarColor = DEFAULT_BAR_COLOR,
         showDamage = true,
     }) {
@@ -26,7 +26,7 @@ export class HealthBar {
         this.barheight = this.height - this.barOffset * 2
         this.health = maxhealth
         this.maxhealth = maxhealth
-        this.borderColor = borderColor
+        this.borderColor = valuesToHSL(borderColor)
         this.defaultbarColor = defaultbarColor
         this.fillColor = defaultbarColor
         this.damageNumbers = []
@@ -66,8 +66,8 @@ export class HealthBar {
     }
 
     draw(context) {
-        context.strokeStyle = valuesToHSL(this.borderColor)
-        context.fillStyle = valuesToHSL(this.fillColor) 
+        context.strokeStyle = this.borderColor
+        context.fillStyle = valuesToHSL(this.fillColor)
         context.lineWidth = 2
 
         // const border = new Path2D()
