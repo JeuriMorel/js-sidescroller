@@ -215,7 +215,8 @@ export class Armored_Frog {
         //Attack
         if (
             this.currentState !== this.states[STATES.ATTACK] &&
-            this.isOnGround()
+            this.isOnGround() &&
+            this.game.player.currentState.state != "GAME_OVER"
         ) {
             if (
                 this.attackTimer > this.attackInterval &&

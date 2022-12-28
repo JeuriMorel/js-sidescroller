@@ -36,6 +36,7 @@ export class Attack extends Boss_State {
         this.width = this.spriteWidth * this.boss.sizeModifier
         this.height = this.spriteHeight * this.boss.sizeModifier
     }
+    
     enter() {
         this.boss.frame = 0
         this.boss.resetBoxes()
