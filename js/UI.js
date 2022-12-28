@@ -85,11 +85,11 @@ export class UI {
             context.font = `32px ${FONT_FAMILY}`
             this.drawText(
                 context,
-                `LIVES REMAINING: ${this.progressIcons.length}`
+                `LIVES REMAINING : ${this.progressIcons.length}`
             )
             this.drawText(
                 context,
-                `Completed in: ${this.game.currentWave.totalTime}`,
+                `Completed in : ${this.game.currentWave.totalTime}`,
                 { y: this.game.height * 0.5 + 52 }
             )
         }

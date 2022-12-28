@@ -1,27 +1,26 @@
-import {qs} from "./utils.js"
-
+import { qs } from "./utils.js"
 
 const accordianAnimationOptions = {
-    duration: 200,
-    easing: "ease-in",
+    duration: 400,
+    easing: "cubic-bezier(.22,1.73,.27,.83)",
 }
 
 export class Accordian {
     constructor(element) {
         this.element = element
         this.summary = qs("summary", element)
-        this.content = qs('.menu', element)
+        this.content = qs(".menu", element)
         this.animation = null
         this.isClosing = false
         this.isExpanding = false
 
-        this.summary,addEventListener('click', e => this.onClick(e))
+        this.summary, addEventListener("click", e => this.onClick(e))
     }
 
     onClick(event) {
-        if(event.target != this.summary) return
+        if (event.target != this.summary) return
         event.preventDefault()
-        this.element.style.overflow = 'hidden'
+        this.element.style.overflow = "hidden"
         if (this.isClosing || !this.element.open) {
             this.open()
         } else if (this.isExpanding || this.element.open) {
@@ -45,20 +44,22 @@ export class Accordian {
             accordianAnimationOptions
         )
 
-        this.animation.onfinish = ()=> this.onAnimationFinish(false)
-        this.animation.oncancel = ()=> this.isClosing = false
+        this.animation.onfinish = () => this.onAnimationFinish(false)
+        this.animation.oncancel = () => (this.isClosing = false)
     }
 
     open() {
         this.element.style.height = `${this.element.offsetHeight}px`
         this.element.open = true
-        requestAnimationFrame(()=> this.expand())
+        requestAnimationFrame(() => this.expand())
     }
 
     expand() {
         this.isExpanding = true
         const startHeight = `${this.element.offsetHeight}px`
-        const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`
+        const endHeight = `${
+            this.summary.offsetHeight + this.content.offsetHeight
+        }px`
 
         if (this.animation) {
             this.animation.cancel()
@@ -72,8 +73,7 @@ export class Accordian {
         )
 
         this.animation.onfinish = () => this.onAnimationFinish(true)
-        this.animation.oncancel = ()=> this.isExpanding = false
-
+        this.animation.oncancel = () => (this.isExpanding = false)
     }
 
     // Callback when the shrink or expand animations are done
@@ -82,6 +82,6 @@ export class Accordian {
         this.animation = null
         this.isClosing = false
         this.isExpanding = false
-        this.element.style.height = this.element.style.overflow = ''
+        this.element.style.height = this.element.style.overflow = ""
     }
 }
