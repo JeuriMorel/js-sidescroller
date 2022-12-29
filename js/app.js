@@ -135,7 +135,7 @@ window.addEventListener("load", function () {
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
-
+            this.startingTime = performance.now()
             this.totalTimePlaying = 0
         }
 
@@ -147,6 +147,14 @@ window.addEventListener("load", function () {
             return `${
                 minutes > 0 ? minutes : ""
             } ${minutes ? "minute" + (minutes > 1 ? "s" : "") : ""} ${seconds} ${"second" + (seconds > 1 ? "s" : "")}`
+        }
+
+        handleTimer() {
+            if (isPaused || this.currentWave.waveIndex === 10) {
+                const timer = performance.now() - this.startingTime
+                this.totalTimePlaying += timer
+            }
+            else this.startingTime = performance.now()
         }
 
         update(deltaTime, input) {
@@ -194,8 +202,8 @@ window.addEventListener("load", function () {
             )
             this.particles.forEach(particle => particle.update(deltaTime))
             this.UI.update(deltaTime)
-            if (this.currentWave.waveIndex != 10 && !isPaused) {
-                this.totalTimePlaying += deltaTime
+            if (isPaused) {
+                this.handleTimer()
             }
         }
 
@@ -241,6 +249,7 @@ window.addEventListener("load", function () {
     }
 
     this.animate = function animate(timestamp) {
+        if(timestamp === 0) game.handleTimer()
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
         game.deltaTime = deltaTime
@@ -271,6 +280,7 @@ window.addEventListener("load", function () {
         game = new Game(canvas.width, canvas.height)
         newGameBtn.textContent = GameButtonText.QUIT
         document.activeElement.blur()
+        lastTime = 0
         animate(0)
     }
 })

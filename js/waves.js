@@ -118,7 +118,6 @@ export class Wave_One extends Wave {
         this.waveIndex = WAVES.ONE
         this.nextWave = WAVES.TWO
     }
-    
 }
 export class Wave_Two extends Wave {
     constructor(game) {
@@ -218,7 +217,6 @@ export class Wave_Eight extends Wave {
         this.waveIndex = WAVES.EIGHT
         this.nextWave = WAVES.NINE
     }
-    
 }
 export class Wave_Nine extends Wave {
     constructor(game) {
@@ -269,12 +267,13 @@ export class Wave_Win extends Wave {
         super(game)
         this.availableEnemiesList = []
         this.enemiesToDefeat = 0
-        this.maxEnemies = 0 
+        this.maxEnemies = 0
         this.enemyFrequency = 0
         this.waveIndex = WAVES.WIN
         this.nextWave = null
     }
     enter() {
+        this.game.handleTimer()
         this.totalTime = this.game.formattedTime
         this.resetPlayerAttackSettings()
         this.game.player.setState(states.ENDING_RESTING)
