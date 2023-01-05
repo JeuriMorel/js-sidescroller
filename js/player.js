@@ -133,7 +133,7 @@ export class Player {
             new Running(this),
             new Sleeping(this),
             new Ending_Resting(this),
-            new Ending_Sleeping(this)
+            new Ending_Sleeping(this),
         ]
         this.currentState = this.states[states.IDLE]
         this.currentState.enter()
@@ -313,15 +313,16 @@ export class Player {
         enemy.resolveCollision({ target: "Attacked: PLAYER" })
         if (enemy.enemyName === "Armored_Frog") {
             let heartIcon = this.game.UI.progressIcons.pop()
-            this.game.particles.push(
-                new Boom({
-                    game: this.game,
-                    x: heartIcon.x + heartIcon.width * 0.5,
-                    y: heartIcon.y + heartIcon.height * 0.5,
-                    sizeModifier: 0.5,
-                    src: SOUND_SHATTER,
-                })
-            )
+            if (heartIcon)
+                this.game.particles.push(
+                    new Boom({
+                        game: this.game,
+                        x: heartIcon.x + heartIcon.width * 0.5,
+                        y: heartIcon.y + heartIcon.height * 0.5,
+                        sizeModifier: 0.5,
+                        src: SOUND_SHATTER,
+                    })
+                )
         }
         if (!this.game.UI.progressIcons.length) this.setState(states.GAME_OVER)
     }

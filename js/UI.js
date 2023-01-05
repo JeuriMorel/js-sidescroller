@@ -1,4 +1,5 @@
 import { isPaused } from "./app.js"
+import { qs } from "./utils.js"
 import {
     FLOATING_DEFAULT_FONT_SIZE,
     FONT_FAMILY,
@@ -9,6 +10,7 @@ import {
 } from "./constants.js"
 import { Heart } from "./icon.js"
 import { valuesToHSL } from "./utils.js"
+const canvas = qs("canvas")
 
 export class UI {
     constructor(game) {
@@ -19,6 +21,12 @@ export class UI {
         this.denominator = 0
         this.redTextHSL = valuesToHSL(RED_TEXT_COLOR)
         this.lightGrayTextHSL = valuesToHSL(LIGHT_GRAY_COLOR)
+        this.overlayOpacity = 0
+        this.overlayTimer = 0
+        this.overlayInterval = 100
+        this.bgColor = getComputedStyle(document.body, null).getPropertyValue(
+            "background-color"
+        )
 
         for (let i = 0; i < MAX_LIVES; i++) {
             this.progressIcons.push(
@@ -61,6 +69,32 @@ export class UI {
             icon.draw(context)
         })
 
+        //OVERLAY GOES HERE
+        if (this.game.player.isGameOver) {
+            if (
+                this.overlayTimer > this.overlayInterval &&
+                this.overlayOpacity < 1
+            ) {
+                this.overlayOpacity += 0.05
+                this.overlayTimer = 0
+            } else {
+                this.overlayTimer += this.game.deltaTime
+            }
+            context.save()
+            context.globalAlpha = this.overlayOpacity
+            context.beginPath()
+            context.rect(0, 0, canvas.width, canvas.height)
+            context.fillStyle = this.bgColor
+            context.fill()
+            context.restore()
+            context.font = `${100 * this.overlayOpacity}px ${FONT_FAMILY}`
+            context.strokeStyle = this.redTextHSL
+            context.lineWidth = 7
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = this.lightGrayTextHSL
+            this.drawText(context, "YOU LOSE")
+        }
         if (isPaused) {
             context.filter = "none"
             context.font = `100px ${FONT_FAMILY}`
