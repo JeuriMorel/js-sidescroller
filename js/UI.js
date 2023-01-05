@@ -23,7 +23,7 @@ export class UI {
         this.lightGrayTextHSL = valuesToHSL(LIGHT_GRAY_COLOR)
         this.overlayOpacity = 0
         this.overlayTimer = 0
-        this.overlayInterval = 100
+        this.overlayInterval = 90
         this.bgColor = getComputedStyle(document.body, null).getPropertyValue(
             "background-color"
         )

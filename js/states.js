@@ -7,6 +7,7 @@ import {
 } from "./constants.js"
 import { Red_Hit_V1 } from "./particles.js"
 import { FloatingMessage } from "./UI.js"
+import { SOUND_GAME_OVER } from "./constants.js"
 
 export const states = {
     CLAW_ATTACK: 0,
@@ -167,7 +168,7 @@ export class Game_Over extends State {
                     x: this.player.x + this.player.width * 0.5,
                     y: this.player.y + this.player.height,
                     sizeModifier: 2,
-                    src: null,
+                    src: SOUND_GAME_OVER,
                 })
             )
         }
