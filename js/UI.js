@@ -23,7 +23,7 @@ export class UI {
         this.lightGrayTextHSL = valuesToHSL(LIGHT_GRAY_COLOR)
         this.overlayOpacity = 0
         this.overlayTimer = 0
-        this.overlayInterval = 90
+        this.overlayInterval = 45
         this.bgColor = getComputedStyle(document.body, null).getPropertyValue(
             "background-color"
         )
@@ -75,7 +75,7 @@ export class UI {
                 this.overlayTimer > this.overlayInterval &&
                 this.overlayOpacity < 1
             ) {
-                this.overlayOpacity += 0.05
+                this.overlayOpacity += 0.025
                 this.overlayTimer = 0
             } else {
                 this.overlayTimer += this.game.deltaTime

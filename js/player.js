@@ -13,6 +13,7 @@ import {
     SOUND_SLASH,
     SOUND_SNARE,
     SOUND_UPROLL,
+    SOUND_WIN,
     SPRITE_HEIGHT,
     SPRITE_WIDTH,
     STARTING_X,
@@ -108,6 +109,7 @@ export class Player {
             get_hit: new Audio(SOUND_GET_HIT),
             bounce: new Audio(SOUND_BOUNCE),
             land: new Audio(SOUND_LAND),
+            win: new Audio(SOUND_WIN),
         }
 
         setSfxVolume(this.audio)

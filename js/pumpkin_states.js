@@ -77,6 +77,7 @@ export class Pumpkin_Explode extends Pumpkin_State {
         this.self.hurtbox.body.isActive = false
         this.self.x += this.self.explodeXOffset
         this.self.resetBoxes()
+        this.self.game.player.stickyMultiplier = 0
     }
     update() {
         if (this.self.y < this.self.game.height - this.self.height - this.self.game.groundMargin)

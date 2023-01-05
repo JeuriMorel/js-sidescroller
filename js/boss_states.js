@@ -36,7 +36,7 @@ export class Attack extends Boss_State {
         this.width = this.spriteWidth * this.boss.sizeModifier
         this.height = this.spriteHeight * this.boss.sizeModifier
     }
-    
+
     enter() {
         this.boss.frame = 0
         this.boss.resetBoxes()
@@ -304,6 +304,7 @@ export class Defeated extends Boss_State {
         this.boss.audio.growl.play()
         this.boss.game.player.fps = 15
         this.boss.game.player.frameInterval = 1000 / this.boss.game.player.fps
+        this.boss.game.player.stickyMultiplier = 0
     }
     update() {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed

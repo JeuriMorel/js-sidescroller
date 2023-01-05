@@ -586,6 +586,7 @@ export class Ending_Resting extends State {
         this.player.maxFrame = 13
         this.sleepInterval = 2000
         this.sleepTimer = 0
+        this.player.audio.win.play()
         // this.player.hurtbox.head.isActive = true
         // this.player.hurtbox.body.isActive = true
         // this.player.hurtbox.head.xOffset = 30
@@ -616,16 +617,6 @@ export class Ending_Sleeping extends State {
         this.player.animationSheet = 10
         this.player.frame = 0
         this.player.maxFrame = 19
-        // this.player.hurtbox.head.isActive = true
-        // this.player.hurtbox.body.isActive = true
-        // this.player.hurtbox.head.xOffset = 55
-        // this.player.hurtbox.head.yOffset = 45
-        // this.player.hurtbox.body.xOffset = 25
-        // this.player.hurtbox.body.yOffset = 55
-        // this.player.hurtbox.head.width = this.player.width - 70
-        // this.player.hurtbox.head.height = this.player.height - 50
-        // this.player.hurtbox.body.width = this.player.width - 50
-        // this.player.hurtbox.body.height = this.player.height - 55
         this.player.game.scrollSpeed = 0
         this.zInterval = 600
         this.zTimer = 0
