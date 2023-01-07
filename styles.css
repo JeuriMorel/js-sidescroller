@@ -453,13 +453,18 @@ a::after {
 }
 [data-list="details"] {
     padding-inline: 0;
-    align-items: flex-start;
+    align-items: stretch;
+}
+[data-list="details"] .btn {
+    width: 100%;
 }
 
 summary {
     text-align: right;
-    width: fit-content;
-    margin: 0 0 0 auto;
+    /* width: fit-content; */
+    /* margin: 0 0 0 auto; */
+    /* transition: width 800ms cubic-bezier(0.22, 1.73, 0.27, 0.83); */
+    z-index: 2;
 }
 
 summary::marker {
@@ -470,12 +475,15 @@ details {
     padding: var(--padding);
     position: relative;
     left: var(--padding);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: calc(var(--padding-xs) + var(--btn-border-radius));
+    border-color: transparent;
 }
 
 details[open] {
-    border: 2px solid var(--clr-neutral-900);
-    border-radius: calc(var(--padding-xs) + var(--btn-border-radius));
     background-color: var(--clr-neutral-400);
+    border-color: var(--clr-neutral-900);
 }
 
 details[open] summary {

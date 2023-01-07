@@ -1,8 +1,9 @@
 import { qs } from "./utils.js"
 
 const accordianAnimationOptions = {
-    duration: 400,
-    easing: "cubic-bezier(.22,1.73,.27,.83)",
+    duration: 250,
+    easing: "cubic-bezier(.43,1.59,1,1.26)",
+    // easing: "cubic-bezier(.22,1.73,.27,.83)",
 }
 
 export class Accordian {
@@ -30,6 +31,7 @@ export class Accordian {
 
     shrink() {
         this.closing = true
+
         const startHeight = `${this.element.offsetHeight}px`
         const endHeight = `${this.summary.offsetHeight}px`
 
