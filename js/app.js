@@ -32,6 +32,18 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
+export const AttackTypes = {
+    CLAW: "Claw",
+    DASH: "Dash",
+    UP_ROLL: "Up_Roll",
+    DOWN_ROLL: "Down_Roll",
+    JUMP: "Jump",
+    BITE: "Bite",
+}
+export const AttackTarget = {
+    PLAYER: "Player",
+    ENEMY: "Enemy",
+}
 const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
 if (is_touch_device) {
@@ -153,8 +165,7 @@ window.addEventListener("load", function () {
             if (isPaused || this.currentWave.waveIndex === 10) {
                 const timer = performance.now() - this.startingTime
                 this.totalTimePlaying += timer
-            }
-            else this.startingTime = performance.now()
+            } else this.startingTime = performance.now()
         }
 
         update(deltaTime, input) {
@@ -249,7 +260,7 @@ window.addEventListener("load", function () {
     }
 
     this.animate = function animate(timestamp) {
-        if(timestamp === 0) game.handleTimer()
+        if (timestamp === 0) game.handleTimer()
         let deltaTime = timestamp - lastTime
         lastTime = timestamp
         game.deltaTime = deltaTime
@@ -281,6 +292,7 @@ window.addEventListener("load", function () {
         newGameBtn.textContent = GameButtonText.QUIT
         document.activeElement.blur()
         lastTime = 0
+        isPaused = false
         animate(0)
     }
 })

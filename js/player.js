@@ -38,6 +38,10 @@ import {
     states,
 } from "./states.js"
 import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2 } from "./particles.js"
+import { EnemyNames } from "./enemies.js"
+import { AttackTarget, AttackTypes } from "./app.js"
+
+
 
 export class Player {
     constructor(game) {
@@ -283,37 +287,37 @@ export class Player {
         if (this.isClawing()) {
             this.audio.claw_strike.play()
             return {
-                type: "Claw",
+                type: AttackTypes.CLAW,
                 damage: this.base_damage.claw + this.attack_bonus,
             }
         }
         if (this.isDashAttacking()) {
             this.audio.dash.play()
             return {
-                type: "Dash",
+                type: AttackTypes.DASH,
                 damage:
                     this.base_damage.dash + this.dash_bonus + this.attack_bonus,
             }
         }
         if (this.isRollingUp())
             return {
-                type: "Up_Roll",
+                type: AttackTypes.UP_ROLL,
                 damage: this.base_damage.up_roll + this.attack_bonus,
             }
         if (this.isRollingDown())
             return {
-                type: "Down_Roll",
+                type: AttackTypes.DOWN_ROLL,
                 damage: this.base_damage.down_roll + this.attack_bonus,
             }
         return {
-            type: "Jump",
+            type: AttackTypes.JUMP,
             damage: this.base_damage.jump + this.attack_bonus,
         }
     }
     resolvePlayerGettingHit(enemy) {
         this.setState(states.GET_HIT)
-        enemy.resolveCollision({ target: "Attacked: PLAYER" })
-        if (enemy.enemyName === "Armored_Frog") {
+        enemy.resolveCollision({ target: AttackTarget.PLAYER })
+        if (enemy.enemyName ===  EnemyNames.ARMORED_FROG) {
             let heartIcon = this.game.UI.progressIcons.pop()
             if (heartIcon)
                 this.game.particles.push(
@@ -335,12 +339,12 @@ export class Player {
         let hitAnimationSize = damage * 0.05
 
         enemy.resolveCollision({
-            target: "Attacked: ENEMY",
+            target: AttackTarget.ENEMY,
             attackDamage: damage,
             attackType: type,
         })
         this.setAfterCollisionParameters(enemy, enemyHurtbox)
-        if (enemyName === "AngryEgg")
+        if (enemyName === EnemyNames.ANGRY_EGG)
             this.game.particles.push(
                 new Hit_V1({
                     game: this.game,
@@ -350,7 +354,7 @@ export class Player {
                     src: null,
                 })
             )
-        else if (enemyName === "Crawler")
+        else if (enemyName === EnemyNames.CRAWLER)
             this.game.particles.push(
                 new Hit_V2({
                     game: this.game,
@@ -360,7 +364,7 @@ export class Player {
                     src: null,
                 })
             )
-        else if (enemyName === "Armored_Frog")
+        else if (enemyName === EnemyNames.ARMORED_FROG)
             if (this.isClawing()) {
                 this.game.particles.push(
                     new Red_Hit_V1({

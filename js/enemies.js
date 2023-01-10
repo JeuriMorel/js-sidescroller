@@ -25,6 +25,17 @@ import {
     PUMPKIN_STATES,
 } from "./pumpkin_states.js"
 import { FloatingMessage } from "./UI.js"
+import { AttackTarget, AttackTypes } from "./app.js"
+
+export const EnemyNames = {
+    ANGRY_EGG: "AngryEgg",
+    CRAWLER: "Crawler",
+    SPAWN: "Spawn",
+    GHOST: "Ghost",
+    BEE: "Bee",
+    PUMPKING: "PumpKing",
+    ARMORED_FROG: "Armored_Frog",
+}
 
 class Enemy {
     constructor(game) {
@@ -133,7 +144,7 @@ class Enemy {
         this.hitbox.body.y = this.y + this.hitbox.body.yOffset
     }
     resolveCollision({ target, attackDamage }) {
-        if (target === "Attacked: ENEMY") {
+        if (target === AttackTarget.ENEMY) {
             this.healthPoints -= attackDamage - this.defence
             this.markedForRecoil = true
         }
@@ -238,10 +249,10 @@ export class AngryEgg extends Enemy {
     resolveCollision({ target, attackDamage, attackType }) {
         super.resolveCollision({ target, attackDamage })
         this.attackType = attackType
-        if (this.attackType === "Dash") this.tossInAir()
+        if (this.attackType === AttackTypes.DASH) this.tossInAir()
 
-        if (target === "Attacked: PLAYER") {
-            this.attackType = "Bite"
+        if (target === AttackTarget.PLAYER) {
+            this.attackType = AttackTypes.BITE
             this.markedForRecoil = true
             this.healthPoints--
         }
@@ -535,7 +546,7 @@ export class Ghost extends Enemy {
         context.restore()
     }
     resolveCollision({ target }) {
-        if (target === "Attacked: ENEMY") {
+        if (target === AttackTarget.ENEMY) {
             this.healthPoints = 0
         }
     }
@@ -669,7 +680,6 @@ export class Bee extends Enemy {
         this.healthPoints = 0
     }
 }
-
 export class PumpKing extends Enemy {
     constructor(game) {
         super(game)
@@ -817,10 +827,10 @@ export class PumpKing extends Enemy {
             this.addOneToEnemiesDefeated()
         }
         this.attackType = attackType
-        if (this.attackType === "Dash") this.tossInAir()
+        if (this.attackType === AttackTypes.DASH) this.tossInAir()
 
-        if (target === "Attacked: PLAYER") {
-            this.attackType = "Bite"
+        if (target === AttackTarget.PLAYER) {
+            this.attackType = AttackTypes.BITE
             this.markedForRecoil = true
             this.healthPoints--
         }

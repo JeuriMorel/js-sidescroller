@@ -44,11 +44,15 @@ export default class InputHandler {
         this.controlsInputs = qsa("input", this.controlsForm)
         this.modalOpen.disabled = false
 
-        this.modalOpen.addEventListener("click", () => {
-            this.modal.showModal()
-            this.populateForm()
-            if (!isPaused) togglePause()
-        })
+        this.modalOpen.addEventListener(
+            "click",
+            () => {
+                this.modal.showModal()
+                this.populateForm()
+                if (!isPaused) togglePause()
+            },
+            { signal: this.keypressController.signal, passive: true }
+        )
 
         this.controlsInputs.forEach(input => {
             input.addEventListener("keydown", e => {
@@ -81,11 +85,15 @@ export default class InputHandler {
             document.activeElement.blur()
         })
 
-        this.modalCancel.addEventListener("click", () => {
-            this.controlsForm.reset()
-            this.modal.close()
-            document.activeElement.blur()
-        })
+        this.modalCancel.addEventListener(
+            "click",
+            () => {
+                this.controlsForm.reset()
+                this.modal.close()
+                document.activeElement.blur()
+            },
+            { signal: this.keypressController.signal, passive: true }
+        )
 
         this.canvas.addEventListener(
             "touchstart",

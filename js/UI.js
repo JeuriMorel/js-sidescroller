@@ -95,16 +95,7 @@ export class UI {
             context.fillStyle = this.lightGrayTextHSL
             this.drawText(context, "YOU LOSE")
         }
-        if (isPaused) {
-            context.filter = "none"
-            context.font = `100px ${FONT_FAMILY}`
-            context.strokeStyle = this.redTextHSL
-            context.lineWidth = 7
-            context.textAlign = "center"
-            context.textBaseline = "middle"
-            context.fillStyle = this.lightGrayTextHSL
-            this.drawText(context, "PAUSED")
-        }
+        
         if (this.game.currentWave.waveIndex === 10) {
             context.filter = "none"
             context.font = `44px ${FONT_FAMILY}`
@@ -126,6 +117,16 @@ export class UI {
                 `Completed in : ${this.game.currentWave.totalTime}`,
                 { y: this.game.height * 0.5 + 52 }
             )
+        }
+        if (isPaused) {
+            context.filter = "none"
+            context.font = `100px ${FONT_FAMILY}`
+            context.strokeStyle = this.redTextHSL
+            context.lineWidth = 7
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = this.lightGrayTextHSL
+            this.drawText(context, "PAUSED")
         }
     }
 

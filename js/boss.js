@@ -1,3 +1,4 @@
+import { AttackTarget } from "./app.js"
 import { Phase_One, Phase_Three, Phase_Two } from "./boss_phases.js"
 import {
     Attack,
@@ -303,7 +304,7 @@ export class Armored_Frog {
         this.x += this.attackOffsetX
     }
     resolveCollision({ target, attackDamage }) {
-        if (target === "Attacked: ENEMY") {
+        if (target === AttackTarget.ENEMY) {
             if (this.currentState.state === "ATTACK") this.exitTongueAttack()
             this.healthPoints -= Math.max(attackDamage - this.defence, 0)
             if (this.healthPoints < 0) this.healthPoints = 0
@@ -314,7 +315,7 @@ export class Armored_Frog {
             this.setPhase()
         }
 
-        if (target === "Attacked: PLAYER") {
+        if (target === AttackTarget.PLAYER) {
             if (this.currentState.state === "ATTACK") this.exitTongueAttack()
             this.invulnerabilityTime = INVULNERABILITY_TIME
         }
