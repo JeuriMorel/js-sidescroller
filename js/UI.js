@@ -3,6 +3,7 @@ import { qs } from "./utils.js"
 import {
     FLOATING_DEFAULT_FONT_SIZE,
     FONT_FAMILY,
+    font_sizes,
     LIGHT_GRAY_COLOR,
     MAX_LIVES,
     PROGRESS_ICON_X,
@@ -49,7 +50,7 @@ export class UI {
         let numerator = this.game.player.enemiesDefeated
         let denominator = this.game.currentWave.enemiesToDefeat
         if (denominator) {
-            context.font = `30px ${FONT_FAMILY}`
+            context.font = `${font_sizes.XSMALL}px ${FONT_FAMILY}`
             context.strokeStyle = this.redTextHSL
             context.lineWidth = 7
             context.textAlign = "left"
@@ -87,19 +88,21 @@ export class UI {
             context.fillStyle = this.bgColor
             context.fill()
             context.restore()
-            context.font = `${100 * this.overlayOpacity}px ${FONT_FAMILY}`
+            context.font = `${
+                font_sizes.XLARGE * this.overlayOpacity
+            }px ${FONT_FAMILY}`
             this.setUpTextSettings(context)
             this.drawText(context, "YOU LOSE")
         }
 
         if (this.game.currentWave.waveIndex === 10 && !isPaused) {
             context.filter = "none"
-            context.font = `44px ${FONT_FAMILY}`
+            context.font = `${font_sizes.MEDIUM}px ${FONT_FAMILY}`
             this.setUpTextSettings(context)
             this.drawText(context, "CONGRATULATIONS", {
                 y: this.game.height * 0.5 - 64,
             })
-            context.font = `32px ${FONT_FAMILY}`
+            context.font = `${font_sizes.SMALL}px ${FONT_FAMILY}`
             this.drawText(
                 context,
                 `LIVES REMAINING : ${this.progressIcons.length}`
@@ -112,7 +115,7 @@ export class UI {
         }
         if (isPaused) {
             context.filter = "none"
-            context.font = `100px ${FONT_FAMILY}`
+            context.font = `${font_sizes.XLARGE}px ${FONT_FAMILY}`
             this.setUpTextSettings(context)
             this.drawText(context, "PAUSED")
         }

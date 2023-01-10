@@ -83,3 +83,10 @@ export const SFX_VOLUME = 0.8
 
 export const INVULNERABILITY_TIME = 400
 export const DEFENCE_DEBUFF = 4
+
+export const font_sizes = {
+    XSMALL: 30,
+    SMALL: 32,
+    MEDIUM: 44,
+    XLARGE: 100
+}
