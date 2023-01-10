@@ -88,22 +88,14 @@ export class UI {
             context.fill()
             context.restore()
             context.font = `${100 * this.overlayOpacity}px ${FONT_FAMILY}`
-            context.strokeStyle = this.redTextHSL
-            context.lineWidth = 7
-            context.textAlign = "center"
-            context.textBaseline = "middle"
-            context.fillStyle = this.lightGrayTextHSL
+            this.setUpTextSettings(context)
             this.drawText(context, "YOU LOSE")
         }
-        
-        if (this.game.currentWave.waveIndex === 10) {
+
+        if (this.game.currentWave.waveIndex === 10 && !isPaused) {
             context.filter = "none"
             context.font = `44px ${FONT_FAMILY}`
-            context.strokeStyle = this.redTextHSL
-            context.lineWidth = 7
-            context.textAlign = "center"
-            context.textBaseline = "middle"
-            context.fillStyle = this.lightGrayTextHSL
+            this.setUpTextSettings(context)
             this.drawText(context, "CONGRATULATIONS", {
                 y: this.game.height * 0.5 - 64,
             })
@@ -121,13 +113,16 @@ export class UI {
         if (isPaused) {
             context.filter = "none"
             context.font = `100px ${FONT_FAMILY}`
-            context.strokeStyle = this.redTextHSL
-            context.lineWidth = 7
-            context.textAlign = "center"
-            context.textBaseline = "middle"
-            context.fillStyle = this.lightGrayTextHSL
+            this.setUpTextSettings(context)
             this.drawText(context, "PAUSED")
         }
+    }
+    setUpTextSettings(context) {
+        context.strokeStyle = this.redTextHSL
+        context.lineWidth = 7
+        context.textAlign = "center"
+        context.textBaseline = "middle"
+        context.fillStyle = this.lightGrayTextHSL
     }
 
     drawText(
