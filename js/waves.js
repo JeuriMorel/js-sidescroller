@@ -271,12 +271,34 @@ export class Wave_Win extends Wave {
         this.enemyFrequency = 0
         this.waveIndex = WAVES.WIN
         this.nextWave = null
+        this.newBestTime = false
+        this.newBestLives = false
+        this.getBestFromLocalStorage()
     }
     enter() {
         this.game.handleTimer()
         this.totalTime = this.game.formattedTime
         this.resetPlayerAttackSettings()
         this.game.player.setState(states.ENDING_RESTING)
+        this.checkForNewBest()
+        
     }
-    exit() {}
+    exit() { }
+    getBestFromLocalStorage() {
+        this.bestTime = JSON.parse(localStorage.getItem("best-time"))
+        this.bestLives = JSON.parse(localStorage.getItem("best-lives"))
+    }
+    checkForNewBest() {
+        if (this.bestTime == null || this.game.totalTimePlaying < this.bestTime) {
+            this.newBestTime = true
+            localStorage.setItem("best-time", JSON.stringify(this.game.totalTimePlaying))
+        }
+        if (this.bestLives == null || this.game.UI.progressIcons.length > this.bestLives) {
+            this.newBestLives = true
+            localStorage.setItem(
+                "best-lives",
+                JSON.stringify(this.game.UI.progressIcons.length)
+            )
+        }
+    }
 }

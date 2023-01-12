@@ -69,6 +69,7 @@ const creditsCloseBtn = qs('[data-btn="credits-close"]')
 const howToPlayModal = qs("[data-modal='how-to-play']")
 const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
 const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
+const clearStorageBtn = qs('[data-btn="clear-storage"]')
 
 creditsOpenBtn.addEventListener("click", () => {
     creditsModal.showModal()
@@ -84,6 +85,7 @@ howToPlayOpenBtn.addEventListener("click", () => {
 howToPlayCloseBtn.addEventListener("click", () => {
     howToPlayModal.close()
 })
+clearStorageBtn.addEventListener("click", () => localStorage.clear())
 
 const details = qs("details")
 new Accordian(details)
