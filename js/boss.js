@@ -1,4 +1,3 @@
-import { AttackTarget } from "./app.js"
 import { Phase_One, Phase_Three, Phase_Two } from "./boss_phases.js"
 import {
     Attack,
@@ -20,6 +19,7 @@ import {
     SOUND_BOSS_RETREAT,
     SOUND_TONGUE,
     INVULNERABILITY_TIME,
+    AttackTarget,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
 import { FloatingMessage } from "./UI.js"

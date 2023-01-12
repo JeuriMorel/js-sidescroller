@@ -90,3 +90,16 @@ export const FontSizes = {
     MEDIUM: 44,
     XLARGE: 100
 }
+
+export const AttackTypes = {
+    CLAW: "Claw",
+    DASH: "Dash",
+    UP_ROLL: "Up_Roll",
+    DOWN_ROLL: "Down_Roll",
+    JUMP: "Jump",
+    BITE: "Bite",
+}
+export const AttackTarget = {
+    PLAYER: "Player",
+    ENEMY: "Enemy",
+}

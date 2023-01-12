@@ -13,6 +13,8 @@ import {
     SOUND_CLAW_STRIKE,
     SOUND_PUMP_DIE,
     DEFENCE_DEBUFF,
+    AttackTarget,
+    AttackTypes,
 } from "./constants.js"
 import { qs } from "./utils.js"
 
@@ -25,7 +27,6 @@ import {
     PUMPKIN_STATES,
 } from "./pumpkin_states.js"
 import { FloatingMessage } from "./UI.js"
-import { AttackTarget, AttackTypes } from "./app.js"
 
 export const EnemyNames = {
     ANGRY_EGG: "AngryEgg",

@@ -32,18 +32,7 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
-export const AttackTypes = {
-    CLAW: "Claw",
-    DASH: "Dash",
-    UP_ROLL: "Up_Roll",
-    DOWN_ROLL: "Down_Roll",
-    JUMP: "Jump",
-    BITE: "Bite",
-}
-export const AttackTarget = {
-    PLAYER: "Player",
-    ENEMY: "Enemy",
-}
+
 const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
 if (is_touch_device) {

@@ -17,6 +17,8 @@ import {
     SPRITE_HEIGHT,
     SPRITE_WIDTH,
     STARTING_X,
+    AttackTarget,
+    AttackTypes,
 } from "./constants.js"
 import {
     Attacking_Claw,
@@ -39,7 +41,6 @@ import {
 } from "./states.js"
 import { Boom, Hit_V1, Hit_V2, Red_Hit_V1, Red_Hit_V2 } from "./particles.js"
 import { EnemyNames } from "./enemies.js"
-import { AttackTarget, AttackTypes } from "./app.js"
 
 
 
