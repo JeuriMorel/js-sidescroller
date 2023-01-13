@@ -283,6 +283,9 @@ a::after {
     outline-offset: 5px;
     outline: 3px solid var(--outline-color);
 }
+.btn:is([data-btn="new-game"], [data-btn="restart-game"], summary) {
+    min-width: 14ch;
+}
 
 /* .bg-layer,
 .player, */

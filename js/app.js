@@ -63,39 +63,41 @@ function toggleFullScreen() {
     }
 }
 
-const creditsModal = qs("[data-modal='credits']")
-const creditsOpenBtn = qs('[data-btn="credits-open"]')
-const creditsCloseBtn = qs('[data-btn="credits-close"]')
-const howToPlayModal = qs("[data-modal='how-to-play']")
-const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
-const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
-const clearStorageBtn = qs('[data-btn="clear-storage"]')
-
-creditsOpenBtn.addEventListener("click", () => {
-    creditsModal.showModal()
-    if (!isPaused) togglePause()
-})
-creditsCloseBtn.addEventListener("click", () => {
-    creditsModal.close()
-})
-howToPlayOpenBtn.addEventListener("click", () => {
-    howToPlayModal.showModal()
-    if (!isPaused) togglePause()
-})
-howToPlayCloseBtn.addEventListener("click", () => {
-    howToPlayModal.close()
-})
-clearStorageBtn.addEventListener("click", () => localStorage.clear())
-
-const details = qs("details")
-new Accordian(details)
-
 window.addEventListener("load", function () {
     const canvas = qs("canvas")
     const ctx = canvas.getContext("2d")
-    const newGameBtn = qs('[data-btn="new-game"]')
     canvas.width = LAYER_WIDTH * 0.5
     canvas.height = LAYER_HEIGHT
+
+    const newGameBtn = qs('[data-btn="new-game"]')
+    const restartGameBtn = qs('[data-btn="restart-game"]')
+    const creditsModal = qs("[data-modal='credits']")
+    const creditsOpenBtn = qs('[data-btn="credits-open"]')
+    const creditsCloseBtn = qs('[data-btn="credits-close"]')
+    const howToPlayModal = qs("[data-modal='how-to-play']")
+    const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
+    const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
+    const clearStorageBtn = qs('[data-btn="clear-storage"]')
+
+    creditsOpenBtn.addEventListener("click", () => {
+        creditsModal.showModal()
+        if (!isPaused) togglePause()
+    })
+    creditsCloseBtn.addEventListener("click", () => {
+        creditsModal.close()
+    })
+    howToPlayOpenBtn.addEventListener("click", () => {
+        howToPlayModal.showModal()
+        if (!isPaused) togglePause()
+    })
+    howToPlayCloseBtn.addEventListener("click", () => {
+        howToPlayModal.close()
+    })
+    clearStorageBtn.addEventListener("click", () => localStorage.clear())
+    restartGameBtn.addEventListener("click", confirmGameRestart)
+
+    const details = qs("details")
+    new Accordian(details)
 
     class Game {
         constructor(width, height) {
@@ -271,19 +273,29 @@ window.addEventListener("load", function () {
         isPaused = true
         if (confirm("Are you sure you want to quit the game?")) quitGame()
     }
+    function confirmGameRestart() {
+        isPaused = true
+        if (confirm("Are you sure you want to restart the game?")) restartGame()
+    }
 
     function quitGame() {
         game.endGame()
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         newGameBtn.textContent = GameButtonText.NEW
+        restartGameBtn.disabled = true
     }
 
     function startNewGame() {
         game = new Game(canvas.width, canvas.height)
         newGameBtn.textContent = GameButtonText.QUIT
+        restartGameBtn.disabled = false
         document.activeElement.blur()
         lastTime = 0
         isPaused = false
         animate(0)
+    }
+    function restartGame() {
+        quitGame()
+        startNewGame()
     }
 })
