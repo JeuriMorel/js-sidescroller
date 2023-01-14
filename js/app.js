@@ -78,6 +78,7 @@ window.addEventListener("load", function () {
     const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
     const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
     const clearStorageBtn = qs('[data-btn="clear-storage"]')
+    const main_menu = qs("[data-list='main-menu']")
 
     creditsOpenBtn.addEventListener("click", () => {
         creditsModal.showModal()
@@ -240,6 +241,7 @@ window.addEventListener("load", function () {
             lastTime = 0
             this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
+            main_menu.classList.remove("game-is-on")
         }
     }
 
@@ -292,6 +294,8 @@ window.addEventListener("load", function () {
         document.activeElement.blur()
         lastTime = 0
         isPaused = false
+        main_menu.classList.add("game-is-on")
+
         animate(0)
     }
     function restartGame() {
