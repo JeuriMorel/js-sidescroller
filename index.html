@@ -54,9 +54,10 @@
             <li>
                 <button
                     type="button"
-                    class="[ game-btn ] [ ] [ btn | new-game ] "
+                    class="[ game-btn ] [ ] [ btn | new-game ]"
                     data-btn="new-game"
                     data-child-of="main-menu"
+                    data-sfx="menu-confirm"
                 >
                     new game
                 </button>
@@ -64,9 +65,10 @@
             <li>
                 <button
                     type="button"
-                    class="[ game-btn ] [ ] [ btn | restart-game] "
+                    class="[ game-btn ] [ ] [ btn | restart-game]"
                     data-btn="restart-game"
                     data-child-of="main-menu"
+                    data-sfx="menu-confirm"
                     disabled
                 >
                     restart
@@ -74,13 +76,20 @@
             </li>
             <li>
                 <details>
-                    <summary class="[ ] [ ] [ btn ]" data-child-of="main-menu">options</summary>
+                    <summary
+                        class="[ ] [ ] [ btn ]"
+                        data-child-of="main-menu"
+                        data-sfx="menu-confirm"
+                    >
+                        options
+                    </summary>
                     <menu class="[ menu ][][]" data-list="details">
                         <li>
                             <button
                                 type="button"
                                 class="[ ] [ ] [ btn ] modal-open"
                                 data-btn="controls-modal-open"
+                                data-sfx="menu-confirm"
                                 disabled
                             >
                                 edit controls
@@ -91,6 +100,7 @@
                                 type="button"
                                 class="[ ] [ ] [ btn ] modal-open"
                                 data-btn="credits-open"
+                                data-sfx="menu-confirm"
                             >
                                 credits
                             </button>
@@ -100,6 +110,7 @@
                                 type="button"
                                 class="[ ] [ ] [ btn ] modal-open"
                                 data-btn="how-to-play-open"
+                                data-sfx="menu-confirm"
                             >
                                 How to play
                             </button>
@@ -109,6 +120,7 @@
                                 type="button"
                                 class="[ ] [ ] [ btn ]"
                                 data-btn="clear-storage"
+                                data-sfx="menu-confirm"
                             >
                                 clear stats
                             </button>
@@ -146,6 +158,7 @@
                     data-btn="controls-modal-save"
                     type="submit"
                     data-size="md"
+                    data-sfx="menu-confirm"
                 >
                     Save Changes
                 </button>
@@ -153,7 +166,7 @@
         </dialog>
         <dialog class="[ ] [ padding-sm ] [ modal ]" data-modal="credits">
             <button
-                class="[  ] [ ] [ btn | btn-close-modal ]"
+                class="[ ] [ ] [ btn | btn-close-modal ]"
                 data-btn="credits-close"
             >
                 &times;
@@ -250,6 +263,13 @@
                                 >qubodup</a
                             >
                         </li>
+                        <li>
+                            <a
+                                href="https://opengameart.org/users/joth"
+                                target="_blank"
+                                >josh</a
+                            >
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -275,7 +295,7 @@
         </dialog>
         <dialog class="[ ] [ padding-sm ] [ modal ]" data-modal="how-to-play">
             <button
-                class="[  ] [ ] [ btn | btn-close-modal ]"
+                class="[ ] [ ] [ btn | btn-close-modal ]"
                 data-btn="how-to-play-close"
             >
                 &times;
@@ -391,13 +411,15 @@
                                 >
                             </p>
                         </li>
-                        <li class=" [] [  mobile-only | hidden ] []" style="--display-type: list-item">
+                        <li
+                            class="[] [ mobile-only | hidden ] []"
+                            style="--display-type: list-item"
+                        >
                             <p>
                                 <span>Pause:</span> double tap
                                 <span class="[ ] [ uppercase ] []">
                                     screen</span
                                 >
-                                
                             </p>
                         </li>
                     </ul>
@@ -481,6 +503,11 @@
             src="./audio/main_theme.mp3"
             id="main_theme"
             loop
+            preload="auto"
+        ></audio>
+        <audio
+            src="./audio/menu_confirm.mp3"
+            id="menu_confirm"
             preload="auto"
         ></audio>
         <img
