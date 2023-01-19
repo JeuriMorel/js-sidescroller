@@ -15,6 +15,7 @@
     --clr-neutral-200: hsl(0, 0%, 19%);
     --clr-neutral-300: hsl(0, 0%, 27%);
     --clr-neutral-400: hsl(0, 0%, 40%);
+    --clr-neutral-400-40: hsl(0, 0%, 40%, 0.4);
     --clr-neutral-500: hsl(0, 0%, 53%);
     --clr-neutral-600: hsl(0, 0%, 63%);
     --clr-neutral-700: hsl(0, 0%, 75%);
@@ -178,7 +179,7 @@ details {
 }
 
 details[open] {
-    background-color: var(--clr-neutral-400);
+    background-color: var(--clr-neutral-400-40);
     border-color: var(--clr-neutral-900);
     padding-top: var(--padding);
 }
@@ -324,7 +325,9 @@ ul span:not(.emphasize) {
 /* BLOCK */
 
 .btn {
-    /* font: inherit; */
+    --gradient-clr-1: var(--clr-neutral-400);
+    --gradient-clr-2: var(--clr-neutral-300);
+    --text-shadow-clr: rgba(0, 0, 0, 1);
     font-size: var(--btn-font-size);
     padding: 0.5em 1em;
     text-transform: inherit;
@@ -338,31 +341,30 @@ ul span:not(.emphasize) {
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.4);
     background: linear-gradient(
         160deg,
-        var(--clr-neutral-400),
-        var(--clr-neutral-300)
+        var(--gradient-clr-1),
+        var(--gradient-clr-2)
     );
-    text-shadow: 0px 0px 4px rgba(0, 0, 0, 1);
+    text-shadow: 0px 0px 4px var(--text-shadow-clr);
     pointer-events: all;
     line-height: 1;
 }
 
 .btn:disabled {
-    background: linear-gradient(
-        160deg,
-        var(--clr-neutral-800),
-        var(--clr-neutral-600)
-    );
+    --gradient-clr-1: var(--clr-neutral-800);
+    --gradient-clr-2: var(--clr-neutral-600);
     border: 1px solid var(--clr-neutral-500);
     cursor: not-allowed;
     box-shadow: none;
 }
 
-.btn:where(:not(:disabled)):active {
+.btn:not(:disabled):active {
     top: 2px;
     box-shadow: 0 0 2px rgb(0, 0, 0, 0.8);
 }
 
-.btn:is(:hover, :focus-visible) {
+.btn:is(:hover, :focus-visible):not(:disabled) {
+    --gradient-clr-1: var(--clr-neutral-400);
+    --gradient-clr-2: var(--clr-neutral-200);
     --outline-color: var(--clr-neutral-900);
     outline-offset: 5px;
     outline: 3px solid var(--outline-color);
@@ -508,7 +510,7 @@ ul span:not(.emphasize) {
 [data-list="details"] {
     margin-top: var(--gap-menu);
     padding: 0;
-    border-top: 3px solid var(--clr-neutral-700);
+    border-top: 3px solid var(--clr-neutral-400);
     align-items: stretch;
 }
 [data-list="details"] .btn {
@@ -521,12 +523,14 @@ ul span:not(.emphasize) {
     --main-menu-padding: var(--padding-menu);
     top: var(--main-menu-padding);
     right: var(--main-menu-padding);
-    /* max-width: fit-content; */
     padding: 0;
     transition: top 300ms var(--easing);
     transition-property: top, right;
-    overflow: hidden;
 }
+[data-list="main-menu"]:is(:not(:hover, :focus-within)) {
+    opacity: 0.4;
+}
+
 [data-list="main-menu"].game-is-on {
     --gap-menu: 0.25em;
     --main-menu-padding: 0.125em;
@@ -541,11 +545,21 @@ ul span:not(.emphasize) {
     padding-inline: 0.5em;
     transition: min-width 400ms var(--easing);
 }
-[data-child-of="main-menu"]:is(:hover, :focus-visible) {
+[data-child-of="main-menu"]:not(:disabled):is(:hover, :focus-visible) {
     min-width: 14ch;
 }
-[data-size="md"] {
-    font-size: min(1.5em, 5vw);
+[data-btn-type="clear"] {
+    --gradient-clr-1: transparent;
+    --gradient-clr-2: transparent;
+    --text-shadow-clr: var(--clr-neutral-900);
+    color: var(--clr-neutral-200);
+}
+.btn[data-btn-type="clear"]:is(:hover, :focus-visible) {
+    --gradient-clr-1: var(--clr-neutral-800);
+    --gradient-clr-2: var(--clr-neutral-800);
+    color: var(--clr-neutral-100);
+    --outline-color: var(--clr-accent-600);
+    box-shadow: none;
 }
 
 @media screen and (min-width: 500px) {
