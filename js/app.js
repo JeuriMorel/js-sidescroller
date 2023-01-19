@@ -82,7 +82,9 @@ window.addEventListener("load", function () {
     const menuConfirmAudio = qs("#menu_confirm")
     const confirmBtns = qsa("[data-sfx='menu-confirm']")
 
-    confirmBtns.forEach(button => button.addEventListener('click', () => menuConfirmAudio.play()))
+    confirmBtns.forEach(button =>
+        button.addEventListener("click", () => menuConfirmAudio.play())
+    )
 
     creditsOpenBtn.addEventListener("click", () => {
         creditsModal.showModal()

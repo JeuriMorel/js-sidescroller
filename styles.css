@@ -317,6 +317,10 @@ ul span:not(.emphasize) {
     font-style: italic;
 }
 
+.mobile-only {
+    display: none;
+}
+
 /* BLOCK */
 
 .btn {
@@ -517,10 +521,11 @@ ul span:not(.emphasize) {
     --main-menu-padding: var(--padding-menu);
     top: var(--main-menu-padding);
     right: var(--main-menu-padding);
-    max-width: fit-content;
+    /* max-width: fit-content; */
     padding: 0;
     transition: top 300ms var(--easing);
     transition-property: top, right;
+    overflow: hidden;
 }
 [data-list="main-menu"].game-is-on {
     --gap-menu: 0.25em;

@@ -126,7 +126,6 @@ export default class InputHandler {
 
                     this.mobileTouches[key] = [key]
                     this.setKeyPress(key, e.timeStamp, btn)
-                    console.log(key)
                 },
                 { signal: this.keypressController.signal, passive: true }
             )
