@@ -100,9 +100,9 @@ window.addEventListener("load", function () {
 
     updateStats()
 
-    confirmBtns.forEach(button =>
-        button.addEventListener("click", () => menuConfirmAudio.play())
-    )
+    // confirmBtns.forEach(button =>
+    //     button.addEventListener("click", () => menuConfirmAudio.play())
+    // )
 
     creditsOpenBtn.addEventListener("click", () => {
         creditsModal.showModal()

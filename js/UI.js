@@ -16,6 +16,8 @@ const canvas = qs("canvas")
 export class UI {
     constructor(game) {
         this.game = game
+        this.widthCenter = this.game.width * 0.5
+        this.heightCenter = this.game.height * 0.5
         this.progressIcons = []
         this.floatingMessages = []
         this.numerator = 0
@@ -133,7 +135,7 @@ export class UI {
     drawText(
         context,
         text,
-        { x = this.game.width * 0.5, y = this.game.height * 0.5 } = {}
+        { x = this.widthCenter, y = this.heightCenter } = {}
     ) {
         context.strokeText(text, x, y)
         context.fillText(text, x, y)

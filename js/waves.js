@@ -248,7 +248,7 @@ export class Wave_Boss extends Wave {
         this.availableEnemiesList = [ENEMY_TYPES.ARMORED_FROG]
         this.enemiesToDefeat = 0
         this.maxEnemies = 1
-        this.enemyFrequency = 500
+        this.enemyFrequency = 2500
         this.waveIndex = WAVES.BOSS
         this.nextWave = WAVES.WIN
     }
