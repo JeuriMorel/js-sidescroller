@@ -176,12 +176,18 @@ details {
     border-style: solid;
     border-radius: calc(var(--padding) + var(--btn-border-radius));
     border-color: transparent;
+    color: var(--clr-neutral-900);
+    text-align: center;
+    font-size: 1.2rem;
+    text-shadow: -1px 1px var(--clr-neutral-100);
+    
 }
 
 details[open] {
     background-color: var(--clr-neutral-400-40);
     border-color: var(--clr-neutral-900);
     padding-top: var(--padding);
+    backdrop-filter: blur(3px);
 }
 
 details[open] summary {
@@ -456,6 +462,9 @@ ul span:not(.emphasize) {
 [data-btn="full-screen"] {
     display: none;
 }
+[data-btn="clear-storage"] {
+    margin-top: var(--gap-menu);
+}
 
 [data-direction="left"] {
     grid-area: left;
@@ -517,6 +526,7 @@ ul span:not(.emphasize) {
     width: 100%;
 }
 
+
 [data-list="main-menu"] {
     --button-height: calc(var(--btn-font-size) * 2 + var(--border-btn) * 2);
     --top-offset: calc(calc(var(--button-height) * 2 + var(--gap-menu)) * -1);
@@ -527,7 +537,7 @@ ul span:not(.emphasize) {
     transition: top 300ms var(--easing);
     transition-property: top, right;
 }
-[data-list="main-menu"]:is(:not(:hover, :focus-within)) {
+[data-list="main-menu"]:is(:not(:hover, :focus-within, :has(details[open]))) {
     opacity: 0.4;
 }
 
@@ -560,6 +570,10 @@ ul span:not(.emphasize) {
     color: var(--clr-neutral-100);
     --outline-color: var(--clr-accent-600);
     box-shadow: none;
+}
+
+[data-stat]:empty::before{
+    content: attr(data-placeholder);
 }
 
 @media screen and (min-width: 500px) {

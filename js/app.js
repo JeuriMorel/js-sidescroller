@@ -1,4 +1,10 @@
-import { qs, qsa, setSfxVolume } from "./utils.js"
+import {
+    formatTime,
+    getStatsFromLocalStorage,
+    qs,
+    qsa,
+    setSfxVolume,
+} from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -32,6 +38,7 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
+export let { bestTime, bestLives } = getStatsFromLocalStorage()
 
 const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
@@ -77,10 +84,21 @@ window.addEventListener("load", function () {
     const howToPlayModal = qs("[data-modal='how-to-play']")
     const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
     const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
+    const editContolsBtn = qs("[data-btn='controls-modal-open']")
     const clearStorageBtn = qs('[data-btn="clear-storage"]')
     const mainMenu = qs("[data-list='main-menu']")
     const menuConfirmAudio = qs("#menu_confirm")
     const confirmBtns = qsa("[data-sfx='menu-confirm']")
+    const timeStatSpan = qs("[data-stat='time']")
+    const livesStatSpan = qs("[data-stat='lives']")
+
+    function updateStats() {
+        if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
+        if (bestLives != null) livesStatSpan.textContent = bestLives
+        clearStorageBtn.disabled = bestTime == null && bestLives == null
+    }
+
+    updateStats()
 
     confirmBtns.forEach(button =>
         button.addEventListener("click", () => menuConfirmAudio.play())
@@ -100,7 +118,12 @@ window.addEventListener("load", function () {
     howToPlayCloseBtn.addEventListener("click", () => {
         howToPlayModal.close()
     })
-    clearStorageBtn.addEventListener("click", () => localStorage.clear())
+    clearStorageBtn.addEventListener("click", () => {
+        localStorage.clear()
+        timeStatSpan.textContent = ""
+        livesStatSpan.textContent = ""
+        clearStorageBtn.disabled = true
+    })
     restartGameBtn.addEventListener("click", confirmGameRestart)
 
     const details = qs("details")
@@ -247,6 +270,7 @@ window.addEventListener("load", function () {
             lastTime = 0
             this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
+
             mainMenu.classList.remove("game-is-on")
         }
     }
@@ -291,6 +315,7 @@ window.addEventListener("load", function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         newGameBtn.textContent = GameButtonText.NEW
         restartGameBtn.disabled = true
+        editContolsBtn.disabled = true
     }
 
     function startNewGame() {

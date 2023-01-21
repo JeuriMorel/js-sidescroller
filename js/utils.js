@@ -39,3 +39,19 @@ export function setSfxVolume(audioObject, volume = SFX_VOLUME) {
         audioObject[sfx].volume = volume
     }
 }
+
+export function getStatsFromLocalStorage() {
+    let bestTime = JSON.parse(localStorage.getItem("best-time"))
+    let bestLives = JSON.parse(localStorage.getItem("best-lives"))
+
+    return { bestTime, bestLives }
+}
+
+export function formatTime(time) {
+    if (time == null) return
+
+    let newTime = new Date(time)
+    let minutes = newTime.getMinutes()
+    let seconds = newTime.getSeconds()
+    return `${minutes}: ${seconds}`
+}
