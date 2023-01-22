@@ -49,6 +49,19 @@ if (is_touch_device) {
     fullScreenToggleBtn.addEventListener("click", toggleFullScreen)
 }
 
+//STATS
+
+const timeStatSpan = qs("[data-stat='time']")
+const livesStatSpan = qs("[data-stat='lives']")
+
+export function updateStats() {
+    if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
+    if (bestLives != null) livesStatSpan.textContent = bestLives
+    clearStorageBtn.disabled = bestTime == null && bestLives == null
+}
+
+updateStats()
+
 function toggleFullScreen() {
     if (!document.fullscreenElement) {
         body.requestFullscreen()
@@ -89,20 +102,13 @@ window.addEventListener("load", function () {
     const mainMenu = qs("[data-list='main-menu']")
     const menuConfirmAudio = qs("#menu_confirm")
     const confirmBtns = qsa("[data-sfx='menu-confirm']")
-    const timeStatSpan = qs("[data-stat='time']")
-    const livesStatSpan = qs("[data-stat='lives']")
+    
 
-    function updateStats() {
-        if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
-        if (bestLives != null) livesStatSpan.textContent = bestLives
-        clearStorageBtn.disabled = bestTime == null && bestLives == null
-    }
+    
 
-    updateStats()
-
-    // confirmBtns.forEach(button =>
-    //     button.addEventListener("click", () => menuConfirmAudio.play())
-    // )
+    confirmBtns.forEach(button =>
+        button.addEventListener("click", () => menuConfirmAudio.play())
+    )
 
     creditsOpenBtn.addEventListener("click", () => {
         creditsModal.showModal()

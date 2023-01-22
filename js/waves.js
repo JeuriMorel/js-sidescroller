@@ -1,3 +1,4 @@
+import { bestLives, bestTime, updateStats } from "./app.js"
 import { Armored_Frog } from "./boss.js"
 import { AngryEgg, Bee, Crawler, Ghost, PumpKing } from "./enemies.js"
 import { states } from "./states.js"
@@ -281,24 +282,35 @@ export class Wave_Win extends Wave {
         this.resetPlayerAttackSettings()
         this.game.player.setState(states.ENDING_RESTING)
         this.checkForNewBest()
-        
     }
-    exit() { }
+    exit() {}
+
     getBestFromLocalStorage() {
-        this.bestTime = JSON.parse(localStorage.getItem("best-time"))
-        this.bestLives = JSON.parse(localStorage.getItem("best-lives"))
+        this.bestTime = bestTime
+        this.bestLives = bestLives
     }
     checkForNewBest() {
-        if (this.bestTime == null || this.game.totalTimePlaying < this.bestTime) {
+        if (
+            this.bestTime == null ||
+            this.game.totalTimePlaying < this.bestTime
+        ) {
             this.newBestTime = true
-            localStorage.setItem("best-time", JSON.stringify(this.game.totalTimePlaying))
+            localStorage.setItem(
+                "best-time",
+                JSON.stringify(this.game.totalTimePlaying)
+            )
         }
-        if (this.bestLives == null || this.game.UI.progressIcons.length > this.bestLives) {
+        if (
+            this.bestLives == null ||
+            this.game.UI.progressIcons.length > this.bestLives
+        ) {
             this.newBestLives = true
             localStorage.setItem(
                 "best-lives",
                 JSON.stringify(this.game.UI.progressIcons.length)
             )
         }
+
+        updateStats()
     }
 }
