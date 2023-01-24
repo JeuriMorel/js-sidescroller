@@ -256,7 +256,7 @@ export class Wave_Boss extends Wave {
     enter() {
         this.resetPlayerAttackSettings()
         this.game.enemies.forEach(enemy => (enemy.healthPoints = 0))
-        this.game.music.currentTheme.play()
+        // this.game.music.currentTheme.play()
     }
     exit() {
         this.game.currentWave = this.game.waves[this.nextWave]

@@ -24,7 +24,7 @@ export class UI {
         this.denominator = 0
         this.redTextHSL = valuesToHSL(RED_TEXT_COLOR)
         this.lightGrayTextHSL = valuesToHSL(LIGHT_GRAY_COLOR)
-        this.overlayOpacity = 0
+        this.overlayOpacity = 1
         this.overlayTimer = 0
         this.overlayInterval = 45
         this.bgColor = getComputedStyle(document.body, null).getPropertyValue(
@@ -96,6 +96,30 @@ export class UI {
             this.setUpTextSettings(context)
             this.drawText(context, "YOU LOSE")
         }
+
+        //GAMESTART OVERLAY
+        if (this.game.gameIsStarting) {
+            if (
+                this.overlayTimer > this.overlayInterval &&
+                this.overlayOpacity > 0
+            ) {
+                this.overlayOpacity -= 0.05
+                this.overlayTimer = 0
+            } else {
+                this.overlayTimer += this.game.deltaTime
+            }
+            context.save()
+            context.globalAlpha = this.overlayOpacity
+            context.beginPath()
+            context.rect(0, 0, canvas.width, canvas.height)
+            context.fillStyle = this.bgColor
+            context.fill()
+            context.restore()
+            
+
+            if(this.overlayOpacity <= 0) this.game.gameIsStarting = false
+        }
+
 
         if (this.game.currentWave.waveIndex === 10 && !isPaused) {
             context.filter = "none"

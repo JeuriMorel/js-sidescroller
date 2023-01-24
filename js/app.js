@@ -51,8 +51,9 @@ if (is_touch_device) {
 
 //STATS
 
-const timeStatSpan = qs("[data-stat='time']")
-const livesStatSpan = qs("[data-stat='lives']")
+export const timeStatSpan = qs("[data-stat='time']")
+export const livesStatSpan = qs("[data-stat='lives']")
+export const clearStorageBtn = qs('[data-btn="clear-storage"]')
 
 export function updateStats() {
     if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
@@ -98,13 +99,9 @@ window.addEventListener("load", function () {
     const howToPlayOpenBtn = qs('[data-btn="how-to-play-open"]')
     const howToPlayCloseBtn = qs('[data-btn="how-to-play-close"]')
     const editContolsBtn = qs("[data-btn='controls-modal-open']")
-    const clearStorageBtn = qs('[data-btn="clear-storage"]')
     const mainMenu = qs("[data-list='main-menu']")
     const menuConfirmAudio = qs("#menu_confirm")
     const confirmBtns = qsa("[data-sfx='menu-confirm']")
-    
-
-    
 
     confirmBtns.forEach(button =>
         button.addEventListener("click", () => menuConfirmAudio.play())
@@ -153,6 +150,7 @@ window.addEventListener("load", function () {
             this.recoveryTime = 0
             this.isRecovering = false
             this.deltaTime = 0
+            this.gameIsStarting = false
             this.music = new MusicHandler(this)
             this.sfx = {
                 defenceUpSFX: new Audio(SOUND_DEFENCE_UP),
@@ -276,6 +274,7 @@ window.addEventListener("load", function () {
             lastTime = 0
             this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
+            this.gameIsStarting = false
 
             mainMenu.classList.remove("game-is-on")
         }
@@ -332,6 +331,7 @@ window.addEventListener("load", function () {
         lastTime = 0
         isPaused = false
         mainMenu.classList.add("game-is-on")
+        game.gameIsStarting = true
 
         animate(0)
     }

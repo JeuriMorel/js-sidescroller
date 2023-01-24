@@ -63,6 +63,8 @@ export class Armored_Frog {
         this.debuffTimer = 0
         this.debuffInterval = 4500
 
+        this.musicIsPlaying = false
+
         this.audio = {
             damaged: new Audio(BOSS_DAMAGED),
             retreat: new Audio(SOUND_BOSS_RETREAT),
@@ -230,6 +232,10 @@ export class Armored_Frog {
                         Math.floor(Math.random() * this.attackIntervals.length)
                     ]
                 this.attack()
+                if (!this.musicIsPlaying) {
+                    this.game.music.currentTheme.play()
+                    this.musicIsPlaying = true
+                }
             } else {
                 this.attackTimer += deltaTime
             }
