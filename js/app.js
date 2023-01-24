@@ -306,13 +306,37 @@ window.addEventListener("load", function () {
         game?.isOn ? confirmGameEnd() : startNewGame()
     })
 
+    //CONFIRM QUIT RESTART
+    const confirmModal = qs("[data-modal='confirm'")
+    const confirmBtn = qs("[data-btn='confirm']")
+    const cancelBtn = qs("[data-btn='cancel']")
+
+    function customConfirm(message) {
+        confirmModal.showModal()
+        qs('span', confirmModal).textContent = message
+        return new Promise((resolve, reject) => {
+            confirmBtn.onclick = () => {
+                resolve()
+                confirmModal.close()
+            }
+            cancelBtn.onclick = () => {
+                reject()
+                confirmModal.close()
+            
+            }
+        })
+    }
+
     function confirmGameEnd() {
         isPaused = true
-        if (confirm("Are you sure you want to quit the game?")) quitGame()
+        customConfirm('quit').then(()=> quitGame()).catch(()=> void(0))
+        
     }
     function confirmGameRestart() {
         isPaused = true
-        if (confirm("Are you sure you want to restart the game?")) restartGame()
+        customConfirm("restart")
+            .then(() => restartGame())
+            .catch(() => void(0))
     }
 
     function quitGame() {

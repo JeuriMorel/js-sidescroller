@@ -116,8 +116,20 @@
                             </button>
                         </li>
                         <li>
-                            <p class="[] [] [ stat-paragraph ]">best time: <span data-stat="time" data-placeholder="--:--"></span></p>
-                            <p class="[] [] [ stat-paragraph ]">lives remaining: <span data-stat="lives" data-placeholder="-"></span></p>
+                            <p class="[] [] [ stat-paragraph ]">
+                                best time:
+                                <span
+                                    data-stat="time"
+                                    data-placeholder="--:--"
+                                ></span>
+                            </p>
+                            <p class="[] [] [ stat-paragraph ]">
+                                lives remaining:
+                                <span
+                                    data-stat="lives"
+                                    data-placeholder="-"
+                                ></span>
+                            </p>
                             <button
                                 type="button"
                                 class="[ ] [ ] [ btn ]"
@@ -158,6 +170,7 @@
                 <button
                     class="[ ] [ ] [ btn ] modal-close"
                     data-btn="controls-modal-save"
+                    data-btn-type="confirm"
                     type="submit"
                     data-size="md"
                     data-sfx="menu-confirm"
@@ -428,6 +441,29 @@
                 </li>
             </menu>
         </dialog>
+        <dialog class="[ ] [ padding-sm ] [ modal ]" data-modal="confirm" data-confirm="">
+            <p>Are you sure you want to <span class="[][ accent-text | text-shadow ] []"></span> the game?</p>
+            <div class="[ button-wrapper ] [] []">
+
+                <button
+                    class="[ ] [ ] [ btn ] modal-close"
+                    data-btn="confirm"
+                    data-btn-type="confirm"
+                    type="button"
+                >
+                    yes
+                </button>
+                <button
+                    class="[ ] [ ] [ btn ] modal-close"
+                    data-btn="cancel"
+                    data-btn-type="clear"
+                    type="button"
+                >
+                    no
+                </button>
+
+            </div>
+        </dialog>
         <canvas class="[ ] [ ] [ canvas ]" id="canvas1"> </canvas>
         <div
             class="[] [ mobile-only ] [ mobile-controller ]"
@@ -510,10 +546,7 @@
             loop
             preload="auto"
         ></audio>
-        <audio
-            src="./audio/menu_confirm.mp3"
-            id="menu_confirm"
-        ></audio>
+        <audio src="./audio/menu_confirm.mp3" id="menu_confirm"></audio>
         <img
             src="./images/kabuki_sprite_sheet.png"
             alt=""
