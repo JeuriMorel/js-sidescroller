@@ -1,4 +1,4 @@
-import { bestLives, bestTime, updateStats } from "./app.js"
+import { bestLives, bestTime, updateBestLives, updateBestTime, updateStats } from "./best_stats.js"
 import { Armored_Frog } from "./boss.js"
 import { AngryEgg, Bee, Crawler, Ghost, PumpKing } from "./enemies.js"
 import { states } from "./states.js"
@@ -274,7 +274,7 @@ export class Wave_Win extends Wave {
         this.nextWave = null
         this.newBestTime = false
         this.newBestLives = false
-        this.getBestFromLocalStorage()
+        this.setBestStats()
     }
     enter() {
         this.game.handleTimer()
@@ -285,7 +285,7 @@ export class Wave_Win extends Wave {
     }
     exit() {}
 
-    getBestFromLocalStorage() {
+    setBestStats() {
         this.bestTime = bestTime
         this.bestLives = bestLives
     }
@@ -295,20 +295,19 @@ export class Wave_Win extends Wave {
             this.game.totalTimePlaying < this.bestTime
         ) {
             this.newBestTime = true
-            localStorage.setItem(
-                "best-time",
-                JSON.stringify(this.game.totalTimePlaying)
-            )
+            let newTimeStat = this.game.totalTimePlaying
+            updateBestTime(newTimeStat)
+            
+            localStorage.setItem("best-time", JSON.stringify(newTimeStat))
         }
         if (
             this.bestLives == null ||
             this.game.UI.progressIcons.length > this.bestLives
         ) {
             this.newBestLives = true
-            localStorage.setItem(
-                "best-lives",
-                JSON.stringify(this.game.UI.progressIcons.length)
-            )
+            let newLifeStat = this.game.UI.progressIcons.length
+            updateBestLives(newLifeStat)
+            localStorage.setItem("best-lives", JSON.stringify(newLifeStat))
         }
 
         updateStats()

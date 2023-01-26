@@ -1,10 +1,4 @@
-import {
-    formatTime,
-    getStatsFromLocalStorage,
-    qs,
-    qsa,
-    setSfxVolume,
-} from "./utils.js"
+import { qs, qsa, setSfxVolume } from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -32,6 +26,7 @@ import {
 } from "./waves.js"
 import MusicHandler from "./music.js"
 import { Accordian } from "./accordian.js"
+import { updateStats } from "./best_stats.js"
 
 import { customConfirm } from "./custom_confirm_box.js"
 
@@ -40,7 +35,6 @@ export function togglePause() {
     isPaused = !isPaused
     if (!isPaused) animate(0)
 }
-export let { bestTime, bestLives } = getStatsFromLocalStorage()
 
 const body = qs("body")
 const is_touch_device = "ontouchstart" in document.documentElement
@@ -49,18 +43,6 @@ if (is_touch_device) {
     const fullScreenToggleBtn = qs('[data-btn="full-screen"]')
 
     fullScreenToggleBtn.addEventListener("click", toggleFullScreen)
-}
-
-//STATS
-
-export const timeStatSpan = qs("[data-stat='time']")
-export const livesStatSpan = qs("[data-stat='lives']")
-export const clearStorageBtn = qs('[data-btn="clear-storage"]')
-
-export function updateStats() {
-    if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
-    if (bestLives != null) livesStatSpan.textContent = bestLives
-    clearStorageBtn.disabled = bestTime == null && bestLives == null
 }
 
 updateStats()
@@ -123,12 +105,7 @@ window.addEventListener("load", function () {
     howToPlayCloseBtn.addEventListener("click", () => {
         howToPlayModal.close()
     })
-    clearStorageBtn.addEventListener("click", () => {
-        localStorage.clear()
-        timeStatSpan.textContent = ""
-        livesStatSpan.textContent = ""
-        clearStorageBtn.disabled = true
-    })
+
     restartGameBtn.addEventListener("click", confirmGameRestart)
 
     const details = qs("details")
@@ -308,37 +285,17 @@ window.addEventListener("load", function () {
         game?.isOn ? confirmGameEnd() : startNewGame()
     })
 
-    //CONFIRM QUIT RESTART
-    // const confirmModal = qs("[data-modal='confirm'")
-    // const confirmBtn = qs("[data-btn='confirm']")
-    // const cancelBtn = qs("[data-btn='cancel']")
-
-    // function customConfirm(message) {
-    //     confirmModal.showModal()
-    //     qs('span', confirmModal).textContent = message
-    //     return new Promise((resolve, reject) => {
-    //         confirmBtn.onclick = () => {
-    //             resolve()
-    //             confirmModal.close()
-    //         }
-    //         cancelBtn.onclick = () => {
-    //             reject()
-    //             confirmModal.close()
-            
-    //         }
-    //     })
-    // }
-
     function confirmGameEnd() {
         isPaused = true
-        customConfirm('quit').then(()=> quitGame()).catch(()=> void(0))
-        
+        customConfirm("quit")
+            .then(() => quitGame())
+            .catch(() => void 0)
     }
     function confirmGameRestart() {
         isPaused = true
         customConfirm("restart")
             .then(() => restartGame())
-            .catch(() => void(0))
+            .catch(() => void 0)
     }
 
     function quitGame() {
