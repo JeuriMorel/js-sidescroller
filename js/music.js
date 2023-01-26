@@ -13,26 +13,21 @@ export default class MusicHandler {
         this.themeInterval = 200
         this.forestThemeFadeOutPoint = this.themes.forest.duration - 5
         this.themes.forest.dataset.fadeOut = this.themes.forest.duration - 5
-        this.mainThemeFadeOutPoint = this.themes.main.duration - 5
-        this.themes.main.dataset.fadeOut = this.themes.main.duration - 5
         this.themes.forest.addEventListener("ended", () => {
             this.currentTheme = this.themes.main
             this.currentTheme.play()
         })
-        this.themes.main.addEventListener(
-            "timeupdate",
-            () => {
-                const loopTimeStamp = 42
-                const buffer = 0.3
-                if (
-                    this.themes.main.currentTime >
-                    this.themes.main.duration - buffer
-                ) {
-                    this.themes.main.currentTime = loopTimeStamp
-                    this.themes.main.play()
-                }
+        this.themes.main.addEventListener("timeupdate", () => {
+            const loopTimeStamp = 42
+            const buffer = 0.3
+            if (
+                this.themes.main.currentTime >
+                this.themes.main.duration - buffer
+            ) {
+                this.themes.main.currentTime = loopTimeStamp
+                this.themes.main.play()
             }
-        )
+        })
         this.themes.main.volume = 0.1
         this.themes.boss.volume = 0.1
         this.themes.forest.volume = 1
@@ -63,18 +58,6 @@ export default class MusicHandler {
         if (!this.currentTheme.loop) {
             this.fadeOutTheme(this.currentTheme, deltaTime)
         }
-        // if (
-        //     !this.themes.forest.paused &&
-        //     this.themes.forest.currentTime >=
-        //         this.themes.forest.dataset.fadeOut &&
-        //     this.themes.forest.volume > 0.2 &&
-        //     !this.themes.forest.ended
-        // ) {
-        //     if (this.themeTimer > this.themeInterval) {
-        //         this.themes.forest.volume -= 0.1
-        //         this.themeTimer = 0
-        //     } else this.themeTimer += deltaTime
-        // }
         //FADE IN THEME
         if (
             this.currentTheme.loop &&

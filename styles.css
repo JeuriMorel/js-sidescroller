@@ -549,7 +549,7 @@ ul span:not(.emphasize) {
     top: var(--main-menu-padding);
     right: var(--main-menu-padding);
     padding: 0;
-    transition: top 300ms var(--easing);
+    transition: 300ms var(--easing);
     transition-property: top, right;
 }
 [data-list="main-menu"]:is(:not(:hover, :focus-within, :has(details[open]))) {
