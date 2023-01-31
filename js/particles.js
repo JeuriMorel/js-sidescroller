@@ -59,6 +59,21 @@ export class Boom extends Particles {
         this.y = y - this.height * 0.5
     }
 }
+export class Boom_V2 extends Particles {
+    constructor({ game, x, y, sizeModifier, src }) {
+        super(game, sizeModifier, src)
+        this.image = qs("#boom2")
+        this.maxFrame = 24
+        this.framesPerRow = 5
+        this.fps = 60
+        this.spriteHeight = 192
+        this.spriteWidth = 192
+        this.height = this.spriteHeight * this.sizeModifier
+        this.width = this.spriteWidth * this.sizeModifier
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
+    }
+}
 export class Smoke extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)

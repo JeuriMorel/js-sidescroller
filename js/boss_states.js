@@ -1,4 +1,4 @@
-import { Boom, Smoke } from "./particles.js"
+import { Boom, Boom_V2, Smoke } from "./particles.js"
 import {  qs } from "./utils.js"
 
 export const STATES = {
@@ -311,10 +311,10 @@ export class Defeated extends Boss_State {
         if (this.boss.frame === this.boss.maxFrame) {
             this.boss.deleteEnemy = true
             this.boss.game.particles.push(
-                new Smoke({
+                new Boom_V2({
                     game: this.boss.game,
                     x: this.boss.x + this.boss.width * 0.5,
-                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    y: this.boss.game.height - this.boss.game.groundMargin - (this.boss.height * 0.25),
                     sizeModifier: 2,
                     src: null,
                 })
