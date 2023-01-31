@@ -85,10 +85,18 @@ window.addEventListener("load", function () {
     const editContolsBtn = qs("[data-btn='controls-modal-open']")
     const mainMenu = qs("[data-list='main-menu']")
     const menuConfirmAudio = qs("#menu_confirm")
+    const menuCancelAudio = qs("#menu_cancel")
     const confirmBtns = qsa("[data-sfx='menu-confirm']")
+    const cancelBtns = qsa("[data-sfx='menu-cancel']")
 
     confirmBtns.forEach(button =>
-        button.addEventListener("click", () => menuConfirmAudio.play())
+        button.addEventListener("click", () => {
+            if(button.parentElement.open) menuCancelAudio.play()
+            else menuConfirmAudio.play()
+        })
+    )
+    cancelBtns.forEach(button =>
+        button.addEventListener("click", () => menuCancelAudio.play())
     )
 
     creditsOpenBtn.addEventListener("click", () => {

@@ -313,9 +313,9 @@ export class Defeated extends Boss_State {
             this.boss.game.particles.push(
                 new Boom_V2({
                     game: this.boss.game,
-                    x: this.boss.x + this.boss.width * 0.5,
+                    x: this.boss.x + this.boss.width * 0.75,
                     y: this.boss.game.height - this.boss.game.groundMargin - (this.boss.height * 0.25),
-                    sizeModifier: 2,
+                    sizeModifier: 3,
                     src: null,
                 })
             )

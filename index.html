@@ -134,7 +134,7 @@
                                 type="button"
                                 class="[ ] [ ] [ btn ]"
                                 data-btn="clear-storage"
-                                data-sfx="menu-confirm"
+                                data-sfx="menu-cancel"
                             >
                                 clear stats
                             </button>
@@ -163,6 +163,7 @@
                     class="[ ] [ ] [ btn ] modal-close"
                     data-btn="controls-modal-cancel"
                     data-btn-type="clear"
+                    data-sfx="menu-cancel"
                     type="button"
                 >
                     cancel
@@ -183,6 +184,7 @@
             <button
                 class="[ ] [ ] [ btn | btn-close-modal ]"
                 data-btn="credits-close"
+                data-sfx="menu-cancel"
             >
                 &times;
             </button>
@@ -312,6 +314,7 @@
             <button
                 class="[ ] [ ] [ btn | btn-close-modal ]"
                 data-btn="how-to-play-close"
+                data-sfx="menu-cancel"
             >
                 &times;
             </button>
@@ -452,21 +455,24 @@
                 the game?
             </p>
             <div class="[ button-wrapper ] [] []">
-                <button
-                    class="[ ] [ ] [ btn ] modal-close"
-                    data-btn="confirm"
-                    data-btn-type="confirm"
-                    type="button"
-                >
-                    yes
-                </button>
+                
                 <button
                     class="[ ] [ ] [ btn ] modal-close"
                     data-btn="cancel"
                     data-btn-type="clear"
+                    data-sfx="menu-cancel"
                     type="button"
                 >
                     no
+                </button>
+                <button
+                    class="[ ] [ ] [ btn ] modal-close"
+                    data-btn="confirm"
+                    data-btn-type="confirm"
+                    data-sfx="menu-confirm"
+                    type="button"
+                >
+                    yes
                 </button>
             </div>
         </dialog>
@@ -553,6 +559,7 @@
             preload="auto"
         ></audio>
         <audio src="./audio/menu_confirm.mp3" id="menu_confirm"></audio>
+        <audio src="./audio/beep.wav" id="menu_cancel"></audio>
         <img
             src="./images/kabuki_sprite_sheet.png"
             alt=""
