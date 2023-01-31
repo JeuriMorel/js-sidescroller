@@ -28,7 +28,7 @@ import MusicHandler from "./music.js"
 import { Accordian } from "./accordian.js"
 import { updateStats } from "./best_stats.js"
 
-import { customConfirm } from "./custom_confirm_box.js"
+import { confirm } from "./custom_confirm_box.js"
 
 export let isPaused = false
 export function togglePause() {
@@ -287,15 +287,11 @@ window.addEventListener("load", function () {
 
     function confirmGameEnd() {
         isPaused = true
-        customConfirm("quit")
-            .then(() => quitGame())
-            .catch(() => void 0)
+        confirm("quit", quitGame)
     }
     function confirmGameRestart() {
         isPaused = true
-        customConfirm("restart")
-            .then(() => restartGame())
-            .catch(() => void 0)
+        confirm('restart', restartGame)
     }
 
     function quitGame() {

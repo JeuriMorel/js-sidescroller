@@ -3,10 +3,11 @@ import { qs } from "./utils.js"
 const confirmModal = qs("[data-modal='confirm'")
 const confirmBtn = qs("[data-btn='confirm']")
 const cancelBtn = qs("[data-btn='cancel']")
+const querySpan = qs("span", confirmModal)
 
-export function customConfirm(message) {
+function handleConfirm(message) {
     confirmModal.showModal()
-    qs("span", confirmModal).textContent = message
+    querySpan.textContent = message
     return new Promise((resolve, reject) => {
         confirmBtn.onclick = () => {
             resolve()
@@ -17,4 +18,10 @@ export function customConfirm(message) {
             confirmModal.close()
         }
     })
+}
+
+export function confirm(message, func) {
+    handleConfirm(message)
+        .then(() => func())
+        .catch(() => void 0)
 }

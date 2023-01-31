@@ -1,5 +1,5 @@
 import { Boom, Smoke } from "./particles.js"
-import { qs } from "./utils.js"
+import {  qs } from "./utils.js"
 
 export const STATES = {
     RETREAT: 0,

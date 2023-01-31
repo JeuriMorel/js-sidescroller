@@ -55,3 +55,4 @@ export function formatTime(time) {
     let seconds = newTime.getSeconds()
     return `${minutes}: ${seconds}`
 }
+
