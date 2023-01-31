@@ -103,7 +103,7 @@ export class UI {
                 this.overlayTimer > this.overlayInterval &&
                 this.overlayOpacity > 0
             ) {
-                this.overlayOpacity -= 0.05
+                this.overlayOpacity = Math.max(this.overlayOpacity - 0.05, 0)
                 this.overlayTimer = 0
             } else {
                 this.overlayTimer += this.game.deltaTime
@@ -115,11 +115,9 @@ export class UI {
             context.fillStyle = this.bgColor
             context.fill()
             context.restore()
-            
 
-            if(this.overlayOpacity <= 0) this.game.gameIsStarting = false
+            if (this.overlayOpacity <= 0) this.game.gameIsStarting = false
         }
-
 
         if (this.game.currentWave.waveIndex === 10 && !isPaused) {
             context.filter = "none"
@@ -137,7 +135,9 @@ export class UI {
             )
             this.drawText(
                 context,
-                `${this.game.currentWave.newBestTime ? '*NEW BEST*' : ''} Completed in : ${this.game.currentWave.totalTime}`,
+                `${
+                    this.game.currentWave.newBestTime ? "*NEW BEST*" : ""
+                } Completed in : ${this.game.currentWave.totalTime}`,
                 { y: this.game.height * 0.5 + 52 }
             )
         }
