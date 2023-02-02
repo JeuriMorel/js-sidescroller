@@ -1,3 +1,4 @@
+import { SOUND_DIMENSION_SUCK } from "./constants.js"
 import { Boom, Boom_V2, Smoke } from "./particles.js"
 import { qs } from "./utils.js"
 
@@ -192,8 +193,11 @@ export class Jump_Down extends Boss_State {
         this.boss.height = this.height
         this.boss.maxFrame = 20
         this.boss.image = images.JUMP_DOWN
-        this.boss.hitbox.claws.width = this.claws.width
-        this.boss.hitbox.claws.yOffset = this.claws.yOffset
+        this.boss.resetBoxes()
+        if (this.boss.hitbox) {
+            this.boss.hitbox.claws.width = this.claws.width
+            this.boss.hitbox.claws.yOffset = this.claws.yOffset
+        }
     }
     update() {
         if (this.boss.isOnGround()) {
@@ -348,6 +352,7 @@ export class Defeated extends Boss_State {
         this.boss.x -= this.boss.horizontalSpeed + this.boss.game.scrollSpeed
         if (this.boss.frame === this.boss.maxFrame) {
             this.boss.deleteEnemy = true
+            this.boss.audio.dematerialize.play()
             this.boss.game.particles.push(
                 new Boom_V2({
                     game: this.boss.game,
@@ -357,7 +362,6 @@ export class Defeated extends Boss_State {
                         this.boss.game.groundMargin -
                         this.boss.height * 0.25,
                     sizeModifier: 3,
-                    src: null,
                 })
             )
             this.boss.game.currentWave.exit()

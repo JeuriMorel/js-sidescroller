@@ -119,7 +119,7 @@ export class UI {
             if (this.overlayOpacity <= 0) this.game.gameIsStarting = false
         }
 
-        if (this.game.currentWave.waveIndex === 10 && !isPaused) {
+        if (this.game.currentWave.waveIndex === 11 && !isPaused) {
             context.filter = "none"
             context.font = `${FontSizes.MEDIUM}px ${FONT_FAMILY}`
             this.setUpTextSettings(context)

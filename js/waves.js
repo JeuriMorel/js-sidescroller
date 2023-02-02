@@ -24,6 +24,7 @@ const WAVES = {
     NINE: 8,
     BOSS: 9,
     WIN: 10,
+    RESULTS: 11
 }
 
 const ENEMIES_FETCH_ARRAY = [
@@ -177,10 +178,10 @@ export class Wave_Five extends Wave {
         let enemyRetrievalFunction = ENEMIES_FETCH_ARRAY[ENEMY_TYPES.PUMPKIN]
         this.game.enemies.push(enemyRetrievalFunction(this.game))
     }
-    enter() {
-        super.enter()
-        this.game.music.currentTheme.loop = false
-    }
+    // enter() {
+    //     super.enter()
+    //     this.game.music.currentTheme.loop = false
+    // }
 }
 export class Wave_Six extends Wave {
     constructor(game) {
@@ -271,13 +272,31 @@ export class Wave_Win extends Wave {
         this.maxEnemies = 0
         this.enemyFrequency = 0
         this.waveIndex = WAVES.WIN
+        this.nextWave = WAVES.RESULTS
+    }
+    enter() {
+        this.game.handleTimer()
+    }
+    exit() {
+        this.game.currentWave = this.game.waves[this.nextWave]
+        this.game.currentWave.enter()
+    }
+
+}
+export class Wave_Results extends Wave {
+    constructor(game) {
+        super(game)
+        this.availableEnemiesList = []
+        this.enemiesToDefeat = 0
+        this.maxEnemies = 0
+        this.enemyFrequency = 0
+        this.waveIndex = WAVES.RESULTS
         this.nextWave = null
         this.newBestTime = false
         this.newBestLives = false
         this.setBestStats()
     }
     enter() {
-        this.game.handleTimer()
         this.totalTime = this.game.formattedTime
         this.resetPlayerAttackSettings()
         this.game.player.setState(states.ENDING_RESTING)

@@ -18,6 +18,7 @@ import {
     Wave_Four,
     Wave_Nine,
     Wave_One,
+    Wave_Results,
     Wave_Seven,
     Wave_Six,
     Wave_Three,
@@ -91,7 +92,7 @@ window.addEventListener("load", function () {
 
     confirmBtns.forEach(button =>
         button.addEventListener("click", () => {
-            if(button.parentElement.open) menuCancelAudio.play()
+            if (button.parentElement.open) menuCancelAudio.play()
             else menuConfirmAudio.play()
         })
     )
@@ -138,6 +139,9 @@ window.addEventListener("load", function () {
             this.isRecovering = false
             this.deltaTime = 0
             this.gameIsStarting = false
+            this.showResults = false
+            this.resultsInterval = 3500
+            this.resultsTimer = 0
             this.music = new MusicHandler(this)
             this.sfx = {
                 defenceUpSFX: new Audio(SOUND_DEFENCE_UP),
@@ -156,6 +160,7 @@ window.addEventListener("load", function () {
                 new Wave_Nine(this),
                 new Wave_Boss(this),
                 new Wave_Win(this),
+                new Wave_Results(this),
             ]
             this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
@@ -176,7 +181,7 @@ window.addEventListener("load", function () {
         }
 
         handleTimer() {
-            if (isPaused || this.currentWave.waveIndex === 10) {
+            if (isPaused || this.currentWave.waveIndex >= 10) {
                 const timer = performance.now() - this.startingTime
                 this.totalTimePlaying += timer
             } else this.startingTime = performance.now()
@@ -220,6 +225,13 @@ window.addEventListener("load", function () {
             ) {
                 this.player.enemiesDefeated = 0
                 this.currentWave.exit()
+            }
+
+            if (this.showResults) {
+                if (this.resultsTimer >= this.resultsInterval) {
+                    this.currentWave.exit()
+                    this.showResults = false
+                } else this.resultsTimer += deltaTime
             }
 
             this.particles = this.particles.filter(
@@ -299,7 +311,7 @@ window.addEventListener("load", function () {
     }
     function confirmGameRestart() {
         isPaused = true
-        confirm('restart', restartGame)
+        confirm("restart", restartGame)
     }
 
     function quitGame() {
@@ -319,6 +331,7 @@ window.addEventListener("load", function () {
         isPaused = false
         mainMenu.classList.add("game-is-on")
         game.gameIsStarting = true
+        updateStats()
 
         animate(0)
     }

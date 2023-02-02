@@ -65,13 +65,17 @@ export class Boom_V2 extends Particles {
         this.image = qs("#boom2")
         this.maxFrame = 24
         this.framesPerRow = 5
-        this.fps = 60
+        this.fps = 15
         this.spriteHeight = 192
         this.spriteWidth = 192
         this.height = this.spriteHeight * this.sizeModifier
         this.width = this.spriteWidth * this.sizeModifier
         this.x = x - this.width * 0.5
         this.y = y - this.height * 0.5
+    }
+    update(deltaTime) {
+        super.update(deltaTime)
+        if(this.markedForDeletion) this.game.showResults = true
     }
 }
 export class Smoke extends Particles {

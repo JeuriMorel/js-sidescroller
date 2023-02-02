@@ -20,6 +20,7 @@ import {
     SOUND_TONGUE,
     INVULNERABILITY_TIME,
     AttackTarget,
+    SOUND_DIMENSION_SUCK,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
 import { FloatingMessage } from "./UI.js"
@@ -71,6 +72,7 @@ export class Armored_Frog {
             jump: new Audio(SOUND_BOSS_JUMP),
             tongue: new Audio(SOUND_TONGUE),
             growl: new Audio(BOSS_GROWL),
+            dematerialize: new Audio(SOUND_DIMENSION_SUCK)
         }
 
         setSfxVolume(this.audio)
@@ -85,11 +87,14 @@ export class Armored_Frog {
             new Defeated(this),
         ]
 
-        
-
         // this.x = this.game.width - this.width
         this.x = this.game.width * 0.5
         this.y = this.game.height * -6
+
+        this.currentState = this.states[STATES.JUMP_DOWN]
+        this.currentState.enter()
+
+
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -146,6 +151,7 @@ export class Armored_Frog {
         }
         //vertical
         this.velocityY = -30
+        // this.velocityY = 0
         this.weight = 3
 
         this.healthBarPadding = 20
@@ -160,8 +166,7 @@ export class Armored_Frog {
             defaultbarColor: DEFAULT_BOSS_BAR_COLOR,
             borderColor: DEFAULT_BOSS_BORDER_COLOR,
         })
-        this.currentState = this.states[STATES.JUMP_DOWN]
-        this.currentState.enter()
+        
     }
 
     get enemyName() {
