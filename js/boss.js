@@ -85,11 +85,11 @@ export class Armored_Frog {
             new Defeated(this),
         ]
 
-        this.currentState = this.states[STATES.IDLE]
-        this.currentState.enter()
+        
 
-        this.x = this.game.width - this.width
-        this.y = this.game.height * -4
+        // this.x = this.game.width - this.width
+        this.x = this.game.width * 0.5
+        this.y = this.game.height * -6
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -145,7 +145,7 @@ export class Armored_Frog {
             },
         }
         //vertical
-        this.velocityY = 0
+        this.velocityY = -30
         this.weight = 3
 
         this.healthBarPadding = 20
@@ -160,6 +160,8 @@ export class Armored_Frog {
             defaultbarColor: DEFAULT_BOSS_BAR_COLOR,
             borderColor: DEFAULT_BOSS_BORDER_COLOR,
         })
+        this.currentState = this.states[STATES.JUMP_DOWN]
+        this.currentState.enter()
     }
 
     get enemyName() {

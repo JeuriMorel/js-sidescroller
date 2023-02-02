@@ -1,5 +1,5 @@
 import { Boom, Boom_V2, Smoke } from "./particles.js"
-import {  qs } from "./utils.js"
+import { qs } from "./utils.js"
 
 export const STATES = {
     RETREAT: 0,
@@ -196,7 +196,45 @@ export class Jump_Down extends Boss_State {
         this.boss.hitbox.claws.yOffset = this.claws.yOffset
     }
     update() {
-        if (this.boss.isOnGround()) this.boss.setState(STATES.IDLE)
+        if (this.boss.isOnGround()) {
+            this.boss.setState(STATES.IDLE)
+            this.boss.game.particles.push(
+                new Smoke({
+                    game: this.boss.game,
+                    x: this.boss.x,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 1,
+                    src: null,
+                })
+            )
+            this.boss.game.particles.push(
+                new Smoke({
+                    game: this.boss.game,
+                    x: this.boss.x + this.boss.width * 0.7,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 1.2,
+                    src: null,
+                })
+            )
+            this.boss.game.particles.push(
+                new Smoke({
+                    game: this.boss.game,
+                    x: this.boss.x + this.boss.width * 0.9,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 0.5,
+                    src: null,
+                })
+            )
+            this.boss.game.particles.push(
+                new Smoke({
+                    game: this.boss.game,
+                    x: this.boss.x + this.boss.width * 0.2,
+                    y: this.boss.game.height - this.boss.game.groundMargin,
+                    sizeModifier: 0.3,
+                    src: null,
+                })
+            )
+        }
     }
 }
 export class Jump_Forward extends Boss_State {
@@ -313,8 +351,11 @@ export class Defeated extends Boss_State {
             this.boss.game.particles.push(
                 new Boom_V2({
                     game: this.boss.game,
-                    x: this.boss.x + this.boss.width * 0.75,
-                    y: this.boss.game.height - this.boss.game.groundMargin - (this.boss.height * 0.25),
+                    x: this.boss.x + this.boss.width * 0.65,
+                    y:
+                        this.boss.game.height -
+                        this.boss.game.groundMargin -
+                        this.boss.height * 0.25,
                     sizeModifier: 3,
                     src: null,
                 })
