@@ -6,7 +6,7 @@ import { qs, qsa } from "./utils.js"
 // })
 
 export default class InputHandler {
-    constructor(game) {
+    constructor(game, controls) {
         this.lastKey = ""
         this.game = game
         this.canvas = qs("canvas")
@@ -21,15 +21,16 @@ export default class InputHandler {
             jump: false,
         }
 
-        this.keys = {
-            left: "ArrowLeft",
-            right: "ArrowRight",
-            up: "ArrowUp",
-            down: "ArrowDown",
-            jump: "d",
-            action: "f",
-            pause: "p",
-        }
+        this.keys = controls
+        // this.keys = {
+        //     left: "ArrowLeft",
+        //     right: "ArrowRight",
+        //     up: "ArrowUp",
+        //     down: "ArrowDown",
+        //     jump: "d",
+        //     action: "f",
+        //     pause: "p",
+        // }
 
         this.timeStampOfLastDownRelease
         this.canRoll = false

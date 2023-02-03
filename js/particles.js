@@ -1,7 +1,5 @@
 import { qs } from "./utils.js"
-import {
-    SFX_VOLUME,
-} from "./constants.js"
+import { SFX_VOLUME } from "./constants.js"
 
 class Particles {
     constructor(game, sizeModifier, src) {
@@ -14,7 +12,7 @@ class Particles {
         this.frameX = 0
         this.frameY = 0
         if (src) this.audio = new Audio(src)
-        if(this.audio) this.audio.volume = SFX_VOLUME
+        if (this.audio) this.audio.volume = SFX_VOLUME
     }
 
     update(deltaTime) {
@@ -65,7 +63,7 @@ export class Boom_V2 extends Particles {
         this.image = qs("#boom2")
         this.maxFrame = 24
         this.framesPerRow = 5
-        this.fps = 15
+        this.fps = 10
         this.spriteHeight = 192
         this.spriteWidth = 192
         this.height = this.spriteHeight * this.sizeModifier
@@ -75,7 +73,7 @@ export class Boom_V2 extends Particles {
     }
     update(deltaTime) {
         super.update(deltaTime)
-        if(this.markedForDeletion) this.game.showResults = true
+        if (this.markedForDeletion) this.game.showResults = true
     }
 }
 export class Smoke extends Particles {
@@ -107,7 +105,6 @@ export class Hit_V1 extends Particles {
         this.x = x - this.width * 0.5
         this.y = y - this.height * 0.5
     }
-    
 }
 export class Hit_V2 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {

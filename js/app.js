@@ -7,6 +7,7 @@ import {
     SOUND_DEFENCE_UP,
     SOUND_DEFENCE_DOWN,
     BLUR_VALUE,
+    DEFAULT_CONTROLS,
 } from "./constants.js"
 import { Player } from "./player.js"
 import InputHandler from "./inputs.js"
@@ -45,6 +46,8 @@ if (is_touch_device) {
 
     fullScreenToggleBtn.addEventListener("click", toggleFullScreen)
 }
+
+const controls = JSON.parse(localStorage.getItem("controls")) || DEFAULT_CONTROLS
 
 updateStats()
 
@@ -130,7 +133,7 @@ window.addEventListener("load", function () {
             this.maxBarWidth = DEFAULT_SCROLL_SPEED * 30
             this.background = new Background(this)
             this.player = new Player(this)
-            this.input = new InputHandler(this)
+            this.input = new InputHandler(this, controls)
             this.UI = new UI(this)
             this.enemyTimer = 0
             this.enemies = []

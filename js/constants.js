@@ -104,3 +104,13 @@ export const AttackTarget = {
     PLAYER: "Player",
     ENEMY: "Enemy",
 }
+
+export const DEFAULT_CONTROLS = {
+    left: "ArrowLeft",
+    right: "ArrowRight",
+    up: "ArrowUp",
+    down: "ArrowDown",
+    jump: "d",
+    action: "f",
+    pause: "Space",
+}
