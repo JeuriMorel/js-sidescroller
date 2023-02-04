@@ -21,6 +21,7 @@ import {
     INVULNERABILITY_TIME,
     AttackTarget,
     SOUND_DIMENSION_SUCK,
+    BOSS_LAND,
 } from "./constants.js"
 import { HealthBar } from "./health_bar.js"
 import { FloatingMessage } from "./UI.js"
@@ -72,7 +73,8 @@ export class Armored_Frog {
             jump: new Audio(SOUND_BOSS_JUMP),
             tongue: new Audio(SOUND_TONGUE),
             growl: new Audio(BOSS_GROWL),
-            dematerialize: new Audio(SOUND_DIMENSION_SUCK)
+            dematerialize: new Audio(SOUND_DIMENSION_SUCK),
+            land: new Audio(BOSS_LAND)
         }
 
         setSfxVolume(this.audio)

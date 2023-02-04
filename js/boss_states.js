@@ -201,6 +201,7 @@ export class Jump_Down extends Boss_State {
     }
     update() {
         if (this.boss.isOnGround()) {
+            this.boss.audio.land.play()
             this.boss.setState(STATES.IDLE)
             this.boss.game.particles.push(
                 new Smoke({
