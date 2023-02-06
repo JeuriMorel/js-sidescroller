@@ -13,6 +13,7 @@
 :root {
     --clr-neutral-100: hsl(0, 0%, 0%);
     --clr-neutral-200: hsl(0, 0%, 19%);
+    --clr-neutral-200-40: hsl(0, 0%, 19%, 0.4);
     --clr-neutral-300: hsl(0, 0%, 27%);
     --clr-neutral-400: hsl(0, 0%, 40%);
     --clr-neutral-400-40: hsl(0, 0%, 40%, 0.4);
@@ -21,6 +22,7 @@
     --clr-neutral-700: hsl(0, 0%, 75%);
     --clr-neutral-800: hsl(0, 0%, 82%);
     --clr-neutral-900: hsl(0, 0%, 93%);
+    --clr-neutral-900-40: hsl(0, 0%, 93%, 0.4);
     --clr-accent-400: hsl(0, 88%, 29%);
     --clr-accent-500: hsl(0, 88%, 49%);
     --clr-accent-600: hsl(0, 58%, 59%);
@@ -230,6 +232,22 @@ a::after {
     color: var(--clr-neutral-600);
 }
 
+label{
+    padding-left: 0.5em;
+    transition: background-color 200ms var(--easing);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border-color, transparent);
+}
+
+label:has( + input:focus-visible){
+    --border-color: white;
+    background-color: var(--clr-neutral-400-40);
+}
+label:has( + input:hover){
+    background-color: var(--clr-neutral-400-40);
+}
+
+
 
 /* COMPOSITION */
 
@@ -240,7 +258,14 @@ a::after {
     padding: 1rem;
 }
 .controls-form input {
-    padding-left: 0.5em;
+    /* padding-left: 0.5em; */
+    outline-offset: 3px;
+    text-align: center;
+    color: var(--clr-accent-400);
+    background-color: var(--clr-neutral-800);
+    border: none;
+    border-radius: 10px 5px;
+    transform: skewX(-5deg);
 }
 
 .menu {
@@ -476,6 +501,16 @@ ul span:not(.emphasize) {
 
 /* EXCEPTIONS */
 
+[data-modal="controls"]{
+    border-color: var(--clr-neutral-900);
+    border-width: 2px;
+    border-radius: 0;
+    background-color: var(--clr-neutral-200-40);
+    backdrop-filter: blur(5px);
+    color: var(--clr-neutral-900);
+    letter-spacing: 2px;
+}
+
 [data-btn="controls-modal-open"] {
     display: inline-block;
 }
@@ -581,8 +616,10 @@ ul span:not(.emphasize) {
     min-width: 14ch;
 }
 [data-btn-type="clear"] {
-    --gradient-clr-1: transparent;
-    --gradient-clr-2: transparent;
+    /* --gradient-clr-1: transparent;
+    --gradient-clr-2: transparent; */
+    --gradient-clr-1: var(--clr-neutral-900);
+    --gradient-clr-2: var(--clr-neutral-900);
     --text-shadow-clr: var(--clr-neutral-900);
     color: var(--clr-neutral-200);
 }

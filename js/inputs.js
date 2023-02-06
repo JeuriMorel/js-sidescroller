@@ -1,4 +1,5 @@
 import { togglePause, isPaused } from "./app.js"
+import { DEFAULT_CONTROLS } from "./constants.js"
 import { qs, qsa } from "./utils.js"
 
 // modalSave.addEventListener("click", () => {
@@ -38,14 +39,15 @@ export default class InputHandler {
         this.mobileTouches = {}
 
         this.modal = qs("[data-modal='controls']")
-        this.modalOpen = qs("[data-btn='controls-modal-open']")
-        this.modalSave = qs("[data-btn='controls-modal-save']")
-        this.modalCancel = qs("[data-btn='controls-modal-cancel']")
+        this.modalOpenBtn = qs("[data-btn='controls-modal-open']")
+        this.modalSaveBtn = qs("[data-btn='controls-modal-save']")
+        this.modalCancelBtn = qs("[data-btn='controls-modal-cancel']")
+        this.modalResetDefaultBtn = qs("[data-btn='controls-modal-default']")
         this.controlsForm = qs("[data-form='controls']")
         this.controlsInputs = qsa("input", this.controlsForm)
-        this.modalOpen.disabled = false
+        this.modalOpenBtn.disabled = false
 
-        this.modalOpen.addEventListener(
+        this.modalOpenBtn.addEventListener(
             "click",
             () => {
                 this.modal.showModal()
@@ -83,15 +85,25 @@ export default class InputHandler {
             }
 
             this.keys = updatedKeys
+            localStorage.setItem("controls", JSON.stringify(updatedKeys))
             document.activeElement.blur()
         })
 
-        this.modalCancel.addEventListener(
+        this.modalCancelBtn.addEventListener(
             "click",
             () => {
                 this.controlsForm.reset()
                 this.modal.close()
                 document.activeElement.blur()
+            },
+            { signal: this.keypressController.signal, passive: true }
+        )
+        this.modalResetDefaultBtn.addEventListener(
+            "click",
+            () => {
+                localStorage.removeItem("controls")
+                this.keys = DEFAULT_CONTROLS
+                this.populateForm()
             },
             { signal: this.keypressController.signal, passive: true }
         )
