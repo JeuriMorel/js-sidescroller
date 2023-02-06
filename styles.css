@@ -51,6 +51,10 @@ body {
     user-select: none;
 }
 
+body:has(.game-is-on) h1 {
+    display: none;
+}
+
 ::-webkit-scrollbar {
     width: 0.975rem;
 }

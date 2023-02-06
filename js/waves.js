@@ -178,10 +178,6 @@ export class Wave_Five extends Wave {
         let enemyRetrievalFunction = ENEMIES_FETCH_ARRAY[ENEMY_TYPES.PUMPKIN]
         this.game.enemies.push(enemyRetrievalFunction(this.game))
     }
-    // enter() {
-    //     super.enter()
-    //     this.game.music.currentTheme.loop = false
-    // }
 }
 export class Wave_Six extends Wave {
     constructor(game) {

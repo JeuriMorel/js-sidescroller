@@ -25,7 +25,7 @@ export const states = {
     RUNNING: 12,
     SLEEPING: 13,
     ENDING_RESTING: 14,
-    ENDING_SLEEPING: 15
+    ENDING_SLEEPING: 15,
 }
 
 class State {
@@ -52,8 +52,6 @@ const inputType = {
         jump: "RELEASE jump",
     },
 }
-
-
 
 export class Attacking_Claw extends State {
     constructor(player) {
@@ -96,7 +94,10 @@ export class Attacking_Claw extends State {
         }
         if (!this.player.isWhiffing && lastKey == inputType.PRESS.left) {
             this.player.setState(states.ROLL_BACK)
-        } else if (!this.player.isWhiffing && lastKey == inputType.PRESS.right) {
+        } else if (
+            !this.player.isWhiffing &&
+            lastKey == inputType.PRESS.right
+        ) {
             this.player.setState(states.ROLL_ACROSS)
         }
     }
@@ -125,7 +126,8 @@ export class Falling extends State {
         if (keysPressed.up) {
             this.player.weight = FLOATING_WEIGHT
         }
-        if (lastKey ===  inputType.RELEASE.up) this.player.weight = FALLING_WEIGHT
+        if (lastKey === inputType.RELEASE.up)
+            this.player.weight = FALLING_WEIGHT
         if (
             !keysPressed.up &&
             !keysPressed.right &&
@@ -192,6 +194,7 @@ export class Get_Hit extends State {
         this.player.enemiesDefeated = 0
         this.player.audio.get_hit.play()
         this.player.attack_bonus = this.player.min_attack_bonus
+        this.player.dash_bonus = this.player.min_dash_bonus
     }
     handleInput() {
         this.player.x -= 15
@@ -222,12 +225,30 @@ export class Attacking_Dash extends State {
         this.player.hurtbox.body.width = this.player.width - 60
         this.player.hurtbox.body.height = this.player.height - 40
     }
-    handleInput({ lastKey, keysPressed }) {
+    handleInput({ lastKey, keysPressed }, deltaTime) {
         if (this.player.frame === 8 && keysPressed.action) {
             this.player.frame = 7
-            if (this.player.dash_bonus < this.player.max_attack_bonus) {
-                this.player.dash_bonus++
-                this.player.game.recoveryTime += 75
+            if (this.player.dash_bonus < this.player.max_dash_bonus) {
+                if (
+                    this.player.dash_bonus_timer >=
+                    this.player.dash_bonus_interval
+                ) {
+                    this.player.dash_bonus++
+                    this.player.game.recoveryTime += 75
+                    this.player.audio.ding.play()
+                    this.player.game.UI.floatingMessages.push(
+                        new FloatingMessage({
+                            value: `+ ${this.player.dash_bonus}`,
+                            x: this.player.x + this.player.width,
+                            y: this.player.y + this.player.height - 10,
+                            targetX: this.player.x + this.player.width,
+                            targetY: this.player.y,
+                        })
+                    )
+                    this.player.dash_bonus_timer = 0
+                } else {
+                    this.player.dash_bonus_timer += deltaTime
+                }
             }
         } else if (lastKey === inputType.PRESS.left)
             this.player.setState(states.ROLL_BACK)
@@ -248,7 +269,7 @@ export class Attacking_Dash extends State {
 
         if (this.player.frame == this.player.maxFrame) {
             this.player.game.recoveryTime += 300
-            this.player.dash_bonus = 0
+            this.player.dash_bonus = this.player.min_dash_bonus
             this.player.setState(states.IDLE)
         }
     }
@@ -287,10 +308,12 @@ export class Idle extends State {
                 this.player.setState(states.ROLL_ACROSS)
             else if (lastKey === inputType.PRESS.left)
                 this.player.setState(states.ROLL_BACK)
-            
         } else if (lastKey === inputType.PRESS.action)
             this.player.setState(states.CLAW_ATTACK)
-        else if (lastKey === inputType.PRESS.up || lastKey === inputType.PRESS.jump)
+        else if (
+            lastKey === inputType.PRESS.up ||
+            lastKey === inputType.PRESS.jump
+        )
             this.player.setState(states.JUMPING)
         else if (lastKey === inputType.PRESS.down)
             this.player.setState(states.RESTING)
@@ -328,7 +351,8 @@ export class Jumping extends State {
         } else if (keysPressed.right) this.player.x++
         if (
             lastKey === inputType.RELEASE.up ||
-            lastKey === inputType.RELEASE.jump)
+            lastKey === inputType.RELEASE.jump
+        )
             this.player.velocityY += 1
         else if (lastKey === inputType.PRESS.action) {
             this.player.stickyMultiplier = 3
@@ -622,7 +646,6 @@ export class Ending_Sleeping extends State {
         this.zTimer = 0
     }
     handleInput(_, deltaTime) {
-
         if (this.zTimer > this.zInterval) {
             this.player.game.UI.floatingMessages.push(
                 new FloatingMessage({

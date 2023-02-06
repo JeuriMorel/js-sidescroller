@@ -19,6 +19,7 @@ import {
     STARTING_X,
     AttackTarget,
     AttackTypes,
+    SOUND_DING,
 } from "./constants.js"
 import {
     Attacking_Claw,
@@ -72,9 +73,13 @@ export class Player {
             down_roll: 20,
         }
         this.min_attack_bonus = 0
+        this.min_dash_bonus = 0
         this.max_attack_bonus = this.min_attack_bonus + 5
         this.attack_bonus = this.min_attack_bonus
-        this.dash_bonus = 0
+        this.dash_bonus = this.min_dash_bonus
+        this.max_dash_bonus = this.min_dash_bonus + 5
+        this.dash_bonus_interval = 250
+        this.dash_bonus_timer = 0
         this.hurtbox = {
             body: {
                 isActive: true,
@@ -115,6 +120,7 @@ export class Player {
             bounce: new Audio(SOUND_BOUNCE),
             land: new Audio(SOUND_LAND),
             win: new Audio(SOUND_WIN),
+            ding: new Audio(SOUND_DING)
         }
 
         setSfxVolume(this.audio)
