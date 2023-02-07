@@ -1,4 +1,4 @@
-import { qs, qsa, setSfxVolume } from "./utils.js"
+import { injectControlsInHowToPlay, qs, qsa, setSfxVolume } from "./utils.js"
 import { Background } from "./background.js"
 import {
     LAYER_HEIGHT,
@@ -48,6 +48,10 @@ if (is_touch_device) {
 }
 
 const controls = JSON.parse(localStorage.getItem("controls")) || DEFAULT_CONTROLS
+
+
+
+injectControlsInHowToPlay(controls)
 
 updateStats()
 

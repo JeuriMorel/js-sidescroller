@@ -55,3 +55,10 @@ export function formatTime(time) {
     let seconds = newTime.getSeconds()
     return `${minutes}: ${seconds}`
 }
+
+export function injectControlsInHowToPlay(controls) {
+    const controlsListItems = qsa("[data-controls-span]")
+    controlsListItems.forEach(
+        item => (item.textContent = controls[item.dataset.controlsSpan])
+    )
+}

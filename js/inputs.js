@@ -1,6 +1,6 @@
 import { togglePause, isPaused } from "./app.js"
 import { DEFAULT_CONTROLS } from "./constants.js"
-import { qs, qsa } from "./utils.js"
+import { qs, qsa, injectControlsInHowToPlay } from "./utils.js"
 
 // modalSave.addEventListener("click", () => {
 //     modal.close()
@@ -23,15 +23,6 @@ export default class InputHandler {
         }
 
         this.keys = controls
-        // this.keys = {
-        //     left: "ArrowLeft",
-        //     right: "ArrowRight",
-        //     up: "ArrowUp",
-        //     down: "ArrowDown",
-        //     jump: "d",
-        //     action: "f",
-        //     pause: "p",
-        // }
 
         this.timeStampOfLastDownRelease
         this.canRoll = false
@@ -86,6 +77,7 @@ export default class InputHandler {
 
             this.keys = updatedKeys
             localStorage.setItem("controls", JSON.stringify(updatedKeys))
+            injectControlsInHowToPlay(updatedKeys)
             document.activeElement.blur()
         })
 
