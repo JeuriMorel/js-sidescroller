@@ -232,22 +232,20 @@ a::after {
     color: var(--clr-neutral-600);
 }
 
-label{
+label {
     padding-left: 0.5em;
     transition: background-color 200ms var(--easing);
     text-transform: uppercase;
-    border-bottom: 2px solid var(--border-color, transparent);
+    border-left: 3px solid var(--border-color, transparent);
 }
 
-label:has( + input:focus-visible){
-    --border-color: white;
+label:has(+ input:focus-visible) {
+    --border-color: var(--clr-accent-600);
     background-color: var(--clr-neutral-400-40);
 }
-label:has( + input:hover){
+label:has(+ input:hover) {
     background-color: var(--clr-neutral-400-40);
 }
-
-
 
 /* COMPOSITION */
 
@@ -255,10 +253,12 @@ label:has( + input:hover){
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    padding: 1rem;
+    padding: var(--padding-menu);
+}
+.controls-form :last-child {
+    margin-top: var(--padding-md);
 }
 .controls-form input {
-    /* padding-left: 0.5em; */
     outline-offset: 3px;
     text-align: center;
     color: var(--clr-accent-400);
@@ -501,9 +501,9 @@ ul span:not(.emphasize) {
 
 /* EXCEPTIONS */
 
-[data-modal="controls"]{
-    border-color: var(--clr-neutral-900);
-    border-width: 2px;
+[data-modal="controls"] {
+    border-color: var(--clr-neutral-900-40);
+    border-width: 1px;
     border-radius: 0;
     background-color: var(--clr-neutral-200-40);
     backdrop-filter: blur(5px);
