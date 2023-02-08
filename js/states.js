@@ -238,7 +238,8 @@ export class Attacking_Dash extends State {
                     this.player.audio.ding.play()
                     this.player.game.UI.floatingMessages.push(
                         new FloatingMessage({
-                            value: `+ ${this.player.dash_bonus}`,
+                            value: this.player
+                                .dash_bonus == this.player.max_dash_bonus ? "MAX" : `+ ${this.player.dash_bonus}`,
                             x: this.player.x + this.player.width,
                             y: this.player.y + this.player.height - 10,
                             targetX: this.player.x + this.player.width,
@@ -250,8 +251,10 @@ export class Attacking_Dash extends State {
                     this.player.dash_bonus_timer += deltaTime
                 }
             }
-        } else if (lastKey === inputType.PRESS.left)
+        } else if (lastKey === inputType.PRESS.left) {
+            this.player.dash_bonus = this.player.min_dash_bonus
             this.player.setState(states.ROLL_BACK)
+        }
 
         if (this.player.frame > 10) {
             this.player.x += 25
