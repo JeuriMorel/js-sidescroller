@@ -1,6 +1,12 @@
-import { bestLives, bestTime, updateBestLives, updateBestTime, updateStats } from "./best_stats.js"
+import {
+    bestLives,
+    bestTime,
+    updateBestLives,
+    updateBestTime,
+    updateStats,
+} from "./best_stats.js"
 import { Armored_Frog } from "./boss.js"
-import { AngryEgg, Bee, Crawler, Ghost, PumpKing } from "./enemies.js"
+import { AngryEgg, Bee, Crawler, Ghost, Pumpkin } from "./enemies.js"
 import { states } from "./states.js"
 
 const ENEMY_TYPES = {
@@ -24,7 +30,7 @@ const WAVES = {
     NINE: 8,
     BOSS: 9,
     WIN: 10,
-    RESULTS: 11
+    RESULTS: 11,
 }
 
 const ENEMIES_FETCH_ARRAY = [
@@ -41,7 +47,7 @@ const ENEMIES_FETCH_ARRAY = [
         return new Ghost(game)
     },
     function (game) {
-        return new PumpKing(game)
+        return new Pumpkin(game)
     },
     function (game) {
         return new Armored_Frog(game)
@@ -277,7 +283,6 @@ export class Wave_Win extends Wave {
         this.game.currentWave = this.game.waves[this.nextWave]
         this.game.currentWave.enter()
     }
-
 }
 export class Wave_Results extends Wave {
     constructor(game) {
@@ -312,7 +317,7 @@ export class Wave_Results extends Wave {
             this.newBestTime = true
             let newTimeStat = this.game.totalTimePlaying
             updateBestTime(newTimeStat)
-            
+
             localStorage.setItem("best-time", JSON.stringify(newTimeStat))
         }
         if (

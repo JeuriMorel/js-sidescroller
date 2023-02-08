@@ -681,7 +681,7 @@ export class Bee extends Enemy {
         this.healthPoints = 0
     }
 }
-export class PumpKing extends Enemy {
+export class Pumpkin extends Enemy {
     constructor(game) {
         super(game)
 

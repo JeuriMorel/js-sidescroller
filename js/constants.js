@@ -1,3 +1,5 @@
+import { qs } from "./utils"
+
 export const LAYER_WIDTH = 1666
 export const LAYER_HEIGHT = 500
 export const SPRITE_WIDTH = 100
@@ -115,4 +117,40 @@ export const DEFAULT_CONTROLS = {
     jump: "d",
     action: "f",
     pause: "Space",
+}
+
+export const SPRITE_SHEETS = {
+    player: qs("player"),
+    enemies: {
+        angry_egg: qs("angryEgg"),
+        crawler: qs("#crawler"),
+        ghost: qs("#ghost"),
+        bee: qs("#bee"),
+        pumpkin: {
+            idle: qs("#pumpkin_idle"),
+            walk: qs("#pumpkin_walk"),
+            explode: qs("#pumpkin_explode"),
+        },
+    },
+    boss: {
+        attack: qs("#attack"),
+        retreat: qs("#retreat"),
+        idle: qs("#idle"),
+        jump_down: qs("#jump_down"),
+        jump_forward: qs("#jump_up"),
+        got_hit: qs("#got_hit"),
+        defeated: qs("#defeated"),
+    },
+    particles: {
+        boom_one: qs("#boom"),
+        boom_two: qs("#boom2"),
+        smoke: qs("#smoke"),
+        hit_one: qs("#hit_one"),
+        hit_two: qs("#hit_two"),
+        red_hit_one: qs("#red_hit_V1"),
+        red_hit_two: qs("#red_hit_V2"),
+    },
+    icons: {
+        heart: qs("#heart"),
+    },
 }
