@@ -59,7 +59,7 @@ body:has(.game-is-on) h1 {
 }
 
 ::-webkit-scrollbar {
-    width: 0.975rem;
+    width: 1.5rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -73,14 +73,19 @@ body:has(.game-is-on) h1 {
         var(--clr-neutral-300)
     );
     outline: 2px solid var(--clr-neutral-100);
+    border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--clr-neutral-200);
+    background: linear-gradient(
+        160deg,
+        var(--clr-neutral-400),
+        var(--clr-neutral-200)
+    );
 }
 
 @supports (scrollbar-color: red blue) {
-    * {
-        scrollbar-color: var(--clr-neutral-200) var(--clr-neutral-900);
+    html {
+        scrollbar-color: var(--clr-neutral-200) var(--clr-neutral-900-40);
     }
 }
 
@@ -172,13 +177,13 @@ ul li {
     outline: 1px solid var(--clr-neutral-600-40);
     outline-offset: var(--gap-menu);
     background-color: var(--clr-neutral-200-40);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) grayscale(40%);
     color: var(--clr-neutral-900);
     letter-spacing: 2px;
 }
 
 ::backdrop {
-    background-color: hsl(0, 0%, 0%, 0.6);
+    background-color: hsla(0, 0%, 0%, 0.7);
 }
 
 details {
@@ -210,9 +215,6 @@ details[open] summary {
 
 summary {
     text-align: center;
-    /* width: fit-content; */
-    /* margin: 0 0 0 auto; */
-    /* transition: width 800ms cubic-bezier(0.22, 1.73, 0.27, 0.83); */
     z-index: 2;
 }
 
@@ -383,6 +385,10 @@ ul span:not(.emphasize) {
 }
 .text-shadow--100 {
     text-shadow: -1px 2px var(--clr-neutral-100);
+}
+
+.marked {
+    list-style-type: "- ";
 }
 
 /* BLOCK */
@@ -626,15 +632,24 @@ ul span:not(.emphasize) {
 }
 [data-list="how-to-play-controls"] {
     display: grid;
-    gap: 0.25em;
     grid-template-areas:
         ". up . . . action"
-        "left . right . jump ."
+        "left circle right . jump ."
         ". down . pause . .";
     background-color: var(--clr-neutral-200-40);
     padding: 0.5em;
-    outline: 2px solid var(--clr-accent-400);
+    outline: 1px solid var(--clr-neutral-900-40);
     outline-offset: var(--gap-menu);
+}
+[data-list="how-to-play-controls"]::before {
+    content: "";
+    background-image: url("./images/dpad.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: 35%;
+    grid-row: up / down;
+    grid-column: left / right;
+    opacity: 0.075;
 }
 [data-controls-li="left"] {
     grid-area: left;
@@ -657,8 +672,12 @@ ul span:not(.emphasize) {
 [data-controls-li="pause"] {
     grid-area: pause;
 }
-/* [data-list-item="how-to-play-controls"]{
-    width: 100%;
+/* [data-controls-li="circle"] {
+    grid-row: up / down;
+    grid-column: left / right;
+    outline: 1px solid var(--clr-neutral-400-40);
+    border-radius: 50%;
+    aspect-ratio: 1;
 } */
 
 [data-child-of="main-menu"] {
