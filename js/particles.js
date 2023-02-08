@@ -11,6 +11,7 @@ class Particles {
         this.frame = 0
         this.frameX = 0
         this.frameY = 0
+        this.sprite_sheets = game.sprite_sheets.particles
         if (src) this.audio = new Audio(src)
         if (this.audio) this.audio.volume = SFX_VOLUME
     }
@@ -45,7 +46,7 @@ class Particles {
 export class Boom extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#boom")
+        this.image = this.sprite_sheets.boom_one
         this.maxFrame = 5
         this.framesPerRow = 5
         this.fps = 15
@@ -60,7 +61,7 @@ export class Boom extends Particles {
 export class Boom_V2 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#boom2")
+        this.image = this.sprite_sheets.boom_two
         this.maxFrame = 24
         this.framesPerRow = 5
         this.fps = 10
@@ -79,7 +80,7 @@ export class Boom_V2 extends Particles {
 export class Smoke extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#smoke")
+        this.image = this.sprite_sheets.smoke
         this.maxFrame = 7
         this.framesPerRow = 7
         this.spriteHeight = 200
@@ -94,7 +95,7 @@ export class Smoke extends Particles {
 export class Hit_V1 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#hit_one")
+        this.image = this.sprite_sheets.hit_one
         this.maxFrame = 16
         this.framesPerRow = 4
         this.fps = 60
@@ -109,7 +110,7 @@ export class Hit_V1 extends Particles {
 export class Hit_V2 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#hit_two")
+        this.image = this.sprite_sheets.hit_two
         this.maxFrame = 16
         this.framesPerRow = 4
         this.fps = 60
@@ -125,7 +126,7 @@ export class Hit_V2 extends Particles {
 export class Red_Hit_V1 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#red_hit_V1")
+        this.image = this.sprite_sheets.red_hit_one
         this.maxFrame = 16
         this.framesPerRow = 4
         this.fps = 20
@@ -140,7 +141,7 @@ export class Red_Hit_V1 extends Particles {
 export class Red_Hit_V2 extends Particles {
     constructor({ game, x, y, sizeModifier, src }) {
         super(game, sizeModifier, src)
-        this.image = qs("#red_hit_V2")
+        this.image = this.sprite_sheets.red_hit_two
         this.maxFrame = 16
         this.framesPerRow = 4
         this.fps = 20

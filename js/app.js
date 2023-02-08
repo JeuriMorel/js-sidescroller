@@ -47,9 +47,8 @@ if (is_touch_device) {
     fullScreenToggleBtn.addEventListener("click", toggleFullScreen)
 }
 
-const controls = JSON.parse(localStorage.getItem("controls")) || DEFAULT_CONTROLS
-
-
+const controls =
+    JSON.parse(localStorage.getItem("controls")) || DEFAULT_CONTROLS
 
 injectControlsInHowToPlay(controls)
 
@@ -127,9 +126,46 @@ window.addEventListener("load", function () {
     const details = qs("details")
     new Accordian(details)
 
+    const SPRITE_SHEETS = {
+        player: qs("#player"),
+        enemies: {
+            angry_egg: qs("#angryEgg"),
+            crawler: qs("#crawler"),
+            ghost: qs("#ghost"),
+            bee: qs("#bee"),
+            pumpkin: {
+                idle: qs("#pumpkin_idle"),
+                walk: qs("#pumpkin_walk"),
+                explode: qs("#pumpkin_explode"),
+            },
+        },
+        boss: {
+            attack: qs("#attack"),
+            retreat: qs("#retreat"),
+            idle: qs("#idle"),
+            jump_down: qs("#jump_down"),
+            jump_forward: qs("#jump_up"),
+            got_hit: qs("#got_hit"),
+            defeated: qs("#defeated"),
+        },
+        particles: {
+            boom_one: qs("#boom"),
+            boom_two: qs("#boom2"),
+            smoke: qs("#smoke"),
+            hit_one: qs("#hit_one"),
+            hit_two: qs("#hit_two"),
+            red_hit_one: qs("#red_hit_V1"),
+            red_hit_two: qs("#red_hit_V2"),
+        },
+        icons: {
+            heart: qs("#heart"),
+        },
+    }
+
     class Game {
         constructor(width, height) {
             this.isOn = true
+            this.sprite_sheets = SPRITE_SHEETS
             this.width = width
             this.height = height
             this.groundMargin = 60

@@ -1,5 +1,3 @@
-import { qs } from "./utils.js"
-
 export const PUMPKIN_STATES = {
     IDLE: 0,
     WALK: 1,
@@ -24,7 +22,7 @@ export class Pumpkin_Idle extends Pumpkin_State {
         this.self.width = this.self.spriteWidth * this.self.sizeModifier
         this.self.height = this.self.spriteHeight * this.self.sizeModifier
         this.self.maxFrame = 28
-        this.self.image = qs("#pumpkin_idle")
+        this.self.image = this.self.sprite_sheets.idle
         this.self.defaultHorizontalSpeed = 0
         this.self.horizontalSpeed = 0
         this.self.resetBoxes()
@@ -47,7 +45,7 @@ export class Pumpkin_Walk extends Pumpkin_State {
         this.self.width = this.self.spriteWidth * this.self.sizeModifier
         this.self.height = this.self.spriteHeight * this.self.sizeModifier
         this.self.maxFrame = 15
-        this.self.image = qs("#pumpkin_walk")
+        this.self.image = this.self.sprite_sheets.walk
         this.self.horizontalSpeed = this.self.isWithinRetreatingRange() ? -2 : 2
         this.self.defaultHorizontalSpeed = this.self.horizontalSpeed
         this.self.resetBoxes()
@@ -70,7 +68,7 @@ export class Pumpkin_Explode extends Pumpkin_State {
         this.self.width = this.self.spriteWidth * this.self.sizeModifier
         this.self.height = this.self.spriteHeight * this.self.sizeModifier
         this.self.maxFrame = 25
-        this.self.image = qs("#pumpkin_explode")
+        this.self.image = this.self.sprite_sheets.explode
         this.self.horizontalSpeed = 0
         this.self.defaultHorizontalSpeed = 0
         this.self.hitbox.body.isActive = false
@@ -80,8 +78,16 @@ export class Pumpkin_Explode extends Pumpkin_State {
         this.self.game.player.stickyMultiplier = 0
     }
     update() {
-        if (this.self.y < this.self.game.height - this.self.height - this.self.game.groundMargin)
-            this.self.y = this.self.game.height - this.self.height - this.self.game.groundMargin
+        if (
+            this.self.y <
+            this.self.game.height -
+                this.self.height -
+                this.self.game.groundMargin
+        )
+            this.self.y =
+                this.self.game.height -
+                this.self.height -
+                this.self.game.groundMargin
         if (this.self.frame === this.self.maxFrame) {
             this.self.deleteEnemy = true
         }

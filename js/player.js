@@ -1,4 +1,4 @@
-import { qs, setSfxVolume } from "./utils.js"
+import { setSfxVolume } from "./utils.js"
 import {
     DEFAULT_SCROLL_SPEED,
     DEFAULT_WEIGHT,
@@ -53,7 +53,7 @@ export class Player {
         this.x = STARTING_X
         this.y = this.game.height - this.height - this.game.groundMargin
         this.starting_x = STARTING_X
-        this.image = qs("#player")
+        this.image = this.game.sprite_sheets.player
         this.frame = 0
         this.maxFrame = 11
         this.animationSheet = 9

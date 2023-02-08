@@ -16,7 +16,6 @@ import {
     AttackTarget,
     AttackTypes,
 } from "./constants.js"
-import { qs } from "./utils.js"
 
 import { Boom, Smoke } from "./particles.js"
 import { HealthBar } from "./health_bar.js"
@@ -171,9 +170,8 @@ export class AngryEgg extends Enemy {
         this.defaultHorizontalSpeed = 0
         this.horizontalSpeed = 0
         this.defence = Math.round(5 * this.sizeModifier + 2)
-        // this.markedForRecoil = false
         this.attackDirection
-        this.image = qs("#angryEgg")
+        this.image = this.game.sprite_sheets.enemies.angry_egg
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
         this.velocityY = 0
@@ -264,8 +262,8 @@ export class Crawler extends Enemy {
         super(game)
 
         this.transparency = 0.95
-        this.teleportAudio = new Audio()
-        this.teleportAudio.src = "./audio/teleport.wav"
+        this.teleportAudio = new Audio("./audio/teleport.wav")
+        // this.teleportAudio.src = "./audio/teleport.wav"
         this.animationSheet = 1
         this.maxFrame = 12
         this.fps = 15
@@ -286,7 +284,7 @@ export class Crawler extends Enemy {
         this.horizontalSpeed = 0.5
         this.defence = Math.round(12 * this.sizeModifier + 2)
         this.weight = 5 * this.sizeModifier
-        this.image = qs("#crawler")
+        this.image = this.game.sprite_sheets.enemies.crawler
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.hurtbox = {
             body: {
@@ -425,7 +423,7 @@ export class Spawn extends Enemy {
         this.x = x
         this.y = this.game.height - this.height - this.game.groundMargin
         this.horizontalSpeed = Math.random() * 1 + 1
-        this.image = qs("#crawler")
+        this.image = this.game.sprite_sheets.enemies.crawler
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.defence = 1
         this.hurtbox = {
@@ -491,7 +489,7 @@ export class Ghost extends Enemy {
         this.y =
             (this.game.height - this.height - this.game.groundMargin) *
             Math.random()
-        this.image = qs("#ghost")
+        this.image = this.game.sprite_sheets.enemies.ghost
         this.defence = 0
         //Flying Pattern
         this.angle = 0
@@ -584,7 +582,7 @@ export class Bee extends Enemy {
         this.y =
             (this.game.height - this.height - this.game.groundMargin) *
             Math.random()
-        this.image = qs("#bee")
+        this.image = this.game.sprite_sheets.enemies.bee
         this.defence = 0
         //Flying Pattern
         this.angle = 0
@@ -703,6 +701,7 @@ export class Pumpkin extends Enemy {
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
         this.velocityY = 0
+        this.sprite_sheets = this.game.sprite_sheets.enemies.pumpkin
         this.states = [
             new Pumpkin_Idle(this),
             new Pumpkin_Walk(this),

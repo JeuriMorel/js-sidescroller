@@ -1,9 +1,8 @@
-import { qs } from "./utils.js"
-
 class Icon {
     constructor(game) {
         this.game = game
         this.transparency = 0
+        this.sprite_sheets = game.sprite_sheets.icons
     }
     draw(context) {
         context.save()
@@ -26,7 +25,7 @@ class Icon {
 export class Heart extends Icon {
     constructor({ game, x, transparency, sizeModifier }) {
         super(game)
-        this.image = qs("#heart")
+        this.image = this.sprite_sheets.heart
         this.spriteWidth = 158
         this.spriteHeight = 130
 
