@@ -323,10 +323,10 @@ export class Defeated extends Boss_State {
     constructor(boss) {
         super("DEFEATED")
         this.boss = boss
-        this.spriteWidth = 522
-        this.spriteHeight = 475
-        this.width = this.spriteWidth * this.boss.sizeModifier
-        this.height = this.spriteHeight * this.boss.sizeModifier
+        this.spriteWidth = 261 //522
+        this.spriteHeight = 237.5 //475
+        this.width = this.spriteWidth * this.boss.sizeModifier * 2
+        this.height = this.spriteHeight * this.boss.sizeModifier * 2
     }
     enter() {
         this.boss.frame = 0
