@@ -26,6 +26,10 @@ export class Pumpkin_Idle extends Pumpkin_State {
         this.self.defaultHorizontalSpeed = 0
         this.self.horizontalSpeed = 0
         this.self.resetBoxes()
+        this.self.y =
+            this.self.game.height -
+            this.self.game.groundMargin -
+            this.self.height
     }
     update() {
         if (this.self.frame === this.self.maxFrame) {
@@ -49,6 +53,7 @@ export class Pumpkin_Walk extends Pumpkin_State {
         this.self.horizontalSpeed = this.self.isWithinRetreatingRange() ? -2 : 2
         this.self.defaultHorizontalSpeed = this.self.horizontalSpeed
         this.self.resetBoxes()
+        this.self.y = this.self.game.height - this.self.game.groundMargin - this.self.height
     }
     update() {
         if (this.self.frame === this.self.maxFrame) {
@@ -63,10 +68,10 @@ export class Pumpkin_Explode extends Pumpkin_State {
     }
     enter() {
         this.self.frame = 0
-        this.self.spriteWidth = 720
-        this.self.spriteHeight = 377
-        this.self.width = this.self.spriteWidth * this.self.sizeModifier
-        this.self.height = this.self.spriteHeight * this.self.sizeModifier
+        this.self.spriteWidth = 360 //720
+        this.self.spriteHeight = 188 //377
+        this.self.width = this.self.spriteWidth * this.self.sizeModifier * 2.5
+        this.self.height = this.self.spriteHeight * this.self.sizeModifier * 2.5
         this.self.maxFrame = 25
         this.self.image = this.self.sprite_sheets.explode
         this.self.horizontalSpeed = 0

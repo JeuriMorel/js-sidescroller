@@ -696,7 +696,6 @@ export class Pumpkin extends Enemy {
         this.horizontalSpeed = 0
         this.defence = Math.round(5 * this.sizeModifier + 3)
         this.markedForRecoil = false
-        // this.attackDirection
         this.explodeXOffset = -120
         this.src = Math.random() > 0.5 ? SOUND_CRACKS_1 : SOUND_CRACKS_2
         this.weight = 3 * this.sizeModifier
@@ -770,7 +769,8 @@ export class Pumpkin extends Enemy {
             this.markedForRecoil
         ) {
             this.horizontalSpeed -= this.recoilSpeeds[this.attackType]
-            if (this.healthBar) this.healthBar.updateBar(this.healthPoints)
+            // if (this.healthBar) this.healthBar.updateBar(this.healthPoints)
+            this.healthBar?.updateBar(this.healthPoints)
             this.markedForRecoil = false
         }
 
@@ -811,7 +811,8 @@ export class Pumpkin extends Enemy {
             this.hurtbox.body.isActive = true
             this.hitbox.body.isActive = true
         }
-        if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
+        // if (this.healthBar) this.healthBar.updatePosition(this.x, this.y)
+        this.healthBar?.updatePosition(this.x, this.y + this.height - (300 * this.sizeModifier))
         this.currentState.update()
     }
     setState(state) {
