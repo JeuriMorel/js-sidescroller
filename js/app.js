@@ -205,7 +205,7 @@ window.addEventListener("load", function () {
                 new Wave_Win(this),
                 new Wave_Results(this),
             ]
-            this.currentWave = this.waves[4] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)

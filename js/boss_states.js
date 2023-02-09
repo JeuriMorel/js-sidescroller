@@ -32,10 +32,10 @@ export class Attack extends Boss_State {
     constructor(boss) {
         super("ATTACK")
         this.boss = boss
-        this.spriteWidth = 609
-        this.spriteHeight = 393
-        this.width = this.spriteWidth * this.boss.sizeModifier
-        this.height = this.spriteHeight * this.boss.sizeModifier
+        this.spriteWidth = 304.5 //609
+        this.spriteHeight = 196 //393
+        this.width = this.spriteWidth * this.boss.sizeModifier * 2
+        this.height = this.spriteHeight * this.boss.sizeModifier * 2
     }
 
     enter() {
