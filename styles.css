@@ -660,6 +660,15 @@ footer {
     grid-column: left / right;
     opacity: 0.09;
 }
+[data-list="how-to-play-controls"]::after {
+    font-family: "FontAwesome";
+    content: "\f6de";
+    grid-row: fistleft / fistright;
+    grid-column: fistup / fistdown;
+    opacity: 0.125;
+    font-size: 5em;
+    color: var(--clr-neutral-100);
+}
 [data-controls-li="left"] {
     grid-area: left;
 }
@@ -681,13 +690,6 @@ footer {
 [data-controls-li="pause"] {
     grid-area: pause;
 }
-/* [data-controls-li="circle"] {
-    grid-row: up / down;
-    grid-column: left / right;
-    outline: 1px solid var(--clr-neutral-400-40);
-    border-radius: 50%;
-    aspect-ratio: 1;
-} */
 
 [data-child-of="main-menu"] {
     min-width: 11ch;
@@ -698,8 +700,6 @@ footer {
     min-width: 14ch;
 }
 [data-btn-type="clear"] {
-    /* --gradient-clr-1: transparent;
-    --gradient-clr-2: transparent; */
     --gradient-clr-1: var(--clr-neutral-900);
     --gradient-clr-2: var(--clr-neutral-900);
     --text-shadow-clr: var(--clr-neutral-900);
@@ -736,9 +736,9 @@ footer {
 @media (min-width: 750px) {
     [data-list="how-to-play-controls"] {
         grid-template-areas:
-            ". up . . . action"
-            "left . right . jump ."
-            ". down . pause . .";
+            ". up . . fistup action"
+            "left . right fistleft jump fistright"
+            ". down . pause . fistdown";
         gap: 0;
     }
 }
