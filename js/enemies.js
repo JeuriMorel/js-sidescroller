@@ -618,8 +618,8 @@ export class Bee extends Enemy {
             this.x += (this.target.x - this.x) * 0.05
             this.y += (this.target.y - this.y) * 0.05
         } else {
-            this.x += Math.random() * 3 - 1.5
-            this.y += Math.random() * 5 - 2.5
+            this.x += (Math.random() * 3 - 2.5) 
+            this.y += (Math.random() * 5 - 2.5) 
         }
         //RETURN TO POSITION
         if (this.x <= this.target.x + 10 && this.isAttacking) {

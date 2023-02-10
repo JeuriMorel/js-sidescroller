@@ -1,5 +1,4 @@
-import { formatTime, getStatsFromLocalStorage } from "./utils.js"
-import { qs } from "./utils.js"
+import { qs, formatTime, getStatsFromLocalStorage } from "./utils.js"
 
 export let { bestTime, bestLives } = getStatsFromLocalStorage()
 
@@ -10,7 +9,7 @@ const clearStorageBtn = qs('[data-btn="clear-storage"]')
 export function updateStats() {
     if (bestTime != null) timeStatSpan.textContent = formatTime(bestTime)
     if (bestLives != null) livesStatSpan.textContent = bestLives
-    clearStorageBtn.disabled = bestTime == null && bestLives == null
+    setClearStorageBtnDisableAttr()
 }
 
 clearStorageBtn.addEventListener("click", () => {
@@ -20,9 +19,20 @@ clearStorageBtn.addEventListener("click", () => {
     clearStorageBtn.disabled = true
 })
 
+function setClearStorageBtnDisableAttr() {
+    clearStorageBtn.disabled = bestTime == null && bestLives == null
+}
+
 export function updateBestTime(newBest) {
     bestTime = newBest
 }
 export function updateBestLives(newBest) {
     bestLives = newBest
+}
+
+export function resetStats() {
+    let { bestTime: newTime, bestLives: newLives } = getStatsFromLocalStorage()
+    bestTime = newTime
+    bestLives = newLives
+    setClearStorageBtnDisableAttr()
 }

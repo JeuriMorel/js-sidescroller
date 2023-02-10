@@ -28,7 +28,7 @@ import {
 } from "./waves.js"
 import MusicHandler from "./music.js"
 import { Accordian } from "./accordian.js"
-import { updateStats } from "./best_stats.js"
+import { resetStats, updateStats } from "./best_stats.js"
 
 import { confirm } from "./custom_confirm_box.js"
 
@@ -205,7 +205,7 @@ window.addEventListener("load", function () {
                 new Wave_Win(this),
                 new Wave_Results(this),
             ]
-            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[7] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -319,6 +319,7 @@ window.addEventListener("load", function () {
             this.input.removeEventListeners()
             cancelAnimationFrame(gameRequestId)
             this.gameIsStarting = false
+            resetStats()
 
             mainMenu.classList.remove("game-is-on")
         }
