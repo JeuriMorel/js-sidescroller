@@ -35,8 +35,8 @@ export default class MusicHandler {
     }
 
     toggleMusicPlayback() {
-        if (isPaused) this.currentTheme.pause()
-        else this.currentTheme.play()
+        if (isPaused) this.currentTheme?.pause()
+        else this.currentTheme?.play()
     }
     fadeOutTheme(theme, deltaTime) {
         if (
@@ -53,6 +53,7 @@ export default class MusicHandler {
     }
 
     update(deltaTime) {
+        if (this.currentTheme == null) return
         //FADE OUT FOREST PATH THEME
 
         if (!this.currentTheme.loop) {

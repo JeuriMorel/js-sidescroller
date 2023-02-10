@@ -309,8 +309,10 @@ window.addEventListener("load", function () {
         }
 
         endGame() {
-            this.music.currentTheme.pause()
-            this.music.currentTheme.currentTime = 0
+            if (this.music.currentTheme) {
+                this.music.currentTheme.currentTime = 0
+                this.music.currentTheme?.pause()
+            }
             isPaused = false
             this.isOn = false
             lastTime = 0

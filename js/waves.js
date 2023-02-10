@@ -278,6 +278,7 @@ export class Wave_Win extends Wave {
     }
     enter() {
         this.game.handleTimer()
+        this.game.music.currentTheme = null
     }
     exit() {
         this.game.currentWave = this.game.waves[this.nextWave]
