@@ -205,7 +205,7 @@ window.addEventListener("load", function () {
                 new Wave_Win(this),
                 new Wave_Results(this),
             ]
-            this.currentWave = this.waves[8] //DEBUG PURPOSES CHANGE LATER
+            this.currentWave = this.waves[0] //DEBUG PURPOSES CHANGE LATER
             this.currentWave.enter()
 
             setSfxVolume(this.sfx)
@@ -321,7 +321,7 @@ window.addEventListener("load", function () {
             this.gameIsStarting = false
             resetStats()
 
-            mainMenu.classList.remove("game-is-on")
+            body.classList.remove("game-is-on")
         }
     }
 
@@ -375,7 +375,7 @@ window.addEventListener("load", function () {
         document.activeElement.blur()
         lastTime = 0
         isPaused = false
-        mainMenu.classList.add("game-is-on")
+        body.classList.add("game-is-on")
         game.gameIsStarting = true
         updateStats()
 

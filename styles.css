@@ -55,10 +55,6 @@ body {
     user-select: none;
 }
 
-body:has(.game-is-on) h1 {
-    display: none;
-}
-
 ::-webkit-scrollbar {
     width: 1.5rem;
 }
@@ -164,7 +160,7 @@ ul li {
 
 /*Neumorphism Code from:  https://css-tricks.com/neumorphism-and-css/ */
 
-:has(.game-is-on) canvas {
+/* :has(.game-is-on) canvas {
     --positive-value: 4px;
     --negative-value: -4px;
     --h1: var(--positive-value);
@@ -179,7 +175,7 @@ ul li {
         var(--clr-neutral-500);
     box-shadow: var(--h1) var(--v1) var(--blur) var(--color-dark),
         var(--h2) var(--v2) var(--blur) var(--color-light);
-}
+} */
 
 :modal {
     font-size: 2rem;
@@ -658,10 +654,6 @@ footer {
     opacity: 0.4;
 }
 
-[data-list="main-menu"].game-is-on {
-    --gap-menu: 0.25em;
-    --main-menu-padding: 0.125em;
-}
 [data-list="main-menu"]:has(details[open]) {
     top: var(--top-offset);
     right: var(--padding-menu);
@@ -755,6 +747,30 @@ footer {
     outline: 3px solid var(--clr-neutral-600);
     outline-offset: 3px;
     border: none;
+}
+
+body.game-is-on h1 {
+    display: none;
+}
+body.game-is-on [data-list="main-menu"] {
+    --gap-menu: 0.25em;
+    --main-menu-padding: 0.125em;
+}
+body.game-is-on canvas {
+    --positive-value: 4px;
+    --negative-value: -4px;
+    --h1: var(--positive-value);
+    --h2: var(--negative-value);
+    --v1: var(--positive-value);
+    --v2: var(--negative-value);
+    --blur: 11px;
+    --color-dark: var(--clr-neutral-100);
+    --color-light: var(--clr-neutral-600-40);
+    border: 2px solid;
+    border-color: var(--clr-neutral-700) var(--clr-neutral-900)
+        var(--clr-neutral-500);
+    box-shadow: var(--h1) var(--v1) var(--blur) var(--color-dark),
+        var(--h2) var(--v2) var(--blur) var(--color-light);
 }
 
 @media screen and (min-width: 500px) {
