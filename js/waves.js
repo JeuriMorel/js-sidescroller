@@ -122,7 +122,7 @@ export class Wave_One extends Wave {
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG]
         this.enemiesToDefeat = 10
         this.maxEnemies = 1
-        this.enemyFrequency = 200
+        this.enemyFrequency = 50
         this.waveIndex = WAVES.ONE
         this.nextWave = WAVES.TWO
     }
@@ -131,7 +131,7 @@ export class Wave_Two extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = [ENEMY_TYPES.ANGRY_EGG, ENEMY_TYPES.GHOST]
-        this.enemiesToDefeat = 10 //30
+        this.enemiesToDefeat = 30
         this.maxEnemies = 2
         this.enemyFrequency = 500
         this.waveIndex = WAVES.TWO
@@ -144,7 +144,7 @@ export class Wave_Three extends Wave {
         this.availableEnemiesList = [ENEMY_TYPES.CRAWLER]
         this.enemiesToDefeat = 15
         this.maxEnemies = 1
-        this.enemyFrequency = 500
+        this.enemyFrequency = 50
         this.waveIndex = WAVES.THREE
         this.nextWave = WAVES.FOUR
     }
@@ -173,9 +173,9 @@ export class Wave_Five extends Wave {
     constructor(game) {
         super(game)
         this.availableEnemiesList = [ENEMY_TYPES.PUMPKIN]
-        this.enemiesToDefeat = 40
+        this.enemiesToDefeat = 30
         this.maxEnemies = 1
-        this.enemyFrequency = 100
+        this.enemyFrequency = 50
         this.waveIndex = WAVES.FIVE
         this.nextWave = WAVES.SIX
     }
@@ -215,7 +215,7 @@ export class Wave_Eight extends Wave {
             ENEMY_TYPES.BEE,
             ENEMY_TYPES.GHOST,
         ]
-        this.enemiesToDefeat = 10 //40
+        this.enemiesToDefeat = 40
         this.maxEnemies = 4
         this.enemyFrequency = 500
         this.waveIndex = WAVES.EIGHT
@@ -230,8 +230,8 @@ export class Wave_Nine extends Wave {
             ENEMY_TYPES.BEE,
             ENEMY_TYPES.CRAWLER,
         ]
-        this.enemiesToDefeat = 5 // 60
-        this.maxEnemies = 1 // 5
+        this.enemiesToDefeat = 60
+        this.maxEnemies = 5
         this.enemyFrequency = 500
         this.waveIndex = WAVES.NINE
         this.nextWave = WAVES.BOSS
@@ -259,7 +259,6 @@ export class Wave_Boss extends Wave {
     enter() {
         this.resetPlayerAttackSettings()
         this.game.enemies.forEach(enemy => (enemy.healthPoints = 0))
-        // this.game.music.currentTheme.play()
     }
     exit() {
         this.game.currentWave = this.game.waves[this.nextWave]

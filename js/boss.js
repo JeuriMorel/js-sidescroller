@@ -31,7 +31,7 @@ export class Armored_Frog {
     constructor(game) {
         this.game = game
         this.sprite_sheets = game.sprite_sheets.boss
-        this.healthPoints = 15 //100
+        this.healthPoints = 100
         this.animationSheet = 0
         this.frame = 0
         this.lastFinishedFrame = null
