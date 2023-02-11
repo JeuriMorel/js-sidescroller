@@ -226,6 +226,23 @@ details[open] {
     backdrop-filter: blur(3px);
 }
 
+/* Fallback if :has is not supported */
+@supports not selector(div:has(img)) {
+    details {
+        transition: 300ms var(--easing);
+        transition-property: top, right;
+        top: 0;
+        right: 0;
+        pointer-events: none;
+        z-index: 20;
+    }
+
+    details[open] {
+        top: var(--top-offset);
+        right: var(--padding-menu);
+    }
+}
+
 details[open] summary {
     background: var(--clr-neutral-500);
 }
@@ -283,7 +300,7 @@ label:has(+ input:hover) {
     gap: 1rem;
     padding: var(--padding-menu);
 }
-.controls-form :last-child {
+.controls-form button {
     margin-top: var(--padding-md);
 }
 .controls-form input {
