@@ -75,7 +75,7 @@ export class Armored_Frog {
             tongue: new Audio(SOUND_TONGUE),
             growl: new Audio(BOSS_GROWL),
             dematerialize: new Audio(SOUND_DIMENSION_SUCK),
-            land: new Audio(BOSS_LAND)
+            land: new Audio(BOSS_LAND),
         }
 
         setSfxVolume(this.audio)
@@ -90,13 +90,11 @@ export class Armored_Frog {
             new Defeated(this),
         ]
 
-        // this.x = this.game.width - this.width
         this.x = this.game.width * 0.5
         this.y = this.game.height * -6
 
         this.currentState = this.states[STATES.JUMP_DOWN]
         this.currentState.enter()
-
 
         this.hurtbox = {
             body: {
@@ -154,7 +152,6 @@ export class Armored_Frog {
         }
         //vertical
         this.velocityY = -30
-        // this.velocityY = 0
         this.weight = 3
 
         this.healthBarPadding = 20
@@ -169,7 +166,6 @@ export class Armored_Frog {
             defaultbarColor: DEFAULT_BOSS_BAR_COLOR,
             borderColor: DEFAULT_BOSS_BORDER_COLOR,
         })
-        
     }
 
     get enemyName() {
@@ -227,7 +223,7 @@ export class Armored_Frog {
 
         //Attack
         if (
-            this.currentState !== this.states[STATES.ATTACK] &&
+            this.currentState == this.states[STATES.IDLE] &&
             this.isOnGround() &&
             this.game.player.currentState.state != "GAME_OVER"
         ) {

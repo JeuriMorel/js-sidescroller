@@ -1,6 +1,5 @@
 // import { SOUND_DIMENSION_SUCK } from "./constants.js"
 import { Boom, Boom_V2, Smoke } from "./particles.js"
-import { qs } from "./utils.js"
 
 export const STATES = {
     RETREAT: 0,
@@ -11,16 +10,6 @@ export const STATES = {
     GOT_HIT: 5,
     DEFEATED: 6,
 }
-
-// const images = {
-//     ATTACK: qs("#attack"),
-//     RETREAT: qs("#retreat"),
-//     IDLE: qs("#idle"),
-//     JUMP_DOWN: qs("#jump_down"),
-//     JUMP_FORWARD: qs("#jump_up"),
-//     GOT_HIT: qs("#got_hit"),
-//     DEFEATED: qs("#defeated"),
-// }
 
 class Boss_State {
     constructor(state) {
@@ -57,6 +46,11 @@ export class Attack extends Boss_State {
         this.boss.hurtbox.tongue.isActive = true
         this.boss.hitbox.tongue.isActive = true
         this.boss.hitbox.claws.isActive = true
+        this.boss.velocityY = 0
+        this.boss.y =
+            this.boss.game.height -
+            this.boss.height * this.boss.spriteGroundOffsetModifier -
+            this.boss.game.groundMargin
     }
     update() {
         this.boss.x -= this.boss.game.scrollSpeed
