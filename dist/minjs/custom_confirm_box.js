@@ -1,0 +1,1 @@
+import{qs as n}from"./utils.js";const o=n("[data-modal='confirm'"),t=n("[data-btn='confirm']"),c=n("[data-btn='cancel']"),a=n("span",o);export function confirm(n,e){(function(n){return o.showModal(),a.textContent=n,new Promise(((n,a)=>{t.onclick=()=>{n(),o.close()},c.onclick=()=>{a(),o.close()}}))})(n).then((()=>e())).catch((()=>{}))}

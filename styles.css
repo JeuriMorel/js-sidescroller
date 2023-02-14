@@ -52,7 +52,10 @@ body {
     position: relative;
     background-color: var(--clr-neutral-200);
     overflow: hidden;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 ::-webkit-scrollbar {
@@ -100,7 +103,11 @@ a::after {
 h1 {
     --shift-distance: -0.5em;
     --text-shadow-color: var(--clr-accent-400);
+    width: -webkit-max-content;
+    width: -moz-max-content;
     width: max-content;
+    height: -webkit-max-content;
+    height: -moz-max-content;
     height: max-content;
     position: absolute;
     color: var(--clr-neutral-700);
@@ -129,6 +136,8 @@ h2 {
 }
 h3 {
     font-size: 1.5em;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
     line-height: 1;
     margin-bottom: 0.5em;
@@ -137,7 +146,10 @@ h1,
 h2,
 h3 {
     text-shadow: -2px 3px var(--text-shadow-color, var(--clr-neutral-100));
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 ul {
@@ -158,25 +170,6 @@ ul li {
     border-radius: var(--canvas-border-radius);
 }
 
-/*Neumorphism Code from:  https://css-tricks.com/neumorphism-and-css/ */
-
-/* :has(.game-is-on) canvas {
-    --positive-value: 4px;
-    --negative-value: -4px;
-    --h1: var(--positive-value);
-    --h2: var(--negative-value);
-    --v1: var(--positive-value);
-    --v2: var(--negative-value);
-    --blur: 11px;
-    --color-dark: var(--clr-neutral-100);
-    --color-light: var(--clr-neutral-600-40);
-    border: 2px solid;
-    border-color: var(--clr-neutral-700) var(--clr-neutral-900)
-        var(--clr-neutral-500);
-    box-shadow: var(--h1) var(--v1) var(--blur) var(--color-dark),
-        var(--h2) var(--v2) var(--blur) var(--color-light);
-} */
-
 :modal {
     font-size: 2rem;
     font-size: var(--btn-font-size);
@@ -190,9 +183,14 @@ ul li {
     outline: 1px solid var(--clr-neutral-600-40);
     outline-offset: var(--gap-menu);
     background-color: var(--clr-neutral-200-40);
-    backdrop-filter: blur(10px) grayscale(40%);
+    -webkit-backdrop-filter: blur(10px) grayscale(40%);
+            backdrop-filter: blur(10px) grayscale(40%);
     color: var(--clr-neutral-900);
     letter-spacing: 2px;
+}
+
+::-webkit-backdrop {
+    background-color: hsla(0, 0%, 0%, 0.7);
 }
 
 ::backdrop {
@@ -219,7 +217,8 @@ details[open] {
     background-color: var(--clr-neutral-400-40);
     border-color: var(--clr-neutral-900);
     padding-top: var(--padding);
-    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
 }
 
 /* Fallback if :has is not supported */
@@ -317,7 +316,10 @@ label:has(+ input:hover) {
     z-index: 2;
     position: relative;
     padding: var(--padding-menu);
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
     pointer-events: none;
     margin-left: auto;
     align-items: flex-end;
@@ -452,7 +454,10 @@ footer {
     cursor: pointer;
     color: var(--clr-neutral-900);
     position: relative;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
     letter-spacing: 1px;
     border-radius: var(--btn-border-radius);
     border: var(--border-btn) outset var(--clr-neutral-500);
@@ -529,7 +534,10 @@ footer {
         rgb(80, 80, 80, 0.7) 100%
     );
     aspect-ratio: 1;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
     color: white;
 
     padding: 0.5em;
@@ -756,6 +764,8 @@ body.game-is-on [data-list="main-menu"] {
     --gap-menu: 0.25em;
     --main-menu-padding: 0.125em;
 }
+/*Neumorphism Code from:  https://css-tricks.com/neumorphism-and-css/ */
+
 body.game-is-on canvas {
     --positive-value: 4px;
     --negative-value: -4px;
