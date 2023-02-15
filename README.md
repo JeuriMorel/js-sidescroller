@@ -18,6 +18,8 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
 - The Project
 
+    //to do
+
 - Screenshots
     - Desktop
     ![Desktop](/screenshots/Super-Kabuki-Cat-desktop.png)
@@ -55,7 +57,7 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
     Here I use the so-called "parent selector" to slide the main menu which houses the Options sub menu, a `<details>` tag, in and out of view.
 
-    ```
+    ```css
         [data-list="main-menu"] {
         --button-height: calc(var(--btn-font-size) * 2 + 
             var(--border-btn) * 2);
@@ -84,7 +86,7 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
     I was using the standard browser confirmation dialog box to handle the quitting and restarting of the game. But I wanted control over how it looked, so I decided to create my own.
 
-    ```
+    ```html
         <dialog
             class="[ ] [ padding-sm ] [ modal ]"
             data-modal="confirm"
@@ -122,7 +124,7 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
     ![confirm box](/screenshots/confirm.png)
 
-    ```
+    ```js
     const confirmModal = qs("[data-modal='confirm'")
     const confirmBtn = qs("[data-btn='confirm']")
     const cancelBtn = qs("[data-btn='cancel']")
@@ -165,7 +167,7 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
     Instead of this: 
 
-    ```
+    ```css
         .btn:hover:not(:disabled),
         .btn:focus-visible:not(:disabled){
             /* styles */
@@ -174,8 +176,7 @@ I greatly expanded on the core concepts and tied them together to create a cohes
 
     You can write this instead:
 
-    ```
-
+    ```css
         .btn:is(:hover, :focus-visible):not(:disabled) {
             /* styles */
         }
