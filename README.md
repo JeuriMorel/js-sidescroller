@@ -12,7 +12,7 @@
 
 -   The Project
 
-    The basic core of this project is based on lessons learned from [Frank's Laboratory's JS Game Developement Masterclass](https://www.youtube.com/playlist?list=PLYElE_rzEw_uryBrrzu2E626MY4zoXvx2).
+    The basic core of this project is based on ideas taken from [Frank's Laboratory's JS Game Developement Masterclass](https://www.youtube.com/playlist?list=PLYElE_rzEw_uryBrrzu2E626MY4zoXvx2).
 
     I greatly expanded on the core concepts and tied them together to create a cohesive game.
 
@@ -37,7 +37,7 @@
         -   Drawing context for rendering the game on the screen using the HTML5 `<canvas>` Element.
     -   CSS
         -   CUBE methodology. Still getting the hang of it, and I can't say I fully understand how to "think" in CUBE, but I find it rather appealing.
-        -   Custom Properties (variables). The more I use them the more I understand how powerful they are.
+        -   Custom Properties (variables).
         -   Grid
             -   `grid-template-areas`
         -   Flexbox
@@ -48,7 +48,7 @@
 
 ## Code Examples
 
--   I love the `:has()` pseudo class!
+-   The `:has()` pseudo-class
 
     Here I use the so-called "parent selector" to slide the main menu which houses the Options sub menu, a `<details>` tag, in and out of view.
 
@@ -73,11 +73,11 @@
     }
     ```
 
-    When the Options menu is `[open]`, the parent (main-menu), slides up giving the sub menu more space.
+    When the Options menu is `[open]`, the parent (main-menu), slides up giving the sub menu more room.
 
     ![gif showing the menu sliding in and out of view when its child element opens and closes](/screenshots/chrome-capture-2023-1-14.gif)
 
-    The `:has()` pseudo-class isn't fully supported in all browsers yet, so I included a fallback to achieve a similar effect on browsers that don't support it.
+    The `:has()` pseudo-class isn't fully supported in all browsers yet, so I included a fallback to achieve a similar effect on browsers that don't yet support it.
 
     ```css
     @supports not selector(div:has(img)) {
@@ -222,9 +222,19 @@
     }
     ```
 
+    On narrow screens:
+
+    ![controls image on narrow screens](/screenshots/controls-desktop-narrow.png)
+
+    On screens wider than 750px:
+
+    ![controls image on wide screens](/screenshots/controls-desktop.png)
+
+    [Back to Table of Contents](#table-of-contents)
+
 -   `<canvas>`
 
-    Most of this project works on rendering graphics on the page through the `<canvas>` element. An "animate" `function` in called every frame with the `window.requestAnimationFrame()` method.
+    Most of this project works by rendering graphics on the page through the `<canvas>` element. An "animate" `function` in called every frame with the `window.requestAnimationFrame()` method.
 
     ```javascript
     function animate(timestamp) {
@@ -244,17 +254,89 @@
     }
     ```
 
-    The parts of the game can be broken down into four types of elements:
+    The parts of the game visuals can be broken down into four types of elements:
 
     -   Background
-    -   Player and Enemy sprites
+    -   Player and Enemy enemies
     -   Impermanent visual elements, such as particle effects
-    -   More permanent UI elements, such as health bars and icons
-
+    -   More permanent on-screen elements, such as health bars and icons
 
         The Background is made up of several images layered on top of each other that scroll at different speeds creating an illusion of depth. This is known as Parallax scrolling.
 
         ![Parallax Scrolling](/screenshots/parallax.gif)
+
+        The player and enemies are rendered from sprite sheets that continuously cycle through each sprite, returning to the beginning upon reaching the end. Unlike the player and enemies, particle effects disappear once they reach the end of their sprite sheet.
+
+        ![Particle Effects](/screenshots/particles.gif)
+
+        Health bars and text are drawn using `canvas` methods suct as `rect()`, `stroke()`, `strokeText()` and `Path2D()` objects.
+
+        ```javascript
+        // If enemy's health is above 0, draw a bar with an outline and fill it with color. The bar's width is relative to the perventage of health remaining with the outline representing 100%
+        const bar = new Path2D()
+        if (this.health > 0) {
+            bar.moveTo(this.barX + this.barRadius, this.barY)
+            bar.arcTo(
+                this.barX + this.width,
+                this.barY,
+                this.barX + this.width,
+                this.barY + this.barheight,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX + this.width,
+                this.barY + this.barheight,
+                this.barX,
+                this.barY + this.barheight,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX,
+                this.barY + this.barheight,
+                this.barX,
+                this.barY,
+                this.barRadius
+            )
+            bar.arcTo(
+                this.barX,
+                this.barY,
+                this.barX + this.width,
+                this.barY,
+                this.barRadius
+            )
+            bar.closePath()
+        }
+
+        context.beginPath()
+        context.moveTo(this.x + this.radius, this.y)
+        context.arcTo(
+            this.x + this.maxWidth,
+            this.y,
+            this.x + this.maxWidth,
+            this.y + this.height,
+            this.radius
+        )
+        context.arcTo(
+            this.x + this.maxWidth,
+            this.y + this.height,
+            this.x,
+            this.y + this.height,
+            this.radius
+        )
+        context.arcTo(this.x, this.y + this.height, this.x, this.y, this.radius)
+        context.arcTo(
+            this.x,
+            this.y,
+            this.x + this.maxWidth,
+            this.y,
+            this.radius
+        )
+        context.closePath()
+        context.stroke()
+        context.fill(bar)
+        ```
+
+        ![Enemy health bar change on hit](/screenshots/health_bars.gif)
 
 ## Useful Links
 
