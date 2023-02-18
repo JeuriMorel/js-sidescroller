@@ -232,6 +232,30 @@
 
     [Back to Table of Contents](#table-of-contents)
 
+-   More `@media` queries
+
+    Game is controlled differently on desktop and mobile; keyboard and touchscreen respectively. I couldn't rely simply on screen sizes to detect the device being used, so I had to get creative.
+
+    ```js
+    const is_touch_device = "ontouchstart" in document.documentElement
+
+    if (is_touch_device) body.classList.add("is_touch_device")
+    ```
+
+    First step was to find out if the device supports touch controls. If yes, special class is added to body. Then, with CSS we test the device's capabilities.
+
+    ```css
+    @media (hover: none), (pointer: none) {
+        .is_touch_device {
+            /* styles for mobile */
+        }
+    }
+    ```
+
+    Once we are confident that the user is on a mobile device we make changes to the styles to display an onscreen controller.
+
+    ![mobile screenshot](/screenshots/Super-Kabuki-Cat-mobile-2.jpg)
+
 -   `<canvas>`
 
     Most of this project works by rendering graphics on the page through the `<canvas>` element. An "animate" `function` in called every frame with the `window.requestAnimationFrame()` method.
