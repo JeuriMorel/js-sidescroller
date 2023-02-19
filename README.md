@@ -362,6 +362,38 @@
 
         ![Enemy health bar change on hit](/screenshots/health_bars.gif)
 
+-   `AbortController`
+
+    When the user starts a new game, several event listeners are added to the `window` and other DOM elements. To prevent there being multiple versions of the same listeners being triggered by a user that has restarted the game more than once we have to dispose of listeners every time the game is ended. The `AbortController` interface allows us to easily do just that.
+
+    First we create an instance of it like so:
+
+    ```js
+    this.keypressController = new AbortController()
+    ```
+
+    Then we use it to pass an `AbortSignal` object into an `addEventListener` method.
+
+    ```js
+    this.modalOpenBtn.addEventListener(
+        "click",
+        () => {
+            this.modal.showModal()
+            this.populateForm()
+            if (!isPaused) togglePause()
+        },
+        { signal: this.keypressController.signal, passive: true }
+    )
+    ```
+
+    The same `AbortSignal` object can be passed to several event listeners. This allows you to abort them all with one function call.
+
+    ```js
+    removeEventListeners() {
+        this.keypressController.abort()
+    }
+    ```
+
 ## Useful Links
 
 -   [JavaScript Game Development Masterclass 2022](https://www.youtube.com/playlist?list=PLYElE_rzEw_uryBrrzu2E626MY4zoXvx2)
